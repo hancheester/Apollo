@@ -1,0 +1,44 @@
+﻿@using Apollo.FrontStore.Models.Category;
+@model CategoryModel
+
+@{
+    string treeId = "category-tree";
+
+    var forMobile = Html.ViewData["ForMobile"] as bool?;
+    if (forMobile.HasValue)
+    {
+        treeId = treeId + (forMobile.Value ? "-mobile" : null);
+    }
+}
+
+@if (Model.Category.Children.Count > 0)
+{
+    <div class="panel-group" id="@treeId">
+    @foreach (var child in Model.Category.Children)
+    {
+        <div class="panel panel-default">
+        @if (child.Children.Count > 0)
+        {
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="#@treeId-@child.Id" data-toggle="collapse" data-parent="#@treeId">
+                        @Html.Raw(child.Name)
+                        <span class="glyphicon glyphicon-@(child.UrlKey == Model.SelectedSecondCategoryUrl ? "minus" : "plus") pull-right"></span>
+                    </a>
+                </h4>
+            </div>
+            <div id="@treeId-@child.Id" class="panel-collapse collapse @(child.UrlKey == Model.SelectedSecondCategoryUrl ? "in" : null)">
+                <div class="panel-body">
+                    <ul>
+                        @foreach (var item in child.Children)
+                        {
+                            <li><a class="@(item.UrlKey == Model.SelectedThirdCategoryUrl ? "selected" : null)" href="@Url.RouteUrl("Category With Products", new { top = Model.Category.UrlKey, second = child.UrlKey, third = item.UrlKey })">@Html.Raw(item.Name)<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+        </div>
+    }
+    </div>
+}

@@ -1,0 +1,52 @@
+﻿@using Apollo.FrontStore.Models.Checkout;
+@model CheckoutCompletedModel
+
+@{
+    Html.AddTitleParts("Order Completed");
+}
+<div id="breadcrumb">
+    <div class="container list">
+        <ul>
+            <li><a href="/">Home</a></li>
+            @if (Model.EmailInvoiceId.Value == 0)
+            {
+                <li><a href="@Url.RouteUrl("Shopping Cart")">Cart</a></li>
+                <li><a href="@Url.RouteUrl("Checkout Confirm Address")">Address</a></li>
+                <li><a href="@Url.RouteUrl("Checkout Confirm Order")">Confirm</a></li>
+                <li><a href="@Url.RouteUrl("Checkout Payment")" class="active">Pay</a></li>
+            }
+            else
+            {
+                <li><a href="#" class="active">Payment Completed</a></li>
+            }
+        </ul>
+    </div>
+</div>
+
+<div id="checkout">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Thank you! @Model.ThankYouTitle</h4>
+            </div>
+
+            <div class="col-xs-12 col-lg-6">
+                <p>Your transaction has been completed and a confirmation will be emailed to you.</p>
+                <p>If you have any comments or questions please do not hesitate to <a href="@Url.RouteUrl("Contact Us")">contact us</a>.</p>
+                @Html.Raw(Model.Message)
+            </div>
+        </div>
+    </div>
+</div>
+
+@*@if (Model.OrderId.HasValue && Model.OrderId.Value != 0)
+{
+    <div id="trustedShopsCheckout" style="display: none;">
+        <span id="tsCheckoutOrderNr">@Model.OrderId.ToString()</span>
+        <span id="tsCheckoutBuyerEmail">@Model.Email</span>
+        <span id="tsCheckoutOrderAmount">@Model.Amount</span>
+        <span id="tsCheckoutOrderCurrency">@Model.CurrencyCode</span>
+        <span id="tsCheckoutOrderPaymentType">@Model.PaymentType</span>
+        <span id="tsCheckoutOrderEstDeliveryDate">@Model.EstimatedDeliveryDate</span>
+    </div>
+}*@

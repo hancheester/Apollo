@@ -1,0 +1,252 @@
+﻿@using Apollo.FrontStore.Models.Checkout;
+@using Apollo.Web.Framework;
+@model PharmOrderModel
+
+@{
+    Html.AddTitleParts("Pharmaceutical Form");
+}
+
+<div id="breadcrumb">
+    <div class="container list">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="@Url.RouteUrl("Shopping Cart")">Cart</a></li>            
+            <li><a href="@Url.RouteUrl("Checkout Pharm Form")" class="active">Pharmaceutical Form</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="pharm">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 hidden-xs checkout-progress">
+                <ul>
+                    <li><a href="@Url.RouteUrl("Shopping Cart")">1</a><span>My Cart</span></li>
+                    <li><a href="#">2</a><span>Address</span></li>
+                    <li><a href="#">3</a><span>Confirmation</span></li>
+                    <li><a href="#">4</a><span>Payment</span></li>
+                </ul>
+            </div>            
+        </div>
+        <div class="col-xs-12 col-lg-7 no-gutter">
+            <p class="important">
+                Pharmacy medicines are sold at the professional discretion of our pharmacist. Please
+                answer the following questions accurately to allow our pharmacist to check that
+                the medicines in your basket are suitable for the intended user. All information
+                provided will be treated confidentially and securely.
+            </p>
+
+            @using (Html.BeginForm("ConfirmPharmForm", "Checkout", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                var validationSummary = Html.ValidationSummary(true);
+                if (!MvcHtmlString.IsNullOrEmpty(validationSummary))
+                {
+                    <div class="message-error alert alert-danger">@validationSummary</div>
+                }
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TakenByOwner)
+                    @Html.EditorFor(model => model.TakenByOwner, new { @class = "form-control", @type = "checkbox" })
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Allergy)
+                    <div class="input-group">
+                        @Html.TextAreaFor(model => model.Allergy, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Allergy)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.OwnerAge)
+                    <div class="input-group">
+                        @Html.DropDownListFor(model => model.OwnerAge, Model.OwnerAges)
+                        @Html.ValidationMessageFor(model => model.OwnerAge)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.HasCondition)
+                    @Html.EditorFor(model => model.HasCondition, new { @class = "form-control", @type = "checkbox" })
+                </div>
+
+                <div id="qOwnerCondition" class="form-group" style="display: none;">
+                    @Html.LabelFor(model => model.OwnerCondition)
+                    <div class="input-group">
+                        @Html.TextAreaFor(model => model.OwnerCondition, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.OwnerCondition)
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                for (int i = 0; i < Model.PharmItems.Count; i++)
+                {
+                    <div class="pharm-item">
+                        <div><h4>@Html.Raw(Model.PharmItems[i].Name)</h4></div>
+                        @Html.HiddenFor(Model => Model.PharmItems[i].ProductId)
+                        @Html.HiddenFor(Model => Model.PharmItems[i].ProductPriceId)
+
+                        @if(string.IsNullOrEmpty(Model.PharmItems[i].Note) == false)
+                        {
+                            <p class="important">
+                                @Model.PharmItems[i].Note
+                            </p>
+                        }
+
+                        <div class="form-group">
+                            @Html.LabelFor(Model => Model.PharmItems[i].Symptoms)
+                            <div class="input-group">
+                                @Html.TextAreaFor(Model => Model.PharmItems[i].Symptoms, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.PharmItems[i].Symptoms)
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(Model => Model.PharmItems[i].MedForSymptom)
+                            <div class="input-group">
+                                @Html.TextAreaFor(Model => Model.PharmItems[i].MedForSymptom, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.PharmItems[i].MedForSymptom)
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(Model => Model.PharmItems[i].PersistedInDays)
+                            <div class="input-group">
+                                @Html.DropDownListFor(Model => Model.PharmItems[i].PersistedInDays, Model.PharmItems[i].AvailablePersistedInDays)
+                                @Html.ValidationMessageFor(Model => Model.PharmItems[i].PersistedInDays)
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(Model => Model.PharmItems[i].ActionTaken)
+                            <div class="input-group">
+                                @Html.TextAreaFor(Model => Model.PharmItems[i].ActionTaken, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.PharmItems[i].ActionTaken)
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="age form-group">
+                            @Html.LabelFor(Model => Model.PharmItems[i].Age)
+                            <div class="input-group">
+                                @Html.DropDownListFor(Model => Model.PharmItems[i].Age, Model.PharmItems[i].AvailableAges)
+                                @Html.ValidationMessageFor(Model => Model.PharmItems[i].Age)
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="hasOtherCondition form-group">
+                            @Html.LabelFor(Model => Model.PharmItems[i].HasOtherCondMed)
+                            @Html.EditorFor(Model => Model.PharmItems[i].HasOtherCondMed, new { @class = "form-control", @type = "checkbox" })
+                        </div>
+
+                        <div class="clearfix"></div>
+                        
+                        <div id="qOwnerCondition_@Model.PharmItems[i].ProductPriceId" class="otherCondition form-group " style="display: none;">
+                            @Html.LabelFor(Model => Model.PharmItems[i].OtherCondMed)
+                            <div class="input-group">
+                                @Html.TextAreaFor(Model => Model.PharmItems[i].OtherCondMed, new { @class = "form-control" })                                
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="hasTaken form-group">                            
+                            @Html.LabelFor(Model => Model.PharmItems[i].HasTaken)
+                            @Html.EditorFor(Model => Model.PharmItems[i].HasTaken, new { @class = "form-control", @type = "checkbox" })                            
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div id="qTakenQuantity_@Model.PharmItems[i].ProductPriceId" class="takenQuantity form-group" style="display: none;">
+                            @Html.LabelFor(Model => Model.PharmItems[i].TakenQuantity)
+                            <div class="input-group">
+                                @Html.DropDownListFor(Model => Model.PharmItems[i].TakenQuantity, Model.PharmItems[i].AvailableTakenQuantity)
+                            </div>
+                        </div>
+
+                        <div id="qLastTimeTaken_@Model.PharmItems[i].ProductPriceId" class="lastTimeTaken form-group" style="display: none;">
+                            <label>When was the last time the intended user took this medication?</label>
+                            <div class="input-group">
+                                @Html.DatePickerDropDowns(
+                                    Html.FieldNameFor(x => x.PharmItems[i].LastTimeTakenDay),
+                                    Html.FieldNameFor(x => x.PharmItems[i].LastTimeTakenMonth),
+                                    Html.FieldNameFor(x => x.PharmItems[i].LastTimeTakenYear),
+                                    DateTime.Now.Year - 10,
+                                    DateTime.Now.Year,
+                                    Model.PharmItems[i].LastTimeTakenDay,
+                                    Model.PharmItems[i].LastTimeTakenMonth,
+                                    Model.PharmItems[i].LastTimeTakenYear,
+                                    displayCalendarName: false)
+                                @Html.ValidationMessageFor(model => model.PharmItems[i].LastTimeTakenDay)
+                                @Html.ValidationMessageFor(model => model.PharmItems[i].LastTimeTakenMonth)
+                                @Html.ValidationMessageFor(model => model.PharmItems[i].LastTimeTakenYear)
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                }
+
+                <div class="form-group col-lg-6 row">
+                    <input type="submit" class="button" value="SUBMIT NOW" />
+                </div>                
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $('input[name=HasCondition]').click(function () {                
+                if ($('input[name=HasCondition]').is(':checked')) {
+                    $('#qOwnerCondition').show();                
+                }
+                else {
+                    $('#qOwnerCondition').hide();
+                }
+            });
+
+            $('.hasOtherCondition input[type=checkbox]').click(function () {
+                $('.hasOtherCondition input[type=checkbox]:checked').parent().siblings('.otherCondition').show();
+                $('.hasOtherCondition input[type=checkbox]:not(:checked)').parent().siblings('.otherCondition').hide();
+            });
+
+            $('.hasTaken input[type=checkbox]').click(function () {
+                $('.hasTaken input[type=checkbox]:checked').parent().siblings('.takenQuantity').show();
+                $('.hasTaken input[type=checkbox]:checked').parent().siblings('.lastTimeTaken').show();
+                $('.hasTaken input[type=checkbox]:not(:checked)').parent().siblings('.takenQuantity').hide();
+                $('.hasTaken input[type=checkbox]:not(:checked)').parent().siblings('.lastTimeTaken').hide();
+            });
+
+            $('input[name=TakenByOwner').click(function () {
+                if ($('input[name=TakenByOwner]').is(':checked')) {
+                    $('.age').hide();
+                    $('.hasOtherCondition').hide();
+                    $('.otherCondition').hide();
+                }
+                else {
+                    $('.age').show();
+                    $('.hasOtherCondition').show();
+
+                    $('.hasOtherCondition input[type=checkbox]:checked').parent().siblings('.otherCondition').show();
+                    $('.hasOtherCondition input[type=checkbox]:not(:checked)').parent().siblings('.otherCondition').hide();
+                }
+            });
+        });
+    </script>
+}

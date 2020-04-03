@@ -1,0 +1,1415 @@
+﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="..\..\packages\Microsoft.Net.Compilers.3.2.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\..\packages\Microsoft.Net.Compilers.3.2.1\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ACB226DC-596F-4EE3-82A8-A14BD264EA1A}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Apollo.AdminStore.WebForm</RootNamespace>
+    <AssemblyName>Apollo.AdminStore.WebForm</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Web, Version=3.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.Web.3.2.0\lib\net40\Autofac.Integration.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="FreeTextBox">
+      <HintPath>..\..\DLL\FreeTextBox.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="401.aspx" />
+    <Content Include="BulkProduct\empty.txt" />
+    <Content Include="Catalog\brand_category_info.aspx" />
+    <Content Include="Catalog\brand_default.aspx" />
+    <Content Include="Catalog\category_default.aspx" />
+    <Content Include="Catalog\custom_dict_default.aspx" />
+    <Content Include="Catalog\custom_dict_info.aspx" />
+    <Content Include="Catalog\custom_dict_new.aspx" />
+    <Content Include="Catalog\product_default.aspx" />
+    <Content Include="Catalog\product_info.aspx" />
+    <Content Include="Catalog\product_new.aspx" />
+    <Content Include="Catalog\product_price_default.aspx" />
+    <Content Include="Catalog\reviews_all.aspx" />
+    <Content Include="Catalog\reviews_pending.aspx" />
+    <Content Include="Catalog\review_info.aspx" />
+    <Content Include="Catalog\search_term_default.aspx" />
+    <Content Include="Catalog\search_term_info.aspx" />
+    <Content Include="Catalog\search_term_new.aspx" />
+    <Content Include="Catalog\test_search_result.aspx" />
+    <Content Include="css\inspinia\animate.css" />
+    <Content Include="css\inspinia\bootstrap.min.css" />
+    <Content Include="css\inspinia\font-awesome.css" />
+    <Content Include="css\inspinia\fonts\fontawesome-webfont.svg" />
+    <Content Include="css\inspinia\global-search.css" />
+    <Content Include="css\inspinia\offer-rule-tree.css" />
+    <Content Include="css\inspinia\order.css" />
+    <Content Include="css\inspinia\patterns\header-profile.png" />
+    <Content Include="css\inspinia\plugins\bootstrap-markdown\bootstrap-markdown.min.css" />
+    <Content Include="css\inspinia\plugins\dataTables\datatables.min.css" />
+    <Content Include="css\inspinia\plugins\datepicker\datepicker3.css" />
+    <Content Include="css\inspinia\plugins\gritter\jquery.gritter.css" />
+    <Content Include="css\inspinia\plugins\iCheck\custom.css" />
+    <Content Include="css\inspinia\plugins\iCheck\green.png" />
+    <Content Include="css\inspinia\plugins\summernote\summernote-bs3.css" />
+    <Content Include="css\inspinia\plugins\summernote\summernote.css" />
+    <Content Include="css\inspinia\plugins\toastr\toastr.min.css" />
+    <Content Include="css\inspinia\print.css" />
+    <Content Include="css\inspinia\product.css" />
+    <Content Include="css\inspinia\stock-admission.css" />
+    <Content Include="css\inspinia\style.css" />
+    <Content Include="Customer\customer_account_info.aspx" />
+    <Content Include="Customer\customer_address_info.aspx" />
+    <Content Include="Customer\customer_cart_info.aspx" />
+    <Content Include="Customer\customer_default.aspx" />
+    <Content Include="Customer\customer_info.aspx" />
+    <Content Include="Customer\customer_new.aspx" />
+    <Content Include="Customer\customer_order_info.aspx" />
+    <Content Include="Customer\customer_point_info.aspx" />
+    <Content Include="dashboard.aspx" />
+    <Content Include="favicon.ico" />
+    <Content Include="Fulfillment\order_fulfillment.aspx" />
+    <Content Include="Fulfillment\order_line_items.aspx" />
+    <Content Include="Fulfillment\order_line_item_status.aspx" />
+    <Content Include="Fulfillment\order_packing_info.aspx" />
+    <Content Include="get_image_handler.aspx" />
+    <Content Include="get_item_handler.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="img\1st_class_royal_mail.jpg" />
+    <Content Include="img\2nd_class_royal_mail.jpg" />
+    <Content Include="img\category-description-1.png" />
+    <Content Include="img\category-description-2.png" />
+    <Content Include="img\category-short-description.png" />
+    <Content Include="img\diana-sig.jpg" />
+    <Content Include="img\flory-sig.jpg" />
+    <Content Include="img\folder.png" />
+    <Content Include="img\offer-label.png" />
+    <Content Include="img\pager_arrow_left.gif" />
+    <Content Include="img\pager_arrow_right.gif" />
+    <Content Include="img\profile_small.jpg" />
+    <Content Include="js\inspinia\bootstrap.min.js" />
+    <Content Include="js\inspinia\demo\peity-demo.js" />
+    <Content Include="js\inspinia\demo\sparkline-demo.js" />
+    <Content Include="js\inspinia\global-search.js" />
+    <Content Include="js\inspinia\inspinia.js" />
+    <Content Include="js\inspinia\jquery-2.1.1.js" />
+    <Content Include="js\inspinia\plugins\bootstrap-markdown\bootstrap-markdown.js" />
+    <Content Include="js\inspinia\plugins\bootstrap-markdown\markdown.js" />
+    <Content Include="js\inspinia\plugins\chartJs\Chart.min.js" />
+    <Content Include="js\inspinia\plugins\datepicker\bootstrap-datepicker.js" />
+    <Content Include="js\inspinia\plugins\flot\jquery.flot.js" />
+    <Content Include="js\inspinia\plugins\flot\jquery.flot.pie.js" />
+    <Content Include="js\inspinia\plugins\flot\jquery.flot.resize.js" />
+    <Content Include="js\inspinia\plugins\flot\jquery.flot.spline.js" />
+    <Content Include="js\inspinia\plugins\flot\jquery.flot.tooltip.min.js" />
+    <Content Include="js\inspinia\plugins\gritter\jquery.gritter.min.js" />
+    <Content Include="js\inspinia\plugins\jquery-ui\jquery-ui.min.js" />
+    <Content Include="js\inspinia\plugins\jvectormap\jquery-jvectormap-2.0.2.min.js" />
+    <Content Include="js\inspinia\plugins\jvectormap\jquery-jvectormap-world-mill-en.js" />
+    <Content Include="js\inspinia\plugins\metisMenu\jquery.metisMenu.js" />
+    <Content Include="js\inspinia\plugins\pace\pace.min.js" />
+    <Content Include="js\inspinia\plugins\peity\jquery.peity.min.js" />
+    <Content Include="js\inspinia\plugins\slimscroll\jquery.slimscroll.min.js" />
+    <Content Include="js\inspinia\plugins\sparkline\jquery.sparkline.min.js" />
+    <Content Include="js\inspinia\plugins\summernote\summernote.min.js" />
+    <Content Include="js\inspinia\plugins\toastr\toastr.min.js" />
+    <Content Include="js\offer.js" />
+    <Content Include="js\order.js" />
+    <Content Include="js\product.js" />
+    <Content Include="js\stock_admission.js" />
+    <Content Include="js\tip_centerwindow.js" />
+    <Content Include="js\tip_followscroll.js" />
+    <Content Include="js\wz_tooltip.js" />
+    <Content Include="login.aspx" />
+    <Content Include="logout.aspx" />
+    <Content Include="Marketing\cms_blog_comment_default.aspx" />
+    <Content Include="Marketing\cms_blog_post_default.aspx" />
+    <Content Include="Marketing\cms_blog_post_info.aspx" />
+    <Content Include="Marketing\cms_blog_post_new.aspx" />
+    <Content Include="Marketing\cms_featureditem_default.aspx" />
+    <Content Include="Marketing\cms_featureditem_info.aspx" />
+    <Content Include="Marketing\cms_featureditem_new.aspx" />
+    <Content Include="Marketing\cms_largebanner_default.aspx" />
+    <Content Include="Marketing\cms_largebanner_info.aspx" />
+    <Content Include="Marketing\cms_largebanner_new.aspx" />
+    <Content Include="Marketing\cms_offerbanner_default.aspx" />
+    <Content Include="Marketing\cms_offerbanner_info.aspx" />
+    <Content Include="Marketing\cms_offerbanner_new.aspx" />
+    <Content Include="Marketing\cms_testimonials_default.aspx" />
+    <Content Include="Marketing\cms_testimonials_info.aspx" />
+    <Content Include="Marketing\cms_testimonials_new.aspx" />
+    <Content Include="Marketing\newsletter_subscribers.aspx" />
+    <Content Include="Marketing\promo_cart_offer_default.aspx" />
+    <Content Include="Marketing\promo_cart_offer_info.aspx" />
+    <Content Include="Marketing\promo_cart_offer_new.aspx" />
+    <Content Include="Marketing\promo_catalog_offer_default.aspx" />
+    <Content Include="Marketing\promo_catalog_offer_info.aspx" />
+    <Content Include="Marketing\promo_catalog_offer_new.aspx" />
+    <Content Include="Marketing\promo_google_shopping_custom_labels_default.aspx" />
+    <Content Include="Marketing\promo_offer_handler.aspx" />
+    <Content Include="Report\report_orders.aspx" />
+    <Content Include="Report\report_pending_line_inventory.aspx" />
+    <Content Include="Report\report_product_analysis.aspx" />
+    <Content Include="Report\report_registrations.aspx" />
+    <Content Include="Report\report_transaction_worldwide.aspx" />
+    <Content Include="Sales\cancellation_default.aspx" />
+    <Content Include="Sales\cancellation_info.aspx" />
+    <Content Include="Sales\order_cancel_new.aspx" />
+    <Content Include="Sales\order_comments_default.aspx" />
+    <Content Include="Sales\order_default.aspx" />
+    <Content Include="Sales\order_email_payment_default.aspx" />
+    <Content Include="Sales\order_info.aspx" />
+    <Content Include="Sales\order_invoice_new.aspx" />
+    <Content Include="Sales\order_new.aspx" />
+    <Content Include="Sales\order_new_add_from_cart.aspx" />
+    <Content Include="Sales\order_new_add_from_product_search.aspx" />
+    <Content Include="Sales\order_new_select_customer.aspx" />
+    <Content Include="Sales\order_payment_default.aspx" />
+    <Content Include="Sales\order_payment_new.aspx" />
+    <Content Include="Sales\order_pharm_form.aspx" />
+    <Content Include="Sales\order_pharm_form_edit.aspx" />
+    <Content Include="Sales\order_refund_new.aspx" />
+    <Content Include="Sales\order_shipment_default.aspx" />
+    <Content Include="Sales\order_shipment_info.aspx" />
+    <Content Include="Sales\refund_default.aspx" />
+    <Content Include="Sales\refund_info.aspx" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="search.aspx" />
+    <Content Include="System\system_bulkproduct_upload.aspx" />
+    <Content Include="System\system_cache_default.aspx" />
+    <Content Include="System\system_country_default.aspx" />
+    <Content Include="System\system_country_info.aspx" />
+    <Content Include="System\system_country_new.aspx" />
+    <Content Include="System\system_currency_default.aspx" />
+    <Content Include="System\system_currency_info.aspx" />
+    <Content Include="System\system_currency_new.aspx" />
+    <Content Include="System\system_google_taxonomy_upload.aspx" />
+    <Content Include="System\system_nhunspell_default.aspx" />
+    <Content Include="System\system_plugins_sagepay_default.aspx" />
+    <Content Include="System\system_security_default.aspx" />
+    <Content Include="System\system_settings_blog.aspx" />
+    <Content Include="System\system_settings_catalog.aspx" />
+    <Content Include="System\system_settings_currency.aspx" />
+    <Content Include="System\system_settings_customer.aspx" />
+    <Content Include="System\system_settings_default.aspx" />
+    <Content Include="System\system_settings_email.aspx" />
+    <Content Include="System\system_settings_general.aspx" />
+    <Content Include="System\system_settings_media.aspx" />
+    <Content Include="System\system_settings_seo.aspx" />
+    <Content Include="System\system_settings_shipping.aspx" />
+    <Content Include="System\system_settings_shoppingcart.aspx" />
+    <Content Include="System\system_settings_store.aspx" />
+    <Content Include="System\system_settings_tax.aspx" />
+    <Content Include="System\system_shipping_default.aspx" />
+    <Content Include="System\system_shipping_info.aspx" />
+    <Content Include="System\system_shipping_new.aspx" />
+    <Content Include="System\system_sitemap_default.aspx" />
+    <Content Include="System\system_widgets_google_analytics_default.aspx" />
+    <Content Include="UserControls\BrandCategoryTreeControl.ascx" />
+    <Content Include="UserControls\CategoryTreeControl.ascx" />
+    <Content Include="UserControls\CustomerNavControl.ascx" />
+    <Content Include="UserControls\CustomerTopRightNavControl.ascx" />
+    <Content Include="UserControls\GoogleTaxonomyControl.ascx" />
+    <Content Include="UserControls\MenuControl.ascx" />
+    <Content Include="UserControls\NoticeBoxControl.ascx" />
+    <Content Include="UserControls\OrderAccountViewControl.ascx" />
+    <Content Include="UserControls\OrderAddressSelectorControl.ascx" />
+    <Content Include="UserControls\OrderAddressViewControl.ascx" />
+    <Content Include="UserControls\OrderHeaderControl.ascx" />
+    <Content Include="UserControls\OrderInfoControl.ascx" />
+    <Content Include="UserControls\OrderLoyaltyViewControl.ascx" />
+    <Content Include="UserControls\OrderNavControl.ascx" />
+    <Content Include="UserControls\OrderOfferViewControl.ascx" />
+    <Content Include="UserControls\OrderPaymentViewControl.ascx" />
+    <Content Include="UserControls\OrderPrevNextControl.ascx" />
+    <Content Include="UserControls\OrderShipmentInfoControl.ascx" />
+    <Content Include="UserControls\OrderShippingNewControl.ascx" />
+    <Content Include="UserControls\OrderShippingViewControl.ascx" />
+    <Content Include="UserControls\OrderSideMenuControl.ascx" />
+    <Content Include="UserControls\OrderSystemCheckViewControl.ascx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="401.aspx.cs">
+      <DependentUpon>401.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="401.aspx.designer.cs">
+      <DependentUpon>401.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\brand_category_info.aspx.cs">
+      <DependentUpon>brand_category_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\brand_category_info.aspx.designer.cs">
+      <DependentUpon>brand_category_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\brand_default.aspx.cs">
+      <DependentUpon>brand_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\brand_default.aspx.designer.cs">
+      <DependentUpon>brand_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\category_default.aspx.cs">
+      <DependentUpon>category_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\category_default.aspx.designer.cs">
+      <DependentUpon>category_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\custom_dict_default.aspx.cs">
+      <DependentUpon>custom_dict_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\custom_dict_default.aspx.designer.cs">
+      <DependentUpon>custom_dict_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\custom_dict_info.aspx.cs">
+      <DependentUpon>custom_dict_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\custom_dict_info.aspx.designer.cs">
+      <DependentUpon>custom_dict_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\custom_dict_new.aspx.cs">
+      <DependentUpon>custom_dict_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\custom_dict_new.aspx.designer.cs">
+      <DependentUpon>custom_dict_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\product_default.aspx.cs">
+      <DependentUpon>product_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\product_default.aspx.designer.cs">
+      <DependentUpon>product_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\product_info.aspx.cs">
+      <DependentUpon>product_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\product_info.aspx.designer.cs">
+      <DependentUpon>product_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\product_new.aspx.cs">
+      <DependentUpon>product_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\product_new.aspx.designer.cs">
+      <DependentUpon>product_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\product_price_default.aspx.cs">
+      <DependentUpon>product_price_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\product_price_default.aspx.designer.cs">
+      <DependentUpon>product_price_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\reviews_all.aspx.cs">
+      <DependentUpon>reviews_all.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\reviews_all.aspx.designer.cs">
+      <DependentUpon>reviews_all.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\reviews_pending.aspx.cs">
+      <DependentUpon>reviews_pending.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\reviews_pending.aspx.designer.cs">
+      <DependentUpon>reviews_pending.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\review_info.aspx.cs">
+      <DependentUpon>review_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\review_info.aspx.designer.cs">
+      <DependentUpon>review_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\search_term_default.aspx.cs">
+      <DependentUpon>search_term_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\search_term_default.aspx.designer.cs">
+      <DependentUpon>search_term_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\search_term_info.aspx.cs">
+      <DependentUpon>search_term_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\search_term_info.aspx.designer.cs">
+      <DependentUpon>search_term_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\search_term_new.aspx.cs">
+      <DependentUpon>search_term_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\search_term_new.aspx.designer.cs">
+      <DependentUpon>search_term_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Catalog\test_search_result.aspx.cs">
+      <DependentUpon>test_search_result.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Catalog\test_search_result.aspx.designer.cs">
+      <DependentUpon>test_search_result.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\AccountLite.cs" />
+    <Compile Include="Classes\AdminStoreUtility.cs" />
+    <Compile Include="Classes\BasePage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Classes\BaseUserControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Classes\BranchStaffKey.cs" />
+    <Compile Include="Classes\Compressor.cs" />
+    <Compile Include="Classes\CustomGrid.cs" />
+    <Compile Include="Classes\CustomProfileProvider.cs" />
+    <Compile Include="Classes\CustomRoleProvider.cs" />
+    <Compile Include="Classes\EmailHelper.cs" />
+    <Compile Include="Classes\EnumExtensions.cs" />
+    <Compile Include="Classes\ErrorSummary.cs" />
+    <Compile Include="Classes\ExcelUtility.cs" />
+    <Compile Include="Classes\GenericAttributeExtensions.cs" />
+    <Compile Include="Classes\Global.cs" />
+    <Compile Include="Classes\ImageUtility.cs" />
+    <Compile Include="Classes\LineItemLite.cs" />
+    <Compile Include="Classes\LogBuilder.cs" />
+    <Compile Include="Classes\Logger.cs" />
+    <Compile Include="Classes\MessageType.cs" />
+    <Compile Include="Classes\OfferUtility.cs" />
+    <Compile Include="Classes\OrderNavType.cs" />
+    <Compile Include="Classes\OrderSideMenuType.cs" />
+    <Compile Include="Classes\QueryKey.cs" />
+    <Compile Include="Classes\SessionFacade.cs" />
+    <Compile Include="Classes\SupportedCard.cs" />
+    <Compile Include="Classes\SupportedCardSectionHandler.cs" />
+    <Compile Include="Customer\customer_account_info.aspx.cs">
+      <DependentUpon>customer_account_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Customer\customer_account_info.aspx.designer.cs">
+      <DependentUpon>customer_account_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\customer_address_info.aspx.cs">
+      <DependentUpon>customer_address_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Customer\customer_address_info.aspx.designer.cs">
+      <DependentUpon>customer_address_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\customer_cart_info.aspx.cs">
+      <DependentUpon>customer_cart_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Customer\customer_cart_info.aspx.designer.cs">
+      <DependentUpon>customer_cart_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\customer_default.aspx.cs">
+      <DependentUpon>customer_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Customer\customer_default.aspx.designer.cs">
+      <DependentUpon>customer_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\customer_info.aspx.cs">
+      <DependentUpon>customer_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Customer\customer_info.aspx.designer.cs">
+      <DependentUpon>customer_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\customer_new.aspx.cs">
+      <DependentUpon>customer_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Customer\customer_new.aspx.designer.cs">
+      <DependentUpon>customer_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\customer_order_info.aspx.cs">
+      <DependentUpon>customer_order_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Customer\customer_order_info.aspx.designer.cs">
+      <DependentUpon>customer_order_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\customer_point_info.aspx.cs">
+      <DependentUpon>customer_point_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Customer\customer_point_info.aspx.designer.cs">
+      <DependentUpon>customer_point_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="dashboard.aspx.cs">
+      <DependentUpon>dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="dashboard.aspx.designer.cs">
+      <DependentUpon>dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Fulfillment\order_fulfillment.aspx.cs">
+      <DependentUpon>order_fulfillment.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Fulfillment\order_fulfillment.aspx.designer.cs">
+      <DependentUpon>order_fulfillment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Fulfillment\order_line_items.aspx.cs">
+      <DependentUpon>order_line_items.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Fulfillment\order_line_items.aspx.designer.cs">
+      <DependentUpon>order_line_items.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Fulfillment\order_line_item_status.aspx.cs">
+      <DependentUpon>order_line_item_status.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Fulfillment\order_line_item_status.aspx.designer.cs">
+      <DependentUpon>order_line_item_status.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Fulfillment\order_packing_info.aspx.cs">
+      <DependentUpon>order_packing_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Fulfillment\order_packing_info.aspx.designer.cs">
+      <DependentUpon>order_packing_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="get_image_handler.aspx.cs">
+      <DependentUpon>get_image_handler.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="get_image_handler.aspx.designer.cs">
+      <DependentUpon>get_image_handler.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="get_item_handler.aspx.cs">
+      <DependentUpon>get_item_handler.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="get_item_handler.aspx.designer.cs">
+      <DependentUpon>get_item_handler.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\DependencyRegistrar.cs" />
+    <Compile Include="Inspinia.Master.cs">
+      <DependentUpon>Inspinia.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Inspinia.Master.designer.cs">
+      <DependentUpon>Inspinia.Master</DependentUpon>
+    </Compile>
+    <Compile Include="login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="logout.aspx.cs">
+      <DependentUpon>logout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="logout.aspx.designer.cs">
+      <DependentUpon>logout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_blog_comment_default.aspx.cs">
+      <DependentUpon>cms_blog_comment_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_blog_comment_default.aspx.designer.cs">
+      <DependentUpon>cms_blog_comment_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_blog_post_default.aspx.cs">
+      <DependentUpon>cms_blog_post_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_blog_post_default.aspx.designer.cs">
+      <DependentUpon>cms_blog_post_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_blog_post_info.aspx.cs">
+      <DependentUpon>cms_blog_post_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_blog_post_info.aspx.designer.cs">
+      <DependentUpon>cms_blog_post_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_blog_post_new.aspx.cs">
+      <DependentUpon>cms_blog_post_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_blog_post_new.aspx.designer.cs">
+      <DependentUpon>cms_blog_post_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_featureditem_default.aspx.cs">
+      <DependentUpon>cms_featureditem_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_featureditem_default.aspx.designer.cs">
+      <DependentUpon>cms_featureditem_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_featureditem_info.aspx.cs">
+      <DependentUpon>cms_featureditem_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_featureditem_info.aspx.designer.cs">
+      <DependentUpon>cms_featureditem_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_featureditem_new.aspx.cs">
+      <DependentUpon>cms_featureditem_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_featureditem_new.aspx.designer.cs">
+      <DependentUpon>cms_featureditem_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_largebanner_default.aspx.cs">
+      <DependentUpon>cms_largebanner_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_largebanner_default.aspx.designer.cs">
+      <DependentUpon>cms_largebanner_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_largebanner_info.aspx.cs">
+      <DependentUpon>cms_largebanner_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_largebanner_info.aspx.designer.cs">
+      <DependentUpon>cms_largebanner_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_largebanner_new.aspx.cs">
+      <DependentUpon>cms_largebanner_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_largebanner_new.aspx.designer.cs">
+      <DependentUpon>cms_largebanner_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_offerbanner_default.aspx.cs">
+      <DependentUpon>cms_offerbanner_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_offerbanner_default.aspx.designer.cs">
+      <DependentUpon>cms_offerbanner_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_offerbanner_info.aspx.cs">
+      <DependentUpon>cms_offerbanner_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_offerbanner_info.aspx.designer.cs">
+      <DependentUpon>cms_offerbanner_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_offerbanner_new.aspx.cs">
+      <DependentUpon>cms_offerbanner_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_offerbanner_new.aspx.designer.cs">
+      <DependentUpon>cms_offerbanner_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_testimonials_default.aspx.cs">
+      <DependentUpon>cms_testimonials_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_testimonials_default.aspx.designer.cs">
+      <DependentUpon>cms_testimonials_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_testimonials_info.aspx.cs">
+      <DependentUpon>cms_testimonials_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_testimonials_info.aspx.designer.cs">
+      <DependentUpon>cms_testimonials_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\cms_testimonials_new.aspx.cs">
+      <DependentUpon>cms_testimonials_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\cms_testimonials_new.aspx.designer.cs">
+      <DependentUpon>cms_testimonials_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\newsletter_subscribers.aspx.cs">
+      <DependentUpon>newsletter_subscribers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\newsletter_subscribers.aspx.designer.cs">
+      <DependentUpon>newsletter_subscribers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\promo_cart_offer_default.aspx.cs">
+      <DependentUpon>promo_cart_offer_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\promo_cart_offer_default.aspx.designer.cs">
+      <DependentUpon>promo_cart_offer_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\promo_cart_offer_info.aspx.cs">
+      <DependentUpon>promo_cart_offer_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\promo_cart_offer_info.aspx.designer.cs">
+      <DependentUpon>promo_cart_offer_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\promo_cart_offer_new.aspx.cs">
+      <DependentUpon>promo_cart_offer_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\promo_cart_offer_new.aspx.designer.cs">
+      <DependentUpon>promo_cart_offer_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\promo_catalog_offer_default.aspx.cs">
+      <DependentUpon>promo_catalog_offer_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\promo_catalog_offer_default.aspx.designer.cs">
+      <DependentUpon>promo_catalog_offer_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\promo_catalog_offer_info.aspx.cs">
+      <DependentUpon>promo_catalog_offer_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\promo_catalog_offer_info.aspx.designer.cs">
+      <DependentUpon>promo_catalog_offer_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\promo_catalog_offer_new.aspx.cs">
+      <DependentUpon>promo_catalog_offer_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\promo_catalog_offer_new.aspx.designer.cs">
+      <DependentUpon>promo_catalog_offer_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\promo_google_shopping_custom_labels_default.aspx.cs">
+      <DependentUpon>promo_google_shopping_custom_labels_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\promo_google_shopping_custom_labels_default.aspx.designer.cs">
+      <DependentUpon>promo_google_shopping_custom_labels_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Marketing\promo_offer_handler.aspx.cs">
+      <DependentUpon>promo_offer_handler.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketing\promo_offer_handler.aspx.designer.cs">
+      <DependentUpon>promo_offer_handler.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\report_orders.aspx.cs">
+      <DependentUpon>report_orders.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Report\report_orders.aspx.designer.cs">
+      <DependentUpon>report_orders.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Report\report_pending_line_inventory.aspx.cs">
+      <DependentUpon>report_pending_line_inventory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Report\report_pending_line_inventory.aspx.designer.cs">
+      <DependentUpon>report_pending_line_inventory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Report\report_product_analysis.aspx.cs">
+      <DependentUpon>report_product_analysis.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Report\report_product_analysis.aspx.designer.cs">
+      <DependentUpon>report_product_analysis.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Report\report_registrations.aspx.cs">
+      <DependentUpon>report_registrations.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Report\report_registrations.aspx.designer.cs">
+      <DependentUpon>report_registrations.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Report\report_transaction_worldwide.aspx.cs">
+      <DependentUpon>report_transaction_worldwide.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Report\report_transaction_worldwide.aspx.designer.cs">
+      <DependentUpon>report_transaction_worldwide.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\cancellation_default.aspx.cs">
+      <DependentUpon>cancellation_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\cancellation_default.aspx.designer.cs">
+      <DependentUpon>cancellation_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\cancellation_info.aspx.cs">
+      <DependentUpon>cancellation_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\cancellation_info.aspx.designer.cs">
+      <DependentUpon>cancellation_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_cancel_new.aspx.cs">
+      <DependentUpon>order_cancel_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_cancel_new.aspx.designer.cs">
+      <DependentUpon>order_cancel_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_comments_default.aspx.cs">
+      <DependentUpon>order_comments_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_comments_default.aspx.designer.cs">
+      <DependentUpon>order_comments_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_default.aspx.cs">
+      <DependentUpon>order_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_default.aspx.designer.cs">
+      <DependentUpon>order_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_email_payment_default.aspx.cs">
+      <DependentUpon>order_email_payment_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_email_payment_default.aspx.designer.cs">
+      <DependentUpon>order_email_payment_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_info.aspx.cs">
+      <DependentUpon>order_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_info.aspx.designer.cs">
+      <DependentUpon>order_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_invoice_new.aspx.cs">
+      <DependentUpon>order_invoice_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_invoice_new.aspx.designer.cs">
+      <DependentUpon>order_invoice_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_new.aspx.cs">
+      <DependentUpon>order_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_new.aspx.designer.cs">
+      <DependentUpon>order_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_new_add_from_cart.aspx.cs">
+      <DependentUpon>order_new_add_from_cart.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_new_add_from_cart.aspx.designer.cs">
+      <DependentUpon>order_new_add_from_cart.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_new_add_from_product_search.aspx.cs">
+      <DependentUpon>order_new_add_from_product_search.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_new_add_from_product_search.aspx.designer.cs">
+      <DependentUpon>order_new_add_from_product_search.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_new_select_customer.aspx.cs">
+      <DependentUpon>order_new_select_customer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_new_select_customer.aspx.designer.cs">
+      <DependentUpon>order_new_select_customer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_payment_default.aspx.cs">
+      <DependentUpon>order_payment_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_payment_default.aspx.designer.cs">
+      <DependentUpon>order_payment_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_payment_new.aspx.cs">
+      <DependentUpon>order_payment_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_payment_new.aspx.designer.cs">
+      <DependentUpon>order_payment_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_pharm_form.aspx.cs">
+      <DependentUpon>order_pharm_form.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_pharm_form.aspx.designer.cs">
+      <DependentUpon>order_pharm_form.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_pharm_form_edit.aspx.cs">
+      <DependentUpon>order_pharm_form_edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_pharm_form_edit.aspx.designer.cs">
+      <DependentUpon>order_pharm_form_edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_refund_new.aspx.cs">
+      <DependentUpon>order_refund_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_refund_new.aspx.designer.cs">
+      <DependentUpon>order_refund_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_shipment_default.aspx.cs">
+      <DependentUpon>order_shipment_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_shipment_default.aspx.designer.cs">
+      <DependentUpon>order_shipment_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\order_shipment_info.aspx.cs">
+      <DependentUpon>order_shipment_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\order_shipment_info.aspx.designer.cs">
+      <DependentUpon>order_shipment_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\refund_default.aspx.cs">
+      <DependentUpon>refund_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\refund_default.aspx.designer.cs">
+      <DependentUpon>refund_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\refund_info.aspx.cs">
+      <DependentUpon>refund_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Sales\refund_info.aspx.designer.cs">
+      <DependentUpon>refund_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="search.aspx.cs">
+      <DependentUpon>search.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="search.aspx.designer.cs">
+      <DependentUpon>search.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_bulkproduct_upload.aspx.cs">
+      <DependentUpon>system_bulkproduct_upload.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_bulkproduct_upload.aspx.designer.cs">
+      <DependentUpon>system_bulkproduct_upload.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_cache_default.aspx.cs">
+      <DependentUpon>system_cache_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_cache_default.aspx.designer.cs">
+      <DependentUpon>system_cache_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_country_default.aspx.cs">
+      <DependentUpon>system_country_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_country_default.aspx.designer.cs">
+      <DependentUpon>system_country_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_country_info.aspx.cs">
+      <DependentUpon>system_country_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_country_info.aspx.designer.cs">
+      <DependentUpon>system_country_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_country_new.aspx.cs">
+      <DependentUpon>system_country_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_country_new.aspx.designer.cs">
+      <DependentUpon>system_country_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_currency_default.aspx.cs">
+      <DependentUpon>system_currency_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_currency_default.aspx.designer.cs">
+      <DependentUpon>system_currency_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_currency_info.aspx.cs">
+      <DependentUpon>system_currency_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_currency_info.aspx.designer.cs">
+      <DependentUpon>system_currency_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_currency_new.aspx.cs">
+      <DependentUpon>system_currency_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_currency_new.aspx.designer.cs">
+      <DependentUpon>system_currency_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_google_taxonomy_upload.aspx.cs">
+      <DependentUpon>system_google_taxonomy_upload.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_google_taxonomy_upload.aspx.designer.cs">
+      <DependentUpon>system_google_taxonomy_upload.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_nhunspell_default.aspx.cs">
+      <DependentUpon>system_nhunspell_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_nhunspell_default.aspx.designer.cs">
+      <DependentUpon>system_nhunspell_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_plugins_sagepay_default.aspx.cs">
+      <DependentUpon>system_plugins_sagepay_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_plugins_sagepay_default.aspx.designer.cs">
+      <DependentUpon>system_plugins_sagepay_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_security_default.aspx.cs">
+      <DependentUpon>system_security_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_security_default.aspx.designer.cs">
+      <DependentUpon>system_security_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_settings_blog.aspx.cs">
+      <DependentUpon>system_settings_blog.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_settings_blog.aspx.designer.cs">
+      <DependentUpon>system_settings_blog.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_settings_catalog.aspx.cs">
+      <DependentUpon>system_settings_catalog.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_settings_catalog.aspx.designer.cs">
+      <DependentUpon>system_settings_catalog.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_settings_currency.aspx.cs">
+      <DependentUpon>system_settings_currency.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_settings_currency.aspx.designer.cs">
+      <DependentUpon>system_settings_currency.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_settings_customer.aspx.cs">
+      <DependentUpon>system_settings_customer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_settings_customer.aspx.designer.cs">
+      <DependentUpon>system_settings_customer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_settings_default.aspx.cs">
+      <DependentUpon>system_settings_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_settings_default.aspx.designer.cs">
+      <DependentUpon>system_settings_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_settings_email.aspx.cs">
+      <DependentUpon>system_settings_email.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_settings_email.aspx.designer.cs">
+      <DependentUpon>system_settings_email.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_settings_general.aspx.cs">
+      <DependentUpon>system_settings_general.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_settings_general.aspx.designer.cs">
+      <DependentUpon>system_settings_general.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_settings_media.aspx.cs">
+      <DependentUpon>system_settings_media.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_settings_media.aspx.designer.cs">
+      <DependentUpon>system_settings_media.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_settings_seo.aspx.cs">
+      <DependentUpon>system_settings_seo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_settings_seo.aspx.designer.cs">
+      <DependentUpon>system_settings_seo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_settings_shipping.aspx.cs">
+      <DependentUpon>system_settings_shipping.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_settings_shipping.aspx.designer.cs">
+      <DependentUpon>system_settings_shipping.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_settings_shoppingcart.aspx.cs">
+      <DependentUpon>system_settings_shoppingcart.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_settings_shoppingcart.aspx.designer.cs">
+      <DependentUpon>system_settings_shoppingcart.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_settings_store.aspx.cs">
+      <DependentUpon>system_settings_store.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_settings_store.aspx.designer.cs">
+      <DependentUpon>system_settings_store.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_settings_tax.aspx.cs">
+      <DependentUpon>system_settings_tax.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_settings_tax.aspx.designer.cs">
+      <DependentUpon>system_settings_tax.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_shipping_default.aspx.cs">
+      <DependentUpon>system_shipping_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_shipping_default.aspx.designer.cs">
+      <DependentUpon>system_shipping_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_shipping_info.aspx.cs">
+      <DependentUpon>system_shipping_info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_shipping_info.aspx.designer.cs">
+      <DependentUpon>system_shipping_info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_shipping_new.aspx.cs">
+      <DependentUpon>system_shipping_new.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_shipping_new.aspx.designer.cs">
+      <DependentUpon>system_shipping_new.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_sitemap_default.aspx.cs">
+      <DependentUpon>system_sitemap_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_sitemap_default.aspx.designer.cs">
+      <DependentUpon>system_sitemap_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="System\system_widgets_google_analytics_default.aspx.cs">
+      <DependentUpon>system_widgets_google_analytics_default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="System\system_widgets_google_analytics_default.aspx.designer.cs">
+      <DependentUpon>system_widgets_google_analytics_default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\BrandCategoryTreeControl.ascx.cs">
+      <DependentUpon>BrandCategoryTreeControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\BrandCategoryTreeControl.ascx.designer.cs">
+      <DependentUpon>BrandCategoryTreeControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CategoryTreeControl.ascx.cs">
+      <DependentUpon>CategoryTreeControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\CategoryTreeControl.ascx.designer.cs">
+      <DependentUpon>CategoryTreeControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CustomerNavControl.ascx.cs">
+      <DependentUpon>CustomerNavControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\CustomerNavControl.ascx.designer.cs">
+      <DependentUpon>CustomerNavControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CustomerTopRightNavControl.ascx.cs">
+      <DependentUpon>CustomerTopRightNavControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\CustomerTopRightNavControl.ascx.designer.cs">
+      <DependentUpon>CustomerTopRightNavControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\GoogleTaxonomyControl.ascx.cs">
+      <DependentUpon>GoogleTaxonomyControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\GoogleTaxonomyControl.ascx.designer.cs">
+      <DependentUpon>GoogleTaxonomyControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MenuControl.ascx.cs">
+      <DependentUpon>MenuControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\MenuControl.ascx.designer.cs">
+      <DependentUpon>MenuControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\NoticeBoxControl.ascx.cs">
+      <DependentUpon>NoticeBoxControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\NoticeBoxControl.ascx.designer.cs">
+      <DependentUpon>NoticeBoxControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderAccountViewControl.ascx.cs">
+      <DependentUpon>OrderAccountViewControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderAccountViewControl.ascx.designer.cs">
+      <DependentUpon>OrderAccountViewControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderAddressSelectorControl.ascx.cs">
+      <DependentUpon>OrderAddressSelectorControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderAddressSelectorControl.ascx.designer.cs">
+      <DependentUpon>OrderAddressSelectorControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderAddressViewControl.ascx.cs">
+      <DependentUpon>OrderAddressViewControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderAddressViewControl.ascx.designer.cs">
+      <DependentUpon>OrderAddressViewControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderHeaderControl.ascx.cs">
+      <DependentUpon>OrderHeaderControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderHeaderControl.ascx.designer.cs">
+      <DependentUpon>OrderHeaderControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderInfoControl.ascx.cs">
+      <DependentUpon>OrderInfoControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderInfoControl.ascx.designer.cs">
+      <DependentUpon>OrderInfoControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderLoyaltyViewControl.ascx.cs">
+      <DependentUpon>OrderLoyaltyViewControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderLoyaltyViewControl.ascx.designer.cs">
+      <DependentUpon>OrderLoyaltyViewControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderNavControl.ascx.cs">
+      <DependentUpon>OrderNavControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderNavControl.ascx.designer.cs">
+      <DependentUpon>OrderNavControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderOfferViewControl.ascx.cs">
+      <DependentUpon>OrderOfferViewControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderOfferViewControl.ascx.designer.cs">
+      <DependentUpon>OrderOfferViewControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderPaymentViewControl.ascx.cs">
+      <DependentUpon>OrderPaymentViewControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderPaymentViewControl.ascx.designer.cs">
+      <DependentUpon>OrderPaymentViewControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderPrevNextControl.ascx.cs">
+      <DependentUpon>OrderPrevNextControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderPrevNextControl.ascx.designer.cs">
+      <DependentUpon>OrderPrevNextControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderShipmentInfoControl.ascx.cs">
+      <DependentUpon>OrderShipmentInfoControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderShipmentInfoControl.ascx.designer.cs">
+      <DependentUpon>OrderShipmentInfoControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderShippingNewControl.ascx.cs">
+      <DependentUpon>OrderShippingNewControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderShippingNewControl.ascx.designer.cs">
+      <DependentUpon>OrderShippingNewControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderShippingViewControl.ascx.cs">
+      <DependentUpon>OrderShippingViewControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderShippingViewControl.ascx.designer.cs">
+      <DependentUpon>OrderShippingViewControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderSideMenuControl.ascx.cs">
+      <DependentUpon>OrderSideMenuControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderSideMenuControl.ascx.designer.cs">
+      <DependentUpon>OrderSideMenuControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderSystemCheckViewControl.ascx.cs">
+      <DependentUpon>OrderSystemCheckViewControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderSystemCheckViewControl.ascx.designer.cs">
+      <DependentUpon>OrderSystemCheckViewControl.ascx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BulkProduct\product-entry-template.xlsx" />
+    <Content Include="BulkProduct\taxonomy-with-ids.en-GB.xls" />
+    <Content Include="css\inspinia\fonts\fontawesome-webfont.eot" />
+    <Content Include="css\inspinia\fonts\fontawesome-webfont.ttf" />
+    <Content Include="css\inspinia\fonts\fontawesome-webfont.woff" />
+    <Content Include="css\inspinia\fonts\fontawesome-webfont.woff2" />
+    <Content Include="css\inspinia\fonts\FontAwesome.otf" />
+    <Content Include="Logs\store-admin.log" />
+    <Content Include="Inspinia.Master" />
+    <Content Include="product-entry-template.xlsx" />
+    <None Include="packages.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Apollo.Core.Model\Apollo.Core.Model.csproj">
+      <Project>{69067ce3-5f66-4c27-8ae9-7309b2a6d105}</Project>
+      <Name>Apollo.Core.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Apollo.Core.Services.Interfaces\Apollo.Core.Services.Interfaces.csproj">
+      <Project>{c887bcec-a061-4289-9954-54a656f07db3}</Project>
+      <Name>Apollo.Core.Services.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Apollo.Core\Apollo.Core.csproj">
+      <Project>{ae3335c7-9fb1-4242-b3e8-04f4ed9da0f6}</Project>
+      <Name>Apollo.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Web Framework\Apollo.Web.Framework\Apollo.Web.Framework.csproj">
+      <Project>{2f849822-dd13-43d0-99f2-e864ff500a1c}</Project>
+      <Name>Apollo.Web.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>49927</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:50565/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.Net.Compilers.3.2.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Net.Compilers.3.2.1\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

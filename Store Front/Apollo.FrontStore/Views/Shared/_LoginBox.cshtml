@@ -1,0 +1,38 @@
+﻿@using Apollo.Core.Infrastructure;
+@using Apollo.Core;
+@using Microsoft.Owin.Security;
+
+@{
+    var workContext = EngineContext.Current.Resolve<IWorkContext>();
+    var webHelper = EngineContext.Current.Resolve<IWebHelper>();
+    var loginUrl = webHelper.ModifyQueryString(Url.RouteUrl("Login", null, this.Request.Url.Scheme), "returnurl=" + HttpUtility.UrlEncode(HttpContext.Current.Request.RawUrl), null);
+}
+
+@if (workContext.CurrentProfile.IsAnonymous)
+{
+    <a href="@Url.RouteUrl("Login", null, this.Request.Url.Scheme)">Login / Sign Up</a>
+    <ul class="dropdown-menu mini-login">
+        <li>
+            <div class="text">
+                <h6><img src="@Url.GenerateAbsoluteUrl("/content/img/icon-user.png")" alt="Login Area" />Login Area</h6>
+                <img src="@Url.GenerateAbsoluteUrl("/content/img/img-border-login.png")" alt="Login Border" />
+            </div>
+            <div class="text">
+
+                @using (Html.BeginForm("Login", "Customer", FormMethod.Post, new { @action = loginUrl }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input name="Email" type="text" placeholder="Your email" />
+                    <input name="Password" type="password" placeholder="Your password" />
+                    <button type="submit"><span class="glyphicon glyphicon-lock"></span>login</button>
+                }
+
+                <a class="create" href="@Url.RouteUrl("Register", null, this.Request.Url.Scheme)">Create New Account</a>
+            </div>
+        </li>
+    </ul>
+}
+else
+{
+    <a href="@Url.RouteUrl("Account", null, this.Request.Url.Scheme)">My Account</a>
+}

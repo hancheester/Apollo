@@ -1,0 +1,44 @@
+﻿@using Apollo.FrontStore.Models.ShoppingCart;
+@model OrderTotalsModel
+
+<div class="@(Model.IsEditable == false ? "col-sm-offset-8" : "") col-sm-4">
+    <div class="title">
+        <h5>Subtotal (excl. tax)<span class="pull-right">@Html.Raw(Model.SubTotal)</span></h5>
+    </div>
+    @if (!string.IsNullOrEmpty(Model.SubTotalDiscount))
+    {
+        <div class="title">
+            <h5>Discount<span class="pull-right">@Html.Raw(Model.SubTotalDiscount)</span></h5>
+        </div>
+        foreach (var discount in Model.CartOffers)
+        {
+            <div class="title">
+                <h5><small>@Html.Raw(discount)</small></h5>
+            </div>
+        }
+    }
+    @if (!string.IsNullOrEmpty(Model.AllocatedPointsAmount))
+    {
+        <div class="title">
+            <h5>Points to use<span class="pull-right">@Html.Raw(Model.AllocatedPointsAmount)</span></h5>
+        </div>
+        <div class="title">
+            <h5><small>@Model.AllocatedPoints points</small></h5>
+        </div>
+    }
+    @if (Model.DisplayTax)
+    {
+        <div class="title">
+            <h5>Tax (VAT)<span class="pull-right">@Html.Raw(Model.Tax)</span></h5>
+        </div>
+    }
+    <div class="title">
+        <h5>Delivery <span class="pull-right">@Html.Raw(Model.Shipping)</span></h5>
+    </div>
+    <div class="title">
+        <h5><small>@Html.Raw(Model.SelectedShippingMethod)</small></h5>
+    </div>
+    <div class="title">
+        <h5>Total<span class="pull-right">@Html.Raw(Model.OrderTotal)</span></h5>
+    </div>
+</div>

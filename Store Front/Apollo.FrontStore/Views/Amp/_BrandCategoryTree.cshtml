@@ -1,0 +1,63 @@
+﻿@using Apollo.FrontStore.Models.Brand;
+@model BrandModel
+
+@if (Model.Categories.Count > 0)
+{
+    <amp-accordion>
+        @foreach (var category in Model.Categories)
+        {
+            <section>
+                @if (category.Children.Count > 0)
+                {
+                    <h4 class="title">
+                        @Html.Raw(category.Name)<span class="glyphicon pull-right"></span>
+                    </h4>
+                    <div class="panel-body">
+                        @if (category.Children.Count > 0)
+                        {
+                            foreach (var child in category.Children)
+                            {
+                                if (child.Children.Count > 0)
+                                {
+                                    <amp-accordion class="child">
+                                        <section>
+                                            <h4>
+                                                @Html.Raw(child.Name)
+                                                <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                                            </h4>
+                                            <div class="panel-body">
+                                                <ul>
+                                                    @foreach (var item in child.Children)
+                                                    {
+                                                        <li><a class="@(item.UrlKey == Model.ThirdUrlKey ? "selected" : null)" href="@Url.RouteUrl("Brand With Products AMP", new { urlKey = Model.UrlKey, top = category.UrlKey, second = child.UrlKey, third = item.UrlKey }, this.Request.Url.Scheme)">@Html.Raw(item.Name)<span class="glyphicon glyphicon-menu-right pull-right"></span></a></li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </section>
+                                    </amp-accordion>
+                                }
+                                else
+                                {
+                                    <div class="item">
+                                        <a class="@(child.UrlKey == Model.SecondUrlKey ? "selected" : null)" href="@Url.RouteUrl("Brand With Products AMP", new { urlKey = Model.UrlKey, top = category.UrlKey, second = child.UrlKey }, this.Request.Url.Scheme)">@Html.Raw(child.Name)<span class="glyphicon glyphicon-chevron-right pull-right"></span></a>
+                                    </div>
+                                }
+                            }
+                        }                        
+                    </div>
+                }
+                else
+                {
+                    <h4 class="title">
+                        <a href="@Url.RouteUrl("Brand With Products AMP", new { urlKey = Model.UrlKey, top = category.UrlKey, second = "" }, this.Request.Url.Scheme)">
+                            @Html.Raw(category.Name)
+                            <span class="glyphicon glyphicon-@(category.UrlKey == Model.TopUrlKey ? "minus" : "plus") pull-right"></span>
+                        </a>
+                    </h4>
+                    <div class="panel-body"></div>
+
+                }
+            </section>
+        }
+    </amp-accordion>    
+}

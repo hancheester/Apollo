@@ -1,0 +1,34 @@
+﻿@{
+    Html.AddTitleParts("Confirmation");
+}
+
+<div id="breadcrumb">
+    <div class="container list">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="@Url.RouteUrl("Shopping Cart")">Cart</a></li>
+            <li><a href="@Url.RouteUrl("Checkout Confirm Address")">Address</a></li>
+            <li><a href="@Url.RouteUrl("Checkout Confirm Order")" class="active">Confirm</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="checkout">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 hidden-xs checkout-progress">
+                <ul>
+                    <li><a href="@Url.RouteUrl("Shopping Cart")">1</a><span>My Cart</span></li>
+                    <li><a href="@Url.RouteUrl("Checkout Confirm Address")">2</a><span>Address</span></li>
+                    <li class="active"><a href="#">3</a><span>Confirmation</span></li>
+                    <li><a href="#">4</a><span>Payment</span></li>
+                </ul>
+            </div>
+
+            @Html.Action("OrderSummary", "ShoppingCart", new { prepareAndDisplayOrderReviewData = true })            
+        </div>
+        <div class="form-group col-md-3 col-md-offset-9 no-gutter">
+            <a class="btn btn-primary btn-block" href="@Url.RouteUrl("Checkout Payment")">CONFIRM</a>
+        </div>
+    </div>
+</div>

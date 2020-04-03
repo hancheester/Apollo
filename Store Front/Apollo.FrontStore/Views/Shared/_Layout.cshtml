@@ -1,0 +1,387 @@
+﻿@using Apollo.Core.Services.Interfaces;
+@using Apollo.Core;
+@using Apollo.Core.Model;
+@using Apollo.Core.Caching;
+@using Apollo.Core.Infrastructure;
+@using Apollo.FrontStore.Models.Common;
+@using Apollo.Web.Framework.Services.Common;
+
+@{
+    var workContext = EngineContext.Current.Resolve<IWorkContext>();
+    var webHelper = EngineContext.Current.Resolve<IWebHelper>();
+    var cartService = EngineContext.Current.Resolve<ICartService>();
+    var items = cartService.GetCartItemOverviewModelByProfileId(workContext.CurrentProfile.Id);
+    var quantity = items.Select(x => x.Quantity).Sum();
+    var basketNotify = quantity > 0 ? string.Format("<span class=\"badge badge-notify\">{0}</span>", quantity) : string.Empty;
+
+    var headerGap = "";
+    if (workContext.CurrentProfile.GetAttribute<bool>("Profile", SystemCustomerAttributeNames.HideHeaderStripOffer) == false)
+    {
+        var cacheManager = EngineContext.Current.ContainerManager.ResolveNamed<ICacheManager>("Apollo_cache_static");
+        var offerService = EngineContext.Current.Resolve<IOfferService>();
+
+        var offerItems = cacheManager.Get(CacheKey.OFFER_RULE_ACTIVE_ORDER_BY_PRIORITY_KEY, delegate ()
+        {
+            var result = offerService.GetOfferRuleLoadPaged(
+                isActive: true,
+                orderBy: OfferRuleSortingType.PriorityAsc);
+
+            return result.Items;
+        });
+
+        if (offerItems != null)
+        {
+            var offers = offerItems.FilterOffers(displayOnHeaderStrip: true);
+
+            if (offers.Count > 0)
+            {
+                headerGap = "space40";
+            }
+        }
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en" xmlns="https://www.w3.org/1999/xhtml" xmlns:og="https://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
+<head>
+    <title>@Html.ApolloTitle(true)</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-DNS-Prefetch-Control" content="on" />
+    <meta name="description" content="@(Html.ApolloMetaDescription())" />
+    <meta name="keywords" content="@(Html.ApolloMetaKeywords())" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="baidu-site-verification" content="w3yUdy6JWl" />
+    <meta name="msvalidate.01" content="CA6F99368B5614C118C106E1485EFD29" />
+    <meta name="theme-color" content="#231f20" />
+    @Html.ApolloHeadCustom()
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+    <link rel="dns-prefetch" href="https://ajax.googleapis.com" />
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+    <link rel="dns-prefetch" href="https://maxcdn.bootstrapcdn.com" />
+    <link rel="dns-prefetch" href="https://d5nxst8fruw4z.cloudfront.net" />
+    <link rel="dns-prefetch" href="https://s7.addthis.com" />
+    <link href="https://plus.google.com/+Apollo/posts" rel="publisher" />
+    <link href="@Url.GenerateAbsoluteUrl("/content/css/external.min.css?201803281204")" rel="stylesheet" />
+    @*<link href="@Url.GenerateAbsoluteUrl("/content/css/site.css")" rel="stylesheet" />*@
+    <link href="@Url.GenerateAbsoluteUrl("/content/css/site.min.css?201803281204")" rel="stylesheet" />
+    <link href="@Url.GenerateAbsoluteUrl("/favicon.ico?v2")" type="image/x-icon" rel="shortcut icon" />
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/assets/owl.theme.default.min.css" rel="stylesheet" />
+    @RenderSection("head", required: false)
+    @Html.ApolloPrevUrls()
+    @Html.ApolloCanonicalUrls()
+    @Html.ApolloNextUrls()
+</head>
+<body>
+    @Html.Action("EuCookieLaw", "Common")
+    @Html.Action("HeaderStripOffer", "Common", new { elementId = "offerarea", isMobile = false })
+    <div id="top-header">
+        <div class="container">
+            <div class="visible-xs @headerGap">
+                <nav class="navbar navbar-default navbar-fixed-top">
+                    @Html.Action("HeaderStripOffer", "Common", new { elementId = "mob-offerarea", isMobile = true })
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mini-menu" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="shopping pull-right btn btn-default btn-lg" href="@Url.RouteUrl("Shopping Cart")"><span class="glyphicon glyphicon-shopping-cart"></span><span id="mini-basket-notify">@Html.Raw(basketNotify)</span></a>
+                        <a class="search pull-right btn btn-default btn-lg" data-toggle="collapse" data-target="#searchbox"><span class="glyphicon glyphicon-search"></span></a>
+                        <a class="navbar-brand" href="@Url.GenerateAbsoluteUrl("/")"><img src="@Url.GenerateAbsoluteUrl("/content/img/simple-logo.svg")" alt="Apollo" /></a>
+                    </div>
+                    <form action="@Url.RouteUrl("Search")" method="get">
+                        <div id="searchbox" class="collapse" aria-expanded="true" role="search">
+                            <div class="input-group">
+                                <input type="text" name="q" class="form-control" placeholder="I'm looking for...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default btn-md" type="submit">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mini-menu" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            @if (!workContext.CurrentProfile.IsAnonymous)
+                            {
+                                <li><a href="@Url.RouteUrl("Account", null, this.Request.Url.Scheme)">My Account</a></li>
+                                <li><a href="@Url.RouteUrl("Logout", null, this.Request.Url.Scheme)">Logout</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="@Url.RouteUrl("Login", null, this.Request.Url.Scheme)">Login / Signup</a></li>
+                            }
+                            <li><a href="@Url.RouteUrl("Shop By Brand", null, this.Request.Url.Scheme)">Brands</a></li>
+                            <li><a href="@Url.RouteUrl("i-Zone", null, this.Request.Url.Scheme)">i-Zone</a></li>
+                            <li><a href="@Url.RouteUrl("Special Offers", null, this.Request.Url.Scheme)">Offers</a></li>
+                            @Html.Action("SimpleMenu", "Category")
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="hidden-xs">
+                <nav class="col-sm-12 navbar navbar-default navbar-nav">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>@Html.Action("CurrencySelector", "Common")</li>
+                        <li>@Html.Action("CountrySelector", "Common")</li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">@{ Html.RenderPartial("_LoginBox"); }</li>
+                        @if (!workContext.CurrentProfile.IsAnonymous)
+                        {
+                            <li><a href="@Url.RouteUrl("Logout", null, this.Request.Url.Scheme)">Logout</a></li>
+                        }
+                        <li class="hidden-sm"><a href="@Url.RouteUrl("Delivery Information", null, this.Request.Url.Scheme)">Delivery</a></li>
+                        <li><a href="@Url.RouteUrl("Shopping Cart", null, this.Request.Url.Scheme)">Checkout</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div id="logo-header">
+        <div class="container hidden-xs">
+            <div class="col-sm-3">
+                <a class="logo" href="@Url.RouteUrl("Home", null, this.Request.Url.Scheme)"></a>
+            </div>
+            <div itemscope itemtype="https://schema.org/WebSite" class="col-sm-5 col-lg-6">
+                <link itemprop="url" href="@Url.RouteUrl("Home", null, this.Request.Url.Scheme)">
+                <form action="@Url.RouteUrl("Search")" method="get" itemprop="potentialAction" itemscope itemtype="https://schema.org/SearchAction">
+                    <meta itemprop="target" content="@Url.RouteUrl("Search", null, this.Request.Url.Scheme)?q={q}" />
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" itemprop="query-input" placeholder="I'm looking for..." required>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Search</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <div class="basket col-sm-4 col-lg-3">
+                <ul class="nav nav-tabs">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown disable" data-target="#" href="@Url.RouteUrl("Shopping Cart", null, this.Request.Url.Scheme)" role="button" aria-haspopup="true" aria-expanded="false">
+                            <img src="@Url.GenerateAbsoluteUrl("/content/img/icon-bag.svg")" alt="basket" />
+                            @Html.Action("ShoppingCartMiniSummary", "ShoppingCart")
+                        </a>
+                        @Html.Action("FlyoutShoppingCart", "ShoppingCart")
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    @Html.Action("Menu", "Category")
+    @RenderBody()
+    @Html.Action("RecentlyViewedProducts", "Product")
+    <div id="subscription">
+        <div class="container">
+            <div class="form">
+                <span class="glyphicon glyphicon-envelope col-sm-1 hidden-xs"></span>
+                <div class="description col-xs-12 col-sm-6 col-lg-5">
+                    <h3 class="col-sm-12 hidden-xs">Grab The Best Deals</h3>
+                    <p class="col-sm-12">Sign up for the latest news, offers and ideas.</p>
+                </div>
+                <div class="input-group col-sm-5 col-lg-6">
+                    @{ Html.RenderPartial("_SubscribeBox", new SubscriptionModel()); }
+                </div>
+            </div>
+            <div class="text-center" itemscope itemtype="https://schema.org/Organization">
+                <link itemprop="url" href="@Url.RouteUrl("Home", null, this.Request.Url.Scheme)">
+                <ul>
+                    <li>Connect with us</li>
+                    <li><a itemprop="sameAs" href="https://twitter.com/Apollo" rel="noopener" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                    <li><a itemprop="sameAs" href="https://www.facebook.com/Apolloonline" rel="noopener" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                    <li><a itemprop="sameAs" href="https://plus.google.com/+Apollo" rel="noopener" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+                    <li><a itemprop="sameAs" href="https://www.instagram.com/Apolloonline" rel="noopener" target="_blank"><i class="fa fa-instagram"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    @Html.Action("LocationPreference", "Common")
+    <div id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="no-gutter col-xs-12 col-lg-3">
+                    <h3><span>Us</span>eful Links</h3>
+                    <ul>
+                        <li><a href="@Url.RouteUrl("About Us", null, this.Request.Url.Scheme)">About Us</a></li>
+                        <li><a href="@Url.RouteUrl("Contact Us", null, this.Request.Url.Scheme)">Contact Us</a></li>
+                        <li><a href="@Url.RouteUrl("Delivery Information", null, this.Request.Url.Scheme)">Delivery Information</a></li>
+                        <li><a href="@Url.RouteUrl("Terms And Conditions", null, this.Request.Url.Scheme)">Terms and Conditions</a></li>
+                        <li><a href="@Url.RouteUrl("Privacy Policy", null, this.Request.Url.Scheme)">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 hidden-xs hidden-sm hidden-md">
+                    @Html.Action("FooterMenu", "Category")
+                </div>
+                <div class="no-gutter col-xs-12 col-lg-2">
+                    <h3><span>My</span> Account</h3>
+                    <ul>
+                        <li><a href="@Url.RouteUrl("Shopping Cart", null, this.Request.Url.Scheme)">Cart</a></li>
+                        @if (!workContext.CurrentProfile.IsAnonymous)
+                        {
+                            <li><a href="@Url.RouteUrl("Account", null, this.Request.Url.Scheme)">My Account</a></li>
+                            <li><a href="@Url.RouteUrl("Logout", null, this.Request.Url.Scheme)">Logout</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.RouteUrl("Register", null, this.Request.Url.Scheme)">Register</a></li>
+                            <li><a href="@Url.RouteUrl("Login", null, this.Request.Url.Scheme)">Login</a></li>
+                        }
+                    </ul>
+                </div>
+                <div class="no-gutter col-xs-12 col-lg-3">
+                    <h3><span>Qu</span>estions?</h3>
+                    <ul>
+                        <li>We are here for you.</li>
+                        <li><i class="fa fa-phone fa-lg"></i> <a href="tel:+44123456789">+44(0)1234 567 890</a></li>
+                        <li><i class="fa fa-envelope"></i> <a href="mailto:customerservices@apollo.co">customerservices@apollo.co</a></li>
+                        <li><i class="fa fa-comment"></i> <a href="javascript:void(window.open('https://chat.apollo.co/chat.php?a=78d61','','width=590,height=760,left=0,top=0,resizable=yes,menubar=no,location=no,status=yes,scrollbars=yes'))" target="_blank">Live chat with a member of support.</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="no-gutter col-xs-12 col-sm-6 hidden-xs">
+                    <p>Apollo &copy; @DateTime.Now.Year. All rights reserved.</p>
+                    <div class="cards">
+                        <ul>
+                            <li><img data-original="@Url.GenerateAbsoluteUrl("/content/img/sagepay.png")" alt="Secured By SagePay" class="lazy" width="198" height="27"></li>
+                            <li>
+                                <a href="#">
+                                    <img data-original="@Url.GenerateAbsoluteUrl("/content/img/comodo-secure.png")" class="lazy" alt="Comodo Secured" width="62" height="33" />
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="back-to-top"><i class="fa fa-arrow-circle-up fa-2x" aria-hidden="true"></i>Top</a>
+    <div class="ajax-loading-block-window" style="display: none"></div>
+    <div id="dialog-notifications-success" title="notification" style="display:none;"></div>
+    <div id="dialog-notifications-error" title="error" style="display:none;"></div>
+    <div id="bar-notification" class="bar-notification"><span class="close" title="close">&nbsp;</span></div>
+    <div class="modal fade" id="quick-modal" tabindex="-1" role="dialog"><div class="modal-dialog" role="document"></div></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.0.2/bootstrap-slider.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.5/jquery.bxslider.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
+    @*<script src="@Url.GenerateAbsoluteUrl("/scripts/public.common.js")"></script>*@
+    <script src="@Url.GenerateAbsoluteUrl("/scripts/public.common.min.js?201803071239")"></script>
+    <script src="@Url.GenerateAbsoluteUrl("/scripts/public.ajaxcart.min.js?201803071239")"></script>
+    <script src="@Url.GenerateAbsoluteUrl("/scripts/public.lazymenuimage.min.js")"></script>
+    <script src="@Url.GenerateAbsoluteUrl("/scripts/public.productgroup.js?201712281014")"></script>
+    <script src="@Url.GenerateAbsoluteUrl("/scripts/jquery.dd.min.js")"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.lazy').lazyload();
+        });
+    </script>
+
+    <script type="text/javascript">
+        AjaxCart.init(false, '.cart-quantity', '.cart-subtotal', '#flyout-cart', '#mini-basket-notify', '#quick-modal');
+    </script>
+
+    <!-- BEGIN EU Cookie Law -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ($('#eu-cookie-bar-notification') && $('#eu-cookie-ok')) {
+
+                $('#eu-cookie-bar-notification').show();
+
+                $('#eu-cookie-ok').click(function () {
+                    $.ajax({
+                        cache: false,
+                        type: 'POST',
+                        url: '@Url.RouteUrl("Accept EU Cookie Law")',
+                        dataType: 'json',
+                        success: function (data) {
+                            $('#eu-cookie-bar-notification').hide();
+                        },
+                        failure: function () {
+                            alert('Cannot store value');
+                        }
+                    });
+                });
+            }
+
+            if ($('.hide-offer-strip')) {
+                $('.hide-offer-strip').click(function () {
+                    $.ajax({
+                        cache: false,
+                        type: 'POST',
+                        url: '@Url.RouteUrl("Hide Header Strip Offer")',
+                        dataType: 'json',
+                        success: function (data) {
+                            reset();
+                        },
+                        failure: function () {
+                            alert('Cannot store value');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+    <!-- END EU Cookie Law -->
+    <!-- BEGIN Trusted Shops Badge -->
+    <script type="text/javascript">
+        (function () {
+            var _tsid = 'X7D4F1507D34D99073ABDAD72218D9E28';
+            _tsConfig = {
+                'yOffset': '0', /* offset from page bottom */
+                'variant': 'reviews', /* default, reviews, custom, custom_reviews */
+                'customElementId': '', /* required for variants custom and custom_reviews */
+                'trustcardDirection': '', /* for custom variants: topRight, topLeft, bottomRight, bottomLeft */
+                'customBadgeWidth': '', /* for custom variants: 40 - 90 (in pixels) */
+                'customBadgeHeight': '', /* for custom variants: 40 - 90 (in pixels) */
+                'disableResponsive': 'true', /* deactivate responsive behaviour */
+                'disableTrustbadge': 'false' /* deactivate trustbadge */
+            };
+            var _ts = document.createElement('script');
+            _ts.type = 'text/javascript';
+            _ts.charset = 'utf-8';
+            _ts.async = true;
+            _ts.src = '//widgets.trustedshops.com/js/' + _tsid + '.js';
+            var __ts = document.getElementsByTagName('script')[0];
+            __ts.parentNode.insertBefore(_ts, __ts);
+        })();
+    </script>
+    <!-- END Trusted Shops Badge -->
+    <!-- BEGIN LiveZilla -->
+    <!-- LiveZilla Chat Button Link Code (ALWAYS PLACE IN BODY ELEMENT) -->
+    <!-- LiveZilla Tracking Code (ALWAYS PLACE IN BODY ELEMENT) -->
+    <div id="livezilla_tracking" style="display:none"></div>
+    <script type="text/javascript">
+        var script = document.createElement("script"); script.async = true; script.type = "text/javascript"; var src = "https://chat.Apollo.co.uk/server.php?a=04fe8&rqst=track&output=jcrpt&fbpos=10&fbml=0&fbmt=0&fbmr=0&fbmb=0&fbw=34&fbh=166&nse=" + Math.random(); setTimeout("script.src=src;document.getElementById('livezilla_tracking').appendChild(script)", 1);
+    </script>
+    <noscript><img src="https://chat.Apollo.co.uk/server.php?a=04fe8&amp;rqst=track&amp;output=nojcrpt&fbpos=10&fbml=0&fbmt=0&fbmr=0&fbmb=0&fbw=34&fbh=166" width="0" height="0" style="visibility:hidden;" alt=""></noscript>
+    <!-- LiveZilla Tracking Code -->
+    <div style="display:none;">
+        <a rel="noopener" href="javascript:void(window.open('https://chat.Apollo.co.uk/chat.php?a=78d61','','width=590,height=760,left=0,top=0,resizable=yes,menubar=no,location=no,status=yes,scrollbars=yes'))" class="lz_fl"><img id="chat_button_image" src="https://chat.Apollo.co.uk/image.php?a=c6b2d&amp;id=4&amp;type=overlay" width="34" height="166" style="border:0px;" alt="LiveZilla Live Chat Software"></a>
+    </div>
+    <!-- LiveZilla Chat Button Link Code -->
+    <!-- END LiveZilla -->
+
+    @RenderSection("scripts", required: false)
+    @Html.Widget("body_end_html_tag_before")
+</body>
+</html>

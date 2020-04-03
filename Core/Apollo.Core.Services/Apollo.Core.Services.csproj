@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{119C182C-E8A0-4603-B39F-B5795460FC69}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Apollo.Core.Services</RootNamespace>
+    <AssemblyName>Apollo.Core.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=4.9.4.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.4.9.4\lib\net45\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.1, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\iTextSharp.5.5.13.1\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.2\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="NHunspell, Version=1.2.5554.16953, Culture=neutral, PublicKeyToken=1ac793ea843b4366, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NHunspell.1.2.5554.16953\lib\net\NHunspell.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\AccountService.cs" />
+    <Compile Include="Accounts\DeleteGuestsTask.cs" />
+    <Compile Include="Accounts\Identity\ApplicationIdentityContext.cs" />
+    <Compile Include="Accounts\Identity\ApplicationRoleManager.cs" />
+    <Compile Include="Accounts\Identity\ApplicationRoleStore.cs" />
+    <Compile Include="Accounts\Identity\ApplicationUser.cs" />
+    <Compile Include="Accounts\Identity\ApplicationUserManager.cs" />
+    <Compile Include="Accounts\Identity\ApplicationUserStore.cs" />
+    <Compile Include="Accounts\Identity\IdentityMembership.cs" />
+    <Compile Include="Accounts\Identity\IIdentityUserManager.cs" />
+    <Compile Include="Accounts\Identity\SqlPasswordHasher.cs" />
+    <Compile Include="Accounts\IWebMembership.cs" />
+    <Compile Include="Accounts\MembershipExtensions.cs" />
+    <Compile Include="Accounts\SqlMembership\SqlMembership.cs" />
+    <Compile Include="Blogs\BlogExtensions.cs" />
+    <Compile Include="Blogs\BlogService.cs" />
+    <Compile Include="Caching\CacheManagerType.cs" />
+    <Compile Include="Caching\CacheNotifier.cs" />
+    <Compile Include="Caching\ICacheManagerMetadata.cs" />
+    <Compile Include="Caching\ICacheNotifier.cs" />
+    <Compile Include="Cart\CartService.cs" />
+    <Compile Include="Cart\CartValidator.cs" />
+    <Compile Include="Cart\ClearCartItemTask.cs" />
+    <Compile Include="Cart\ICartValidator.cs" />
+    <Compile Include="Catalog\BrandService.cs" />
+    <Compile Include="Catalog\CategoryService.cs" />
+    <Compile Include="Catalog\ProductService.cs" />
+    <Compile Include="Catalog\SearchService.cs" />
+    <Compile Include="Cms\CampaignService.cs" />
+    <Compile Include="Cms\WidgetService.cs" />
+    <Compile Include="Common\AffiliateWindowFeedGenerator.cs" />
+    <Compile Include="Common\ClearGenericAttributeTask.cs" />
+    <Compile Include="Common\CsvService.cs" />
+    <Compile Include="Common\DefaultSitemapGenerator.cs" />
+    <Compile Include="Common\EmailManager.cs" />
+    <Compile Include="Common\FeedGeneratorType.cs" />
+    <Compile Include="Common\GenerateSiteMapTask.cs" />
+    <Compile Include="Common\GenericAttributeService.cs" />
+    <Compile Include="Common\GoogleFeedGenerator.cs" />
+    <Compile Include="Common\ICsvService.cs" />
+    <Compile Include="Common\IEmailManager.cs" />
+    <Compile Include="Common\IFeedGenerator.cs" />
+    <Compile Include="Common\IFeedGeneratorMetadata.cs" />
+    <Compile Include="Common\IPdfService.cs" />
+    <Compile Include="Common\ISitemapGenerator.cs" />
+    <Compile Include="Common\ISpellCheckerService.cs" />
+    <Compile Include="Common\NotifyUserForStockTask.cs" />
+    <Compile Include="Common\PdfService.cs" />
+    <Compile Include="Common\Soundex.cs" />
+    <Compile Include="Common\SpellCheckerService.cs" />
+    <Compile Include="Common\UtilityService.cs" />
+    <Compile Include="Configuration\SettingExtensions.cs" />
+    <Compile Include="Configuration\SettingService.cs" />
+    <Compile Include="DataBuilder\AccountBuilder.cs" />
+    <Compile Include="DataBuilder\AddressBuilder.cs" />
+    <Compile Include="DataBuilder\CartItemBuilder.cs" />
+    <Compile Include="DataBuilder\LineItemBuilder.cs" />
+    <Compile Include="DataBuilder\OfferBuilder.cs" />
+    <Compile Include="DataBuilder\OrderBuilder.cs" />
+    <Compile Include="DataBuilder\ProductBuilder.cs" />
+    <Compile Include="Directory\CurrencyService.cs" />
+    <Compile Include="Directory\ICurrencyService.cs" />
+    <Compile Include="Directory\IP2Country\BitVector.cs" />
+    <Compile Include="Directory\IP2Country\BitVectorReader.cs" />
+    <Compile Include="Directory\IP2Country\BitVectorTrie.cs" />
+    <Compile Include="Directory\IP2Country\IIPToCountry.cs" />
+    <Compile Include="Directory\IP2Country\Net\Countries.cs" />
+    <Compile Include="Directory\IP2Country\Net\IPToCountry.cs" />
+    <Compile Include="Directory\UpdateExchangeRateTask.cs" />
+    <Compile Include="EntityExtensions.cs" />
+    <Compile Include="Offer\OfferProcessor\AttributeUtility.cs" />
+    <Compile Include="Offer\OfferProcessor\CartOfferProcessor.cs" />
+    <Compile Include="Offer\OfferProcessor\CartUtility.cs" />
+    <Compile Include="Offer\OfferProcessor\CatalogOfferProcessor.cs" />
+    <Compile Include="Offer\OfferProcessor\CatalogUtility.cs" />
+    <Compile Include="Offer\OfferProcessor\ICartOfferProcessor.cs" />
+    <Compile Include="Offer\OfferProcessor\ICatalogOfferProcessor.cs" />
+    <Compile Include="Offer\OfferService.cs" />
+    <Compile Include="Orders\OrderCalculator.cs" />
+    <Compile Include="Orders\OrderService.cs" />
+    <Compile Include="Payment\IPaymentSystemService.cs" />
+    <Compile Include="Payment\PaymentService.cs" />
+    <Compile Include="Payment\SagePay\Client.cs" />
+    <Compile Include="Payment\SagePay\ElementClass\rule.cs" />
+    <Compile Include="Payment\SagePay\ElementClass\t3mresults.cs" />
+    <Compile Include="Payment\SagePay\ElementClass\vspaccess.cs" />
+    <Compile Include="Payment\SagePay\SagePayLogsExtension.cs" />
+    <Compile Include="Payment\SagePay\SagePayPaymentSystemService.cs" />
+    <Compile Include="Payment\SagePay\XMLGenerator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\ReportService.cs" />
+    <Compile Include="Security\CryptographyService.cs" />
+    <Compile Include="Security\ICryptographyService.cs" />
+    <Compile Include="Security\ISystemCheckService.cs" />
+    <Compile Include="Security\SystemCheckService.cs" />
+    <Compile Include="Shipping\ShippingService.cs" />
+    <Compile Include="Tasks\IScheduleTaskService.cs" />
+    <Compile Include="Tasks\ITask.cs" />
+    <Compile Include="Tasks\ScheduleTaskService.cs" />
+    <Compile Include="Tasks\Task.cs" />
+    <Compile Include="Tasks\TaskFrequencyType.cs" />
+    <Compile Include="Tasks\TaskManager.cs" />
+    <Compile Include="Tasks\TaskThread.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data Access\Apollo.DataAccess.EF\Apollo.DataAccess.EF.csproj">
+      <Project>{8c2b0c23-5864-440b-86cd-dc33997e888f}</Project>
+      <Name>Apollo.DataAccess.EF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Data Access\Apollo.DataAccess.Interfaces\Apollo.DataAccess.Interfaces.csproj">
+      <Project>{9cbc3734-572b-4b80-b2b0-8f2596b66d51}</Project>
+      <Name>Apollo.DataAccess.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Apollo.Core.Model\Apollo.Core.Model.csproj">
+      <Project>{69067ce3-5f66-4c27-8ae9-7309b2a6d105}</Project>
+      <Name>Apollo.Core.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Apollo.Core.Services.Interfaces\Apollo.Core.Services.Interfaces.csproj">
+      <Project>{c887bcec-a061-4289-9954-54a656f07db3}</Project>
+      <Name>Apollo.Core.Services.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Apollo.Core\Apollo.Core.csproj">
+      <Project>{ae3335c7-9fb1-4242-b3e8-04f4ed9da0f6}</Project>
+      <Name>Apollo.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Hunspellx64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Hunspellx86.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

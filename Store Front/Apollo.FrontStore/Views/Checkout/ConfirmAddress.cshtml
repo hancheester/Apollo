@@ -1,0 +1,148 @@
+﻿@using Apollo.FrontStore.Models.Checkout;
+@using Apollo.Web.Framework;
+@model CheckoutAddressModel
+
+@{
+    Html.AddTitleParts("Address");
+}
+
+<div id="breadcrumb">
+    <div class="container list">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="@Url.RouteUrl("Shopping Cart")">Cart</a></li>
+            <li><a href="@Url.RouteUrl("Checkout Confirm Address")" class="active">Address</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="checkout">
+    <div class="container">
+        <div class="row address">            
+            <div class="col-sm-12 hidden-xs checkout-progress">
+                <ul>
+                    <li><a href="@Url.RouteUrl("Shopping Cart")">1</a><span>My Cart</span></li>
+                    <li class="active"><a href="#">2</a><span>Address</span></li>
+                    <li><a href="#">3</a><span>Confirmation</span></li>
+                    <li><a href="#">4</a><span>Payment</span></li>
+                </ul>
+            </div>
+
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage as string))
+            {
+                <div class="col-sm-12">
+                    <p class="text-danger warning">@Html.Raw(ViewBag.ErrorMessage)</p>
+                </div>
+            }
+            
+            @if (Model.NeedBillingAddress)
+            {
+            <div class="col-lg-6 col-sm-6">
+                <h4>Billing Address</h4>
+                @if (Model.HasBillingAddress)
+                {
+                    <p>@Model.BillingAddress.Name,</p>
+                    <p>@Model.BillingAddress.AddressLine1,</p>
+                    
+                    if (!string.IsNullOrEmpty(Model.BillingAddress.AddressLine2))
+                    {
+                        <p>@Model.BillingAddress.AddressLine2,</p>
+                    }
+
+                    <p>@Model.BillingAddress.City,</p>
+                    
+                    if (!string.IsNullOrEmpty(Model.BillingAddress.PostCode))
+                    {
+                        <p>@Model.BillingAddress.PostCode,</p>                        
+                    }
+
+                    if (!string.IsNullOrEmpty(Model.BillingAddress.USState))
+                    {
+                        <p>@Model.BillingAddress.USState,</p>                        
+                    }                   
+                        
+                    <p>@Model.BillingAddress.CountryName</p>
+                    
+                    <div class="form-group col-lg-6 row">
+                        <a class="btn btn-default change" href="@Url.RouteUrl("Checkout Display Address", new { type = 0 })">CHANGE BILLING</a>
+                    </div>
+                }
+                else
+                {
+                    var action = "add";
+                    var actionLink = Url.RouteUrl("Checkout New Address", new { type = 0 });
+
+                    if (Model.HasSavedAddress)
+                    {
+                        action = "select";
+                        actionLink = Url.RouteUrl("Checkout Display Address", new { type = 0 });
+                    }
+
+                    <div class="col-sm-12">
+                        <p class="text-danger warning">Please kindly @action your billing address here to proceed.</p>
+                    </div>
+
+                    <div class="form-group col-lg-6 row">
+                        <a class="btn btn-default change" href="@actionLink">@action.ToUpper() BILLING</a>                        
+                    </div>                
+                }
+            </div>
+            }
+            <div class="col-lg-6 col-sm-6">
+                <h4>Shipping Address</h4>
+                @if (Model.HasShippingAddress)
+                {
+                    <p>@Model.ShippingAddress.Name,</p>
+                    <p>@Model.ShippingAddress.AddressLine1,</p>
+                    
+                    if (!string.IsNullOrEmpty(Model.ShippingAddress.AddressLine2))
+                    {
+                        <p>@Model.ShippingAddress.AddressLine2,</p>
+                    }                    
+
+                    <p>@Model.ShippingAddress.City,</p>
+                    
+                    if (!string.IsNullOrEmpty(Model.ShippingAddress.PostCode))
+                    {
+                        <p>@Model.ShippingAddress.PostCode,</p>
+                    }
+
+                    if (!string.IsNullOrEmpty(Model.ShippingAddress.USState))
+                    {
+                        <p>@Model.ShippingAddress.USState,</p>
+                    }
+                    
+                    <p>@Model.ShippingAddress.CountryName</p>
+                    
+                    <div class="form-group col-lg-6 row">
+                        <a class="btn btn-default change" href="@Url.RouteUrl("Checkout Display Address", new { type = 1 })">CHANGE SHIPPING</a>
+                    </div>
+                }
+                else
+                {
+                    var action = "add";
+                    var actionLink = Url.RouteUrl("Checkout New Address", new { type = 1 });
+
+                    if (Model.HasSavedAddress)
+                    {
+                        action = "select";
+                        actionLink = Url.RouteUrl("Checkout Display Address", new { type = 1 });
+                    }
+
+                    <div class="col-sm-12">
+                        <p class="text-danger warning">Please kindly @action your shipping address here to proceed.</p>
+                    </div>
+
+                    <div class="form-group col-lg-6 row">
+                        <a class="btn btn-default change" href="@actionLink">@action.ToUpper() SHIPPING</a>
+                    </div>
+                }
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <a class="btn btn-default next @(Model.DisableProceed ? "disabled" : null)" href="@Url.RouteUrl("Checkout Confirm Order")">NEXT</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

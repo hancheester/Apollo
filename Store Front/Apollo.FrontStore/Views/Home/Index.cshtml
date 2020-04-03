@@ -1,0 +1,86 @@
+﻿@using Apollo.Core.Model
+@using Apollo.Core.Domain.Seo;
+@using Apollo.Core.Infrastructure;
+@{
+    Html.AddTitleParts("Home");
+
+    Html.AddMetaDescriptionParts("At Apollo, we're committed to making your shopping experience with us fuss-free and pleasurable as well as to get you looking and feeling great.");
+    Html.AddMetaKeywordParts("Beauty, Healthy Living, Pharmacy, Mother and Child, Food and Home, Travel, Skin, Makeup, Nails, Hair, Fragrance, Suncare, Self Tan, Bath and Body, Men, Gifts");
+
+    var homeAmpUrl = Url.RouteUrl("Home AMP", null, this.Request.Url.Scheme);
+    Html.AddHeadCustomParts(string.Format("<link rel=\"amphtml\" href=\"{0}\">", homeAmpUrl));
+
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    if (canonicalUrlsEnabled)
+    {
+        Html.AddCanonicalUrlParts(Url.RouteUrl("Home", null, this.Request.Url.Scheme));
+    }
+}
+
+@{ Html.RenderPartial("_OfferStrips"); }
+
+<div id="banner">
+    <div class="container">
+        @Html.Action("MainBanners", "Common")
+    </div>
+</div>
+
+@Html.Action("BoxMenu", "Category")
+
+<div id="featured">
+    <div class="container hidden-xs">
+        <div class="col-sm-8">
+            <a href="@Url.RouteUrl("Category", new { top = "online-pharmacy" }, this.Request.Url.Scheme)">
+                <img data-original="@Url.GenerateAbsoluteUrl("/media/banner/featured/pharm.png")" class="img-responsive lazy" alt="Pharmacy" width="948" height="491" />
+            </a>
+        </div>        
+        <div class="col-sm-4">
+            <div class="row">
+                <div class="col-sm-12">
+                    <a href="@Url.RouteUrl("Shop By Brand", null, this.Request.Url.Scheme)">
+                        <img data-original="@Url.GenerateAbsoluteUrl("/media/banner/featured/shopbybrand-20180329.png")" class="img-responsive lazy" alt="Shop By Brands" width="370" height="185" />
+                    </a>
+                </div>
+                <div class="col-sm-12">
+                    <a href="@Url.RouteUrl("Special Offers", null, this.Request.Url.Scheme)">
+                        <img data-original="@Url.GenerateAbsoluteUrl("/media/banner/featured/spring-sale-20180329.png")" class="img-responsive lazy" alt="Special Offers" width="370" height="185" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="tabs">
+    <div class="container hidden-xs">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="tabbed">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#new" role="tab" data-toggle="tab">New arrivals</a></li>
+                        <li><a href="#trending" role="tab" data-toggle="tab">Trending now</a></li>                        
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="new">
+                            @Html.Action("HomepageProducts", "Product", new { groupId = ProductGroupType.NewArrivals })
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="trending">
+                            @Html.Action("HomepageProducts", "Product", new { groupId = ProductGroupType.TrendingNow })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="visible-xs col-sm-12 col-lg-12">
+        <div class="feature-header">New arrivals</div>
+        <div class="feature-body">
+            @Html.Action("HomepageProducts", "Product", new { groupId = ProductGroupType.NewArrivals })
+        </div>
+        <div class="feature-header">Trending now</div>
+        <div class="feature-body">
+            @Html.Action("HomepageProducts", "Product", new { groupId = ProductGroupType.TrendingNow })
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿@using Apollo.FrontStore.Models.Product;
+@model ProductPriceModel
+
+<div itemprop="offers" itemscope itemtype="https://schema.org/Offer" class="price-info">
+    @if (Model.Visible)
+    {
+        <span class="price">
+            <span [text]="product.selectedCurrencySymbol" itemprop="priceCurrency" content="@Model.CurrencyCode">@Html.Raw(Model.CurrencySymbol)</span><span [text]="product[product.selectedId].price" itemprop="price" content="@Model.OfferPriceValue">@Model.OfferPriceValue</span>
+        </span>
+    }
+    else
+    {
+        @Html.Raw(Model.MessageAfterHidden)
+    }
+
+    <span [class]="(product[product.selectedId].availability == 'yes' ? 'stock' : 'out-of-stock')" class="@(Model.StockAvailability ? "stock" : "out-of-stock")">
+        @if (Model.StockAvailability)
+        {
+            <link itemprop="availability" href="https://schema.org/InStock"/>
+        }
+        else
+        {
+            <link itemprop="availability" href="https://schema.org/OutOfStock"/>
+        }
+
+        <i [class]="'fa fa-' + (product[product.selectedId].availability == 'yes' ? 'check-circle' : 'times-circle')" class="fa fa-@(Model.StockAvailability ? "check-circle" : "times-circle")"></i><span [text]="(product[product.selectedId].availability == 'yes' ? 'Available in stock' : 'Out of stock')">@(Model.StockAvailability ? "Available in stock" : "Out of stock")</span>
+    </span>
+
+    @*<div class="price-status visible-xs">
+        @if (Model.Visible && Model.OfferRuleId > 0 && Model.DisplayRRP && string.IsNullOrEmpty(Model.SavePercentageNote) == false)
+        {
+            <span class="rrp">
+                <b>WAS </b><span class="old-price">@Html.Raw(Model.Price)</span>
+                <span class="red">@Html.Raw(Model.SavePercentageNote)</span>
+            </span>
+        }
+    </div>*@
+
+</div>
+
+@if (Model.Visible)
+{
+    if (Model.OfferRuleId > 0)
+    {
+        foreach (var currency in Model.SchemaMetaOfferPrices)
+        {
+            <span itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                <meta itemprop="@currency.Key.ItemProp" content="@currency.Key.Content" />
+                <meta itemprop="@currency.Value.ItemProp" content="@currency.Value.Content" />
+                @if (Model.StockAvailability)
+                {
+                    <link itemprop="availability" href="https://schema.org/InStock" />
+                }
+                else
+                {
+                    <link itemprop="availability" href="https://schema.org/OutOfStock" />
+                }
+            </span>
+        }
+    }
+    else
+    {
+        foreach (var currency in Model.SchemaMetaPrices)
+        {
+            <span itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                <meta itemprop="@currency.Key.ItemProp" content="@currency.Key.Content" />
+                <meta itemprop="@currency.Value.ItemProp" content="@currency.Value.Content" />
+                @if (Model.StockAvailability)
+                {
+                    <link itemprop="availability" href="https://schema.org/InStock" />
+                }
+                else
+                {
+                    <link itemprop="availability" href="https://schema.org/OutOfStock" />
+                }
+            </span>
+        }
+    }
+}

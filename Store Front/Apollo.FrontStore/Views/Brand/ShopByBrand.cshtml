@@ -1,0 +1,89 @@
+﻿@using Apollo.Core.Domain.Seo;
+@using Apollo.Core.Infrastructure;
+
+@{
+    Html.AddTitleParts("Shop By Brand");
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    if (canonicalUrlsEnabled)
+    {
+        var shopByBrandUrl = Url.RouteUrl("Shop By Brand", null, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(shopByBrandUrl);
+    }
+
+    var shopByBrandAmpUrl = Url.RouteUrl("Shop By Brand AMP", null, this.Request.Url.Scheme);
+    Html.AddHeadCustomParts(string.Format("<link rel=\"amphtml\" href=\"{0}\">", shopByBrandAmpUrl));
+}
+
+@{ Html.RenderPartial("_OfferStrips"); }
+
+<div id="shopbybrand">
+    <div class="container visible-xs">
+        <h4>Brands A-Z</h4>
+        <div class="panel-group" id="brand-tree">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#num" data-toggle="collapse" data-parent="#brand-tree">
+                            #<span class="glyphicon glyphicon-plus pull-right"></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="num" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        @Html.Action("BrandListByAlpha", "Brand", new { letter = '#', forMobile = true })
+                    </div>
+                </div>
+            </div>
+            @for (char c = 'A'; c <= 'Z'; c++)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#@c" data-toggle="collapse" data-parent="#brand-tree">
+                                @c<span class="glyphicon glyphicon-plus pull-right"></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="@c" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            @Html.Action("BrandListByAlpha", "Brand", new { letter = c, forMobile = true })
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="container hidden-xs">
+        <div class="content">
+            <h5>Shop by brands</h5>
+            <img src="/Content/img/title-underline.png" alt="" class="img-responsive">
+            <ul class="go-to">
+                <li>Go to:</li>
+                <li><a href="#0">#</a></li>
+                @{ int counter = 1; }
+                @for (char c = 'A'; c <= 'Z'; c++, counter++)
+                {
+                    <li><a href="#@counter">@c</a></li>
+                }                
+            </ul>
+
+            <div class="col-sm-12">
+                <div class="brand-panel">
+                    <a id="0"></a>
+                    <h4>#</h4>
+                    @Html.Action("BrandListByAlpha", "Brand", new { letter = '#' })
+                </div>
+
+                @{ counter = 1; }
+                @for (char c = 'A'; c <= 'Z'; c++, counter++)
+                {
+                    <div class="brand-panel">
+                        <a id="@counter"></a>
+                        <h4>@c</h4>
+                        @Html.Action("BrandListByAlpha", "Brand", new { letter = c })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

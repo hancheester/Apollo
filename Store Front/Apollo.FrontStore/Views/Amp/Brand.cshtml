@@ -1,0 +1,212 @@
+﻿@using Apollo.Core.Domain;
+@using Apollo.Core.Domain.Seo;
+@using Apollo.Core.Infrastructure;
+@using Apollo.FrontStore.Models.Brand;
+@model BrandModel
+
+@{
+    var metaTitle = string.IsNullOrEmpty(Model.MetaTitle) ? Model.Name : Model.MetaTitle;
+    Html.AddTitleParts(metaTitle);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    var brandUrl = Url.RouteUrl("Brand", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme);
+
+    if (canonicalUrlsEnabled)
+    {
+        Html.AddCanonicalUrlParts(brandUrl);
+    }
+
+    var storeSettings = EngineContext.Current.Resolve<StoreInformationSettings>();
+
+    // Open Graph tags
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:title\" content=\"{0}\"/>", metaTitle));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:description\" content=\"{0}\"/>", Model.MetaDescription));
+    if (Model.Logo != null)
+    {
+        Html.AddHeadCustomParts(string.Format("<meta property=\"og:image\" content=\"{0}\"/>", Url.GenerateAbsoluteUrl(Model.Logo.ImageUrl)));
+    }
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:url\" content=\"{0}\" />", brandUrl));
+    Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"website\" />");
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:site_name\" content=\"{0}\" />", storeSettings.CompanyName));
+
+    // Twitter Card tags
+    // TODO: Move twitter:site, twitter:creator to settings
+    Html.AddHeadCustomParts("<meta property=\"twitter:card\" content=\"summary\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:site\" content=\"@Apollo\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:creator\" content=\"@Apollo\" />");
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:title\" content=\"{0}\"/>", metaTitle));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:description\" content=\"{0}\"/>", Model.MetaDescription));
+    if (Model.Logo != null)
+    {
+        Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:image:src\" content=\"{0}\"/>", Url.GenerateAbsoluteUrl(Model.Logo.ImageUrl)));
+        Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:image:alt\" content=\"{0}\"/>", Model.Logo.AlternateText));
+    }
+
+    // Facebook tags
+    // TODO: Move fb:app_id to settings
+    Html.AddHeadCustomParts(string.Format("<meta property=\"fb:app_id\" content=\"231491834056841\"/>"));
+}
+
+<div id="brand" itemscope itemtype="https://schema.org/Brand">
+    <div class="container">
+        @if (Model.HasMicrosite)
+        {
+            @section amp_script
+            {
+                <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+                <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+            }
+
+            if (Model.Categories.Count > 0)
+            {
+                @section amp_custom
+                {
+                    amp-accordion {
+                        margin-bottom: 20px;
+                    }
+
+                    amp-accordion section {
+                        border-bottom: 1px solid #eee;
+                        background-color: #fff;
+                    }
+
+                    amp-accordion section+section {
+                        margin-top: 5px;
+                    }
+
+                    amp-accordion section h4.title {
+                        color: #333;
+                        background: url(/content/img/dot.png) left center no-repeat;
+                        width: 100%;
+                        padding: 0;
+                        font-size: 14px;
+                        text-decoration: none;
+                        height: 35px;
+                        display: block;
+                        box-sizing: border-box;
+                        padding: 0 5px 0 20px;
+                        line-height: 35px;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-transform: uppercase;
+                        border: none;
+                    }
+
+                    amp-accordion section h4.title span.glyphicon {
+                        line-height: 35px;
+                        color: #fe5757;
+                    }
+
+                    amp-accordion section h4.title span.glyphicon:before {
+                        content: "\002b";
+                    }
+
+                    amp-accordion section[expanded] h4.title span.glyphicon:before {
+                        content: "\2212";
+                    }
+
+                    amp-accordion section .panel-body {
+                        padding: 0 0 0 10px;
+                    }
+
+                    amp-accordion section .panel-body > ul > li {
+                        padding: 10px;
+                        padding-right: 5px;
+                        border-bottom: 1px solid #eee;
+                    }
+
+                    amp-accordion section .panel-body > ul > li:last-child {
+                        border-bottom: 0;
+                    }
+
+                    amp-accordion section .panel-body > ul > li > a {
+                        font-size: 14px;
+                        display: block;
+                        text-decoration: none;
+                    }
+
+                    amp-accordion section .panel-body > ul > li > a span {
+                        line-height: 18px;
+                    }
+
+                    amp-accordion section div.panel-body .item {
+                        padding: 10px 5px 10px 10px;
+                    }
+
+                    amp-accordion section div.panel-body .item a {
+                        font-size: 14px;
+                        display: block;
+                        text-decoration: none;
+                    }
+
+                    amp-accordion section div.panel-body .item a span {
+                        line-height: 18px;
+                    }
+
+                    amp-accordion.child {
+                        margin-bottom: 0;
+                    }
+
+                    amp-accordion.child section {
+                        border: 0;
+                    }
+
+                    amp-accordion.child section h4 {
+                        border-top: 0;
+                        padding: 10px 5px 10px 10px;
+                        background-color: #fff;
+                        border: 0;
+                        font-size: 14px;
+                        display: block;
+                        text-decoration: none;
+                        line-height: 1.42857143;
+                    }
+
+                    amp-accordion.child section h4 span {
+                        line-height: 18px;
+                    }
+
+                    amp-accordion.child section div.panel-body {
+                        padding: 5px 0 25px 25px;
+                    }
+                }
+            }
+
+            Html.RenderPartial("_BrandGridTemplate", Model);
+        }
+        else
+        {
+            <div class="side-nav visible-xs">
+                <h3>@Html.Raw(Model.Name)</h3>
+            </div>
+            <div class="content col-sm-9 col-lg-8">
+                <div class="products col-sm-12">
+                    @if (Model.Products.Count > 0)
+                    {
+                        foreach (var item in Model.Products)
+                        {
+                            @Html.Partial("_ProductBox", item)
+                        }
+                    }
+                </div>
+                @{
+                    var pager = Html.Pager(Model.PagingFilteringContext)
+                        .QueryParam("pagenumber")
+                        .BooleanParameterName("adv")
+                        .BooleanParameterName("isc")
+                        .BooleanParameterName("sid")
+                        .RenderEmptyParameters(true);
+                }
+                @if (!pager.IsEmpty())
+                {
+                    <div class="pagination-footer sm-col-12 text-center">
+                        @Html.Raw(pager)
+                    </div>
+                }
+            </div>
+                    }
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿@{
+    Html.AddTitleParts("Pharmaceutical Form Result");
+}
+
+<div id="breadcrumb">
+    <div class="container list">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="@Url.RouteUrl("Shopping Cart")">Cart</a></li>
+            <li><a href="@Url.RouteUrl("Checkout Pharm Form")" class="active">Pharmaceutical Form</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="checkout">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 hidden-xs checkout-progress">
+                <ul>
+                    <li><a href="@Url.RouteUrl("Shopping Cart")">1</a><span>My Cart</span></li>
+                    <li><a href="#">2</a><span>Address</span></li>
+                    <li><a href="#">3</a><span>Confirmation</span></li>
+                    <li><a href="#">4</a><span>Payment</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="pharm col-xs-12 no-gutter">
+            <h4>Thanks.</h4>
+            <h5>Your pharmaceutical form has been submitted and would be reviewed by one of our pharmacists. Please proceed with your checkout by clicking the button below.</h5>
+            
+            <div class="form-group col-lg-3 row">
+                <a class="btn btn-default btn-block" href="@Url.RouteUrl("Checkout Confirm Address")">CONTINUE</a>
+            </div>
+        </div>
+    </div>
+</div>

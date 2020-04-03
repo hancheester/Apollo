@@ -1,0 +1,122 @@
+﻿@using Apollo.FrontStore.Models.Common;
+@using Apollo.Web.Framework;
+
+@model AddressModel
+
+@{
+    Html.AddTitleParts("My New Address");
+}
+
+<div id="account">
+    <div class="container">
+        <div class="row">
+            @Html.Partial("_AccountTopMenu")
+
+            <div class="col-xs-12">
+                <h4>My New Address</h4>
+            </div>
+
+            @if (!string.IsNullOrEmpty(ViewBag.Message as string))
+            {
+                <div class="col-sm-12">
+                    <p class="text-danger warning">@Html.Raw(ViewBag.Message)</p>
+                </div>
+            }
+
+            <div class="col-xs-12 col-lg-6 addresses">
+                @using (Html.BeginForm())
+                {
+                    var validationSummary = Html.ValidationSummary(true);
+                    if (!MvcHtmlString.IsNullOrEmpty(validationSummary))
+                    {
+                        <div class="message-error alert alert-danger">@validationSummary</div>
+                    }
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name)@Html.RequiredHint()
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AddressLine1)@Html.RequiredHint()
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.AddressLine1, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AddressLine1)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AddressLine2)
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.AddressLine2, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AddressLine2)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.City)@Html.RequiredHint()
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.City, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.City)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PostCode)
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.PostCode, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.PostCode)
+                        </div>
+                    </div>
+
+                    <div class="states form-group" style="display: none;">
+                        @Html.LabelFor(model => model.USState)
+                        <div class="input-group">
+                            @Html.DropDownListFor(model => model.USStateId, Model.AvailableStates, new { @class = "country-list form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CountryName)@Html.RequiredHint()
+                        <div class="input-group">
+                            @Html.DropDownListFor(model => model.CountryId, Model.AvailableCountries, new { @class = "country-list form-control" })
+                            @Html.ValidationMessageFor(model => model.CountryId)
+                        </div>
+                    </div>
+
+                    <div class="form-group col-lg-6 row">
+                        <input type="submit" class="button add-address" value="ADD ADDRESS" />
+                    </div>
+                }
+
+                <div class="clearfix"></div>
+
+                <div class="form-group col-lg-6 row">
+                    <a class="button back col-xs-12 text-center" href="@Url.RouteUrl("Account Primary Address")">BACK</a>
+                </div>
+            </div>
+
+            @Html.Partial("_AccountBottomMenu")
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        (function () {
+            $('.country-list').change(function () {
+                var country = $(this).find('option:selected').text();
+                //console.log(country);
+                if (country === 'United States') {
+                    $('.states').show();
+                }
+                else {
+                    $('.states').hide();
+                }
+            });
+        })();
+    </script>
+}

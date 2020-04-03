@@ -1,0 +1,63 @@
+﻿.search-float {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  overflow: hidden;
+}
+.search-float-box {
+  margin-right: -225px;
+  position: relative;
+  z-index: 2000;
+  transition-duration: 0.8s;
+}
+.search-float-box.show {
+  margin-right: 0;
+}
+.search-float-box .spin-icon {
+  background: #1ab394;
+  position: absolute;
+  padding: 7px 10px 7px 13px;
+  border-radius: 20px 0 0 20px;
+  font-size: 10px;
+  top: 0;
+  left: 0;
+  width: 30px;
+  color: #fff;
+  cursor: pointer;
+}
+.search-float-box .search-setttings {
+  width: 225px;
+  margin-left: 30px;
+  background: #f3f3f4;
+}
+.search-float-box .search-setttings .title {
+  background: #efefef;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  display: block;
+  padding: 10px 15px;
+  font-size: 12px;
+}
+.search-float-box .setings-item {
+  padding: 10px 30px;
+}
+
+.search-float-box .setings-item input, .search-float-box .setings-item select {
+    border: 2px solid #1AB394;
+    border-radius: 3px;
+}
+
+
+.setings-item.skin {
+  text-align: center;
+}
+.search-float-box .setings-item .switch {
+  float: none;
+}
+.skin-name a {
+  text-transform: uppercase;
+}
+.setings-item a {
+  color: #fff;
+}

@@ -1,0 +1,79 @@
+﻿@using Apollo.Core.Model;
+@using Apollo.FrontStore.Models.Common;
+
+@model IList<AddressModel>
+
+@{
+    Html.AddTitleParts("My Addresses");
+}
+
+<div id="account">
+    <div class="container">
+        <div class="row">
+            @Html.Partial("_AccountTopMenu")
+
+            <div class="col-xs-12">
+                <h4>My Addresses</h4>
+            </div>
+
+            @if (!string.IsNullOrEmpty(ViewBag.Message as string))
+            {
+                <div class="col-sm-12">
+                    <p class="text-danger warning">@Html.Raw(ViewBag.Message)</p>
+                </div>
+            }
+
+            <div class="col-xs-12 col-lg-6 addresses">
+                @if (Model.Count > 0)
+                {
+                    foreach (var address in Model)
+                    {
+                        <div class="address col-xs-12 space20 no-gutter">
+                            <div class="body">                                
+                                @(Html.Raw(string.IsNullOrEmpty(address.Name) ? null : address.Name + "<br/>"))
+                                @(Html.Raw(string.IsNullOrEmpty(address.AddressLine1) ? null : address.AddressLine1 + "<br/>"))
+                                @(Html.Raw(string.IsNullOrEmpty(address.AddressLine2) ? null : address.AddressLine2 + "<br/>"))
+                                @(Html.Raw(string.IsNullOrEmpty(address.City) ? null : address.City + "<br/>"))                                
+                                @(Html.Raw(string.IsNullOrEmpty(address.PostCode) ? null : address.PostCode + "<br/>"))
+                                @(Html.Raw(string.IsNullOrEmpty(address.USState) ? null : address.USState + "<br/>"))
+                                @address.CountryName<br />
+                                @(Html.Raw(address.IsBilling ? "<code>primary billing</code><br />" : null))
+                                @(Html.Raw(address.IsShipping ? "<code>primary shipping</code>" : null))
+                            </div>
+                            <div class="action">
+                                <div class="form-group col-lg-6 row">
+                                    <a href="@Url.RouteUrl("Account Edit Address", new { id = address.Id })" class="button col-xs-12 text-center">EDIT</a>
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <div class="form-group col-lg-6 row">
+                                    <a href="@Url.RouteUrl("Account Set Address", new { id = address.Id, type = (int)AddressType.Billing })" class="button col-xs-12 text-center">SET AS BILLING</a>
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <div class="form-group col-lg-6 row">
+                                    <a href="@Url.RouteUrl("Account Set Address", new { id = address.Id, type = (int)AddressType.Shipping })" class="button col-xs-12 text-center">SET AS SHIPPING</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+                <div class="form-group col-xs-12 col-lg-6 space40 no-gutter">
+                    <a class="button add col-xs-12 text-center" href="@Url.RouteUrl("Account New Address")">ADD ADDRESS</a>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="form-group col-xs-12 col-lg-6 no-gutter">
+                    <a class="button back col-xs-12 text-center" href="@Url.RouteUrl("Account Primary Address")">BACK</a>
+                </div>
+
+            </div>            
+
+            @Html.Partial("_AccountBottomMenu")
+        </div>
+    </div>
+</div>

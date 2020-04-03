@@ -1,0 +1,244 @@
+﻿@using Apollo.Core;
+@using Apollo.Core.Infrastructure;
+@using Apollo.FrontStore.Models.Product;
+@model SearchModel
+
+@{
+    Html.AddTitleParts(string.Format("Search Results For {0}", Model.q));
+
+    var workContext = EngineContext.Current.Resolve<IWorkContext>();
+    var currencyHtmlEntity = workContext.WorkingCurrency.HtmlEntity;
+
+    int min;
+    int.TryParse(Model.PagingFilteringContext.PriceRangeFilter.Min, out min);
+
+    int from;
+    int.TryParse(Model.PagingFilteringContext.PriceRangeFilter.From, out from);
+
+    int max;
+    int.TryParse(Model.PagingFilteringContext.PriceRangeFilter.Max, out max);
+
+    int to;
+    int.TryParse(Model.PagingFilteringContext.PriceRangeFilter.To, out to);
+}
+
+<div id="breadcrumb">
+    <div class="container list hidden-xs">
+        <ul>
+            <li><a href="/">Home</a></li>            
+            <li><a class="active" href="#">Search results for "@Model.q"</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="search">
+    <div class="container">
+        <div class="side-nav visible-xs">
+            <h3>Search Results</h3>            
+            @if (!string.IsNullOrEmpty(Model.SuggestedKeywords))
+            {
+                <h4 class="keyword-suggest">Did you mean: <u><a href="@Url.RouteUrl("Search")?q=@Html.Raw(Model.SuggestedKeywords)">@Html.Raw(Model.SuggestedKeywords)</a></u></h4>
+            }            
+            <a class="filter-refine pull-right" data-toggle="collapse" href="#refine-panel">refine</a>
+            <div class="selected">
+                <span class="badge">@Html.Raw(Model.q)</span><span class="badge">@Html.Raw(currencyHtmlEntity)@(min < from ? from : min) - @Html.Raw(currencyHtmlEntity)@(max > to ? to : max)</span>
+            </div>
+            <div id="refine-panel" class="collapse">
+                <h3>Refine Results</h3>
+                <div class="panel-group" id="mobile-filters" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#mobile-filters" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Price
+                                    <span class="glyphicon glyphicon-plus pull-right"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div class="selected">
+                            <span class="badge">@Html.Raw(currencyHtmlEntity)@(min < from ? from : min) - @Html.Raw(currencyHtmlEntity)@(max > to ? to : max)</span>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel">
+                            <div class="panel-body">
+                                <div class="price-slider col-xs-12">
+                                    <b>Range: @Html.Raw(currencyHtmlEntity)<span id="mobile-min-price">@(min < from ? from : min)</span> - @Html.Raw(currencyHtmlEntity)<span id="mobile-max-price">@(max > to ? to : max)</span></b>
+                                    <input id="mobile-priceSlider" type="text" value=""
+                                           data-slider-min="@Model.PagingFilteringContext.PriceRangeFilter.Min"
+                                           data-slider-max="@Model.PagingFilteringContext.PriceRangeFilter.Max"
+                                           data-slider-step="1"
+                                           data-slider-value="[@(min < from ? from : min),@(max > to ? to : max)]" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="side-nav hidden-xs col-sm-3 col-lg-4">
+            <div class="default">
+                <h3>Search</h3>                        
+                <div class="filter">
+                    <h3>Filter Selection</h3>
+                    <div class="price-filter col-sm-12">
+                        <h5>Price</h5>
+                        <input id="priceSlider" type="text" value=""
+                                data-slider-min="@Model.PagingFilteringContext.PriceRangeFilter.Min"
+                                data-slider-max="@Model.PagingFilteringContext.PriceRangeFilter.Max"
+                                data-slider-step="1"
+                                data-slider-value="[@(min < from ? from : min),@(max > to ? to : max)]" />
+                        <div class="range col-sm-12"><b>Range: @Html.Raw(currencyHtmlEntity)<span id="min-price">@(min < from ? from : min)</span> - @Html.Raw(currencyHtmlEntity)<span id="max-price">@(max > to ? to : max)</span></b></div>
+                    </div>                            
+                    <div class="col-sm-12">
+                        <a class="btn btn-default text-center" href="javascript:reset();"><p><i class="fa fa-times-circle clear-filter"></i> Clear All Filters</p></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content col-sm-9 col-lg-8">
+            <div class="hidden-xs default-header">
+                <h4>Search results for "@Model.OriginalKeywords"</h4>
+                @{
+                    if (!string.IsNullOrEmpty(Model.SuggestedKeywords))
+                    {
+                        <h4 class="keyword-suggest">Did you mean: <a href="@Url.RouteUrl("Search")?q=@Html.Raw(Model.SuggestedKeywords)">@Html.Raw(Model.SuggestedKeywords)</a></h4>
+                    }
+                }
+            </div>
+            <div class="pagination-header hidden-xs">
+                <div class="showing pull-left">
+                    Showing @Model.PagingFilteringContext.FirstItem – @Model.PagingFilteringContext.LastItem of @Model.PagingFilteringContext.TotalItems results
+                </div>
+                <div class="sort-by pull-right">
+                    <ul class="text-right">
+                        <li class="dropdown">
+                            Show
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                @Model.PagingFilteringContext.SelectedPageSize items<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="show-items" href="#">36 items</a></li>
+                                <li><a class="show-items" href="#">72 items</a></li>
+                                <li><a class="show-items" href="#">108 items</a></li>
+                            </ul>
+                        </li>
+                        <li role="presentation" class="dropdown">
+                            Sort By
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                @Model.PagingFilteringContext.ConvertEnum(Model.PagingFilteringContext.OrderBy)<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @foreach (var item in Model.PagingFilteringContext.AvailableSortOptions)
+                                {
+                                    <li><a class="sort-items" data-sortby="@item.Value" href="#">@item.Text</a></li>
+                                }
+                            </ul>
+                        </li>
+                       @foreach (var item in Model.PagingFilteringContext.AvailableViewModes)
+                       {
+                            <li><a class="view-modes" data-view="@item.Value" href="#"><span class="glyphicon @item.Text @(item.Selected ? "selected" : null)"></span></a></li>
+                       }
+                    </ul>
+                </div>
+            </div>
+            <div class="products col-sm-12">                
+                @if (Model.Products.Count > 0)
+                {
+                    foreach (var item in Model.Products)
+                    {
+                        if (Model.PagingFilteringContext.ViewMode == "grid")
+                        {
+                            @Html.Partial("_ProductBox", item)
+                        }
+                        else
+                        {
+                            @Html.Partial("_ProductRow", item)
+                        }
+                    }
+                }
+            </div>
+
+            @{
+                var pager = Html.Pager(Model.PagingFilteringContext)
+                    .QueryParam("pagenumber")
+                    .BooleanParameterName("adv")
+                    .BooleanParameterName("isc")
+                    .BooleanParameterName("sid")
+                    .RenderEmptyParameters(true);
+            }
+            @if (!pager.IsEmpty())
+            {
+                <div class="pagination-footer sm-col-12 text-center">
+                    @Html.Raw(pager)
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('.view-modes').on('click', function () {
+                var value = $(this).data('view');
+                window.location = updateQueryString('viewmode', value, null);
+            });
+
+            $('.sort-items').on('click', function () {
+                var value = $(this).data('sortby');
+                window.location = updateQueryString('orderby', value, null);
+            });
+
+            $('.show-items').on('click', function() {
+                var value = $(this).text().replace(' items', '');
+                window.location = updateQueryString('pagesize', value, null);
+            });
+
+            var currentMinValue;
+            var currentMaxValue;
+
+            var $priceSlider = $('#priceSlider').slider({ tooltip: 'hide' });
+            $priceSlider.on('slideStart', onSlideStart);
+            $priceSlider.on('slide', onSlide);
+            $priceSlider.on('slideStop', onSlideStop);
+
+            var $mobilePriceSlider = $('#mobile-priceSlider').slider();
+            $mobilePriceSlider.on('slideStart', onSlideStart);
+            $mobilePriceSlider.on('slide', onSlide);
+            $mobilePriceSlider.on('slideStop', onSlideStop);
+
+            function onSlideStart(e) {
+                currentMinValue = e.value[0];
+                currentMaxValue = e.value[1];
+            }
+
+            function onSlide(e) {
+                $('#mobile-min-price').text(e.value[0]);
+                $('#mobile-max-price').text(e.value[1]);
+                $('#min-price').text(e.value[0]);
+                $('#max-price').text(e.value[1]);
+            }
+
+            function onSlideStop(e) {
+                var newMinValue = e.value[0];
+                var newMaxValue = e.value[1];
+
+                if (currentMinValue != newMinValue) {
+                    var url = updateQueryString('from', newMinValue, null);
+                    //alert(url);
+                    window.location = url;
+                }
+
+                if (currentMaxValue != newMaxValue) {
+                    var url = updateQueryString('to', newMaxValue, null);
+                    //alert(url);
+                    window.location = url;
+                }
+
+                $priceSlider.slider('setValue', [newMinValue, newMaxValue]);
+                $mobilePriceSlider.slider('setValue', [newMinValue, newMaxValue]);
+            }
+        });
+    </script>
+}

@@ -1,0 +1,18 @@
+﻿@using Apollo.FrontStore.Models.Product;
+@model IList<ProductBoxModel>
+
+@if (Model.Count > 0)
+{
+    <amp-carousel width="auto"
+                  height="240"
+                  type="slides" 
+                  controls
+                  autoplay>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <div class="item">
+                @Html.Partial("_ProductBox", Model[i])
+            </div>
+        }
+    </amp-carousel>
+}

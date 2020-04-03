@@ -1,0 +1,13 @@
+﻿/** From medium devices - Desktops **/
+@media only screen and (min-width: 992px) {
+    #xmas-bg {
+        background: url(../img/valentine-bg.jpg);
+        display: block;
+        height: 100%;
+        z-index: -5;
+        top: 280px;
+        position: absolute;
+        width: 100%;
+        left: 0;
+    }
+}

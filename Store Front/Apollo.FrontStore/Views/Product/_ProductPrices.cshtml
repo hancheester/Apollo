@@ -1,0 +1,116 @@
+﻿@using Apollo.FrontStore.Models.Product;
+@using Apollo.Core.Model;
+@model IList<ProductPriceModel>
+
+@if (Model.Count > 0)
+{
+    string controlId = string.Format("product_price_{0}", ViewBag.ProductId);
+
+    <div>
+        @if (Model.Count > 1)
+        {
+            <script type="text/javascript">
+                var product = {
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var displaySavingNote = Model[i].Visible && Model[i].OfferRuleId > 0 && Model[i].DisplayRRP && string.IsNullOrEmpty(Model[i].SavePercentageNote) == false;
+
+                        @:"@Model[i].Id": { "price": "@Html.Raw(@Model[i].OfferPriceValue)", "availability": "@(@Model[i].StockAvailability ? "yes" : "no")", "oldprice": "@(displaySavingNote ? WebUtility.HtmlDecode(Model[i].Price) : null)", "note": "@(displaySavingNote ? WebUtility.HtmlDecode(Model[i].SavePercentageNote) : null)" }
+                                        
+                        if (i < (Model.Count - 1))
+                        {
+                            @:,
+                         }
+
+                        if (Model[i].IsPreSelected)
+                        {
+                            @:"selectedId": "@Model[i].Id",
+                            @:"selectedCurrencySymbol": "@Html.Raw(Model[i].CurrencySymbol)",
+                            @:"selectedCurrencyCode": "@Model[i].CurrencyCode"
+                                        
+                            if (i < (Model.Count - 1))
+                            {
+                                @:,
+                            }
+                        }
+                    }
+                };
+            </script>
+        }
+
+        @switch ((OptionType)ViewBag.OptionType)
+        {
+            case OptionType.Colour:
+                if (Model.Count == 1)
+                {
+                    if (!string.IsNullOrWhiteSpace(Model[0].Option))
+                    {
+                        <h5>Colour: <span id="selectedColour">@Html.Raw(Model[0].Option)</span></h5>
+                    }
+
+                    <input type="hidden" name="@controlId" value="@Model[0].Id" />
+
+                    <span class="color-container" title="@Model[0].Option">
+                        <span class="color" style="background: url('@Url.GenerateAbsoluteUrl(Model[0].PictureModel.ImageUrl)');">&nbsp;</span>
+                    </span>
+                }
+                else
+                {
+                    var option = Model.Where(x => x.IsPreSelected == true).Select(x => x.Option).FirstOrDefault();
+                    if (string.IsNullOrEmpty(option))
+                    {
+                        option = Model[0].Option;
+                    }
+
+                    <h5>Select colour: <span id="selectedColour">@Html.Raw(option)</span></h5>
+                    <ul class="option-list color-squares" id="@controlId">
+                        @foreach (var item in Model)
+                        {
+                            <li data-toggle="tooltip" data-placement="bottom" title="@item.Option" class="@(item.IsPreSelected ? "selected-value " : null) @(item.StockAvailability ? null : "unavailable")">
+                                <label for="@(controlId)_@(item.Id)">
+                                    <span class="color-container">
+                                        <span class="color" style="background: url('@Url.GenerateAbsoluteUrl(item.PictureModel.ImageUrl)');">&nbsp;</span>
+                                        <span class="out-of-stock"></span>
+                                    </span>
+                                    <input id="@(controlId)_@(item.Id)" type="radio" name="@controlId" data-media-id="@(item.ProductMediaId.HasValue ? item.ProductMediaId.Value : 0 )" data-name="@item.Option" value="@item.Id" checked="@item.IsPreSelected" />                                                                        
+                                </label>
+                            </li>
+                        }
+                    </ul>
+                }
+                break;
+            case OptionType.Size:
+                if (Model.Count == 1)
+                {
+                    if (!string.IsNullOrWhiteSpace(Model[0].Option))
+                    {
+                        <h5>Size:</h5> @Html.Raw(Model[0].Option)
+                    }
+
+                    <input type="hidden" name="@controlId" value="@Model[0].Id" />
+                }
+                else
+                {
+                    <h5>Select size:</h5>
+                    <ul class="options">
+                        @foreach (var item in Model)
+                        {
+                            <li class="@(item.StockAvailability ? null : "unavailable") @(item.IsPreSelected ? "selected" : null)" value="@item.Id">
+                                @Html.Raw(item.Option)
+                                <input id="@(controlId)_@(item.Id)" type="radio" name="@controlId" data-media-id="@(item.ProductMediaId.HasValue ? item.ProductMediaId.Value : 0 )" data-name="@item.Option" value="@item.Id" checked="@item.IsPreSelected" />
+                            </li>
+                        }
+                    </ul>
+                }
+                break;
+            case OptionType.GiftCard:
+            default:
+                @:<input type="hidden" name="@controlId" value="@Model[0].Id" />
+                break;
+        }
+
+    </div>
+
+    
+
+}

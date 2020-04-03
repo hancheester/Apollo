@@ -1,0 +1,90 @@
+﻿@using Apollo.Core.Model;
+@using Apollo.FrontStore.Models.Product;
+@model ProductBoxModel
+
+@{
+    ProductMarkType type = (ProductMarkType)Model.ProductMarkType;
+    string border = string.Empty;
+
+    switch (type)
+    {
+        case ProductMarkType.Yellow:
+            border = "border-yellow";
+            break;
+        case ProductMarkType.Red:
+            border = "border-red";
+            break;
+        case ProductMarkType.Grey:
+            border = "border-grey";
+            break;
+        case ProductMarkType.Orange:
+            border = "border-orange";
+            break;
+        default:
+        case ProductMarkType.None:
+            border = string.Empty;
+            break;
+    }
+}
+
+<div itemscope itemtype="https://schema.org/Product" class="product-box @Model.StyleClass">    
+    <div class="image @border col-xs-4 col-sm-12">
+        @if (string.IsNullOrEmpty(Model.Options) == false)
+        {
+            <div class="swatch"><span class="value">@Model.Options</span></div>
+        }
+        <a href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)"><amp-img itemprop="image" width="300" height="300" src="@Url.GenerateAbsoluteUrl("/media/product/" + Model.Picture.ImageUrl)" alt="@Html.Raw(Model.Picture.AlternateText)" title="@Html.Raw(Model.Picture.Title)" layout="responsive"></amp-img></a>
+        @if (!string.IsNullOrEmpty(Model.ProductMark))
+        {
+            <h6>@Model.ProductMark</h6>
+        }
+    </div>
+    <a class="magnifier" href="#"></a>
+    <div class="text col-xs-8 col-sm-12">
+        <div class="name col-sm-12">
+            <a itemprop="url" href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)"><h4 itemprop="name">@Html.Raw(Model.Name)</h4></a>
+        </div>
+        @if (Model.RelatedOffers.Count > 0)
+        {
+            <div class="offer col-sm-12">
+                @foreach (var offer in Model.RelatedOffers)
+                {
+                    if (offer.OfferRuleType == OfferRuleType.Catalog)
+                    {
+                        <a href="@Url.RouteUrl("Individual Offer", new { urlkey = offer.UrlKey }, this.Request.Url.Scheme)" target="_blank" class="@offer.OfferRuleType.ToString().ToLower()-offer">@offer.OfferTag</a>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <div class="option col-sm-12"><h5>@Model.DefaultOption</h5></div>
+        }
+        <div class="prices col-sm-12">
+            <h5>@Html.Raw(Model.PriceRange)</h5>
+        </div>
+        @if (Model.AverageReviewRating > 0)
+        {
+            <div class="rates col-sm-12">
+                @for (int i = 0; i < Model.AverageReviewRating; i++)
+                {
+                    <i class="fa fa-star"></i>
+                }
+
+                @for (int i = Model.AverageReviewRating; i < 5; i++)
+                {
+                    <i class="fa fa-star gray"></i>
+                }
+
+                @if (Model.ReviewCount > 0)
+                {
+                    @Html.Raw("(" + Model.ReviewCount + ")")
+                }
+            </div>
+        }
+        @*<div class="action col-sm-12"><div class="add col-sm-9"><a>@Html.Raw(Model.AMPNote)</a></div></div>*@
+        <div class="action space20 col-xs-12">            
+            <a class="action-button pull-left" href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)">@Model.ButtonMessage</a>            
+        </div>
+    </div>
+</div>

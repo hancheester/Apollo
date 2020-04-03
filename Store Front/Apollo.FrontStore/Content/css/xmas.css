@@ -1,0 +1,33 @@
+﻿#nav-header .menu-top > li.xmas > a {
+    color: #fe5656;
+}
+
+#nav-header .menu-top > li.xmas:hover > a, #nav-header .menu-top > li.xmas > a.hover {
+    color: #fff;
+    background: #fe5656;
+    text-transform: uppercase;
+}
+
+#nav-header .menu-top > li.xmas > a.hover + .menu-middle, #nav-header .menu-top > li.xmas:hover > a + .menu-middle {
+    display: block;
+    background: #fe5656;
+}
+
+#nav-header .dropdown-red {
+	background: #fe5656;
+	height: 50px;
+}
+
+/** From medium devices - Desktops **/
+@media only screen and (min-width: 992px) {
+    #xmas-bg {
+        background: url(../img/xmas-bg.jpg);
+        display: block;
+        height: 100%;
+        z-index: -5;
+        top: 280px;
+        position: absolute;
+        width: 100%;
+        left: 0;
+    }
+}

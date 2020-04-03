@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8C2B0C23-5864-440B-86CD-DC33997E888F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Apollo.DataAccess.EF</RootNamespace>
+    <AssemblyName>Apollo.DataAccess.EF</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseRepository.cs" />
+    <Compile Include="ApolloContext.cs" />
+    <Compile Include="EfRepository.cs" />
+    <Compile Include="IDataContextFactory.cs" />
+    <Compile Include="IDbContext.cs" />
+    <Compile Include="Mapping\AccountMap.cs" />
+    <Compile Include="Mapping\ActivityLogMap.cs" />
+    <Compile Include="Mapping\AddressMap.cs" />
+    <Compile Include="Mapping\BlogCommentMap.cs" />
+    <Compile Include="Mapping\BlogPostMap.cs" />
+    <Compile Include="Mapping\BranchAllocationMap.cs" />
+    <Compile Include="Mapping\BranchItemStatusMap.cs" />
+    <Compile Include="Mapping\BranchMap.cs" />
+    <Compile Include="Mapping\BranchOrderItemMap.cs" />
+    <Compile Include="Mapping\BranchOrderMap.cs" />
+    <Compile Include="Mapping\BranchPendingAllocationMap.cs" />
+    <Compile Include="Mapping\BranchPendingLineMap.cs" />
+    <Compile Include="Mapping\BranchProductStockMap.cs" />
+    <Compile Include="Mapping\BranchStockStatusMap.cs" />
+    <Compile Include="Mapping\BrandCategoryMap.cs" />
+    <Compile Include="Mapping\BrandFeaturedItemMap.cs" />
+    <Compile Include="Mapping\BrandMap.cs" />
+    <Compile Include="Mapping\BrandMediaMap.cs" />
+    <Compile Include="Mapping\CartItemMap.cs" />
+    <Compile Include="Mapping\CartPharmItemMap.cs" />
+    <Compile Include="Mapping\CartPharmOrderMap.cs" />
+    <Compile Include="Mapping\CategoryFeaturedBrandMap.cs" />
+    <Compile Include="Mapping\CategoryFeaturedItemMap.cs" />
+    <Compile Include="Mapping\CategoryFilterMap.cs" />
+    <Compile Include="Mapping\CategoryLargeBannerMappingMap.cs" />
+    <Compile Include="Mapping\CategoryMap.cs" />
+    <Compile Include="Mapping\CategoryMediaMap.cs" />
+    <Compile Include="Mapping\CategoryTemplateMap.cs" />
+    <Compile Include="Mapping\CategoryWhatsNewMap.cs" />
+    <Compile Include="Mapping\ColourMap.cs" />
+    <Compile Include="Mapping\CountryMap.cs" />
+    <Compile Include="Mapping\CurrencyCountryMap.cs" />
+    <Compile Include="Mapping\CurrencyMap.cs" />
+    <Compile Include="Mapping\CustomDictionaryMap.cs" />
+    <Compile Include="Mapping\DefaultBranchMap.cs" />
+    <Compile Include="Mapping\DeliveryMap.cs" />
+    <Compile Include="Mapping\EmailInvoiceMap.cs" />
+    <Compile Include="Mapping\EmailMessageMap.cs" />
+    <Compile Include="Mapping\EventLogMap.cs" />
+    <Compile Include="Mapping\GCSupportedCountryMap.cs" />
+    <Compile Include="Mapping\GenericAttributeMap.cs" />
+    <Compile Include="Mapping\GoogleTaxonomyMap.cs" />
+    <Compile Include="Mapping\ItemShipmentMap.cs" />
+    <Compile Include="Mapping\LargeBannerMap.cs" />
+    <Compile Include="Mapping\LineItemMap.cs" />
+    <Compile Include="Mapping\LIneStatusMap.cs" />
+    <Compile Include="Mapping\OfferActionAttributeMap.cs" />
+    <Compile Include="Mapping\OfferActionMap.cs" />
+    <Compile Include="Mapping\OfferAttributeMap.cs" />
+    <Compile Include="Mapping\OfferAttributeWithOperatorMap.cs" />
+    <Compile Include="Mapping\OfferBannerMap.cs" />
+    <Compile Include="Mapping\OfferConditionMap.cs" />
+    <Compile Include="Mapping\OfferOperatorMap.cs" />
+    <Compile Include="Mapping\OfferRelatedItemMap.cs" />
+    <Compile Include="Mapping\OfferRuleMap.cs" />
+    <Compile Include="Mapping\OfferTypeMap.cs" />
+    <Compile Include="Mapping\OrderCommentMap.cs" />
+    <Compile Include="Mapping\OrderIssueMap.cs" />
+    <Compile Include="Mapping\OrderMap.cs" />
+    <Compile Include="Mapping\OrderNoteMap.cs" />
+    <Compile Include="Mapping\OrderPaymentMap.cs" />
+    <Compile Include="Mapping\OrderShipmentMap.cs" />
+    <Compile Include="Mapping\OrderStatusMap.cs" />
+    <Compile Include="Mapping\PharmItemMap.cs" />
+    <Compile Include="Mapping\PharmOrderMap.cs" />
+    <Compile Include="Mapping\ProductAttributeMap.cs" />
+    <Compile Include="Mapping\ProductAttributeMappingMap.cs" />
+    <Compile Include="Mapping\ProductCategoryFilterMap.cs" />
+    <Compile Include="Mapping\ProductCategoryMap.cs" />
+    <Compile Include="Mapping\ProductGoogleCustomLabelMappingMap.cs" />
+    <Compile Include="Mapping\ProductGroupMap.cs" />
+    <Compile Include="Mapping\ProductGroupMappingMap.cs" />
+    <Compile Include="Mapping\ProductMap.cs" />
+    <Compile Include="Mapping\ProductMediaMap.cs" />
+    <Compile Include="Mapping\ProductPriceMap.cs" />
+    <Compile Include="Mapping\ProductReviewMap.cs" />
+    <Compile Include="Mapping\ProductTagMap.cs" />
+    <Compile Include="Mapping\ProfileMap.cs" />
+    <Compile Include="Mapping\RefundMap.cs" />
+    <Compile Include="Mapping\RestrictedGroupMap.cs" />
+    <Compile Include="Mapping\RestrictedGroupMappingMap.cs" />
+    <Compile Include="Mapping\RewardPointHistoryMap.cs" />
+    <Compile Include="Mapping\SagePayDirectMap.cs" />
+    <Compile Include="Mapping\SagePayLogMap.cs" />
+    <Compile Include="Mapping\ScheduleTaskMap.cs" />
+    <Compile Include="Mapping\SearchTermMap.cs" />
+    <Compile Include="Mapping\SettingMap.cs" />
+    <Compile Include="Mapping\ShippingOptionMap.cs" />
+    <Compile Include="Mapping\StockNotificationMap.cs" />
+    <Compile Include="Mapping\SubscriberMap.cs" />
+    <Compile Include="Mapping\SysCheckAddressMap.cs" />
+    <Compile Include="Mapping\SysCheckEmailMap.cs" />
+    <Compile Include="Mapping\SysCheckNameMap.cs" />
+    <Compile Include="Mapping\SysCheckPostCodeMap.cs" />
+    <Compile Include="Mapping\SystemCheckMap.cs" />
+    <Compile Include="Mapping\TagMap.cs" />
+    <Compile Include="Mapping\TaxCategoryMap.cs" />
+    <Compile Include="Mapping\TaxCategoryMappingMap.cs" />
+    <Compile Include="Mapping\TestimonialMap.cs" />
+    <Compile Include="Mapping\UserBehaviourMap.cs" />
+    <Compile Include="Mapping\USStateMap.cs" />
+    <Compile Include="Mapping\WarehouseAllocationMap.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Apollo.Core.Model\Apollo.Core.Model.csproj">
+      <Project>{69067ce3-5f66-4c27-8ae9-7309b2a6d105}</Project>
+      <Name>Apollo.Core.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Apollo.Core\Apollo.Core.csproj">
+      <Project>{ae3335c7-9fb1-4242-b3e8-04f4ed9da0f6}</Project>
+      <Name>Apollo.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Apollo.DataAccess.Interfaces\Apollo.DataAccess.Interfaces.csproj">
+      <Project>{9cbc3734-572b-4b80-b2b0-8f2596b66d51}</Project>
+      <Name>Apollo.DataAccess.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

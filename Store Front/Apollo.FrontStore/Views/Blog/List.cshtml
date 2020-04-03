@@ -1,0 +1,103 @@
+﻿@using Apollo.FrontStore.Models.Blog;
+
+@model BlogPostListModel
+
+@{
+    Html.AddTitleParts("i-Zone");
+}
+
+@{ Html.RenderPartial("_OfferStrips"); }
+
+<div id="blog">
+    <div class="container">
+        <div class="side-nav visible-xs">
+            <h3>i-Zone</h3>
+            <a class="filter-refine pull-right" data-toggle="collapse" href="#refine-panel">refine</a>
+            <div id="refine-panel" class="collapse">
+                <h3>Refine Results</h3>
+                <div class="panel-group" id="mobile-filters" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="selected">
+                            @if (!string.IsNullOrEmpty(Model.PagingFilteringContext.Tag))
+                            {
+                                <span class="badge">@Html.Raw(Model.PagingFilteringContext.Tag)</span>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.PagingFilteringContext.Month))
+                            {
+                                <span class="badge">@Html.Raw(Model.PagingFilteringContext.Month)</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        @Html.Action("BlogMonths", "Blog")
+                    </div>
+                    <div class="panel panel-default">
+                        @Html.Action("BlogTags", "Blog")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="side-nav hidden-xs col-sm-3 col-lg-4">
+            <div class="default">
+                <h3>i-Zone</h3>
+                @Html.Action("BlogMonths", "Blog")
+                @Html.Action("BlogTags", "Blog")
+            </div>
+        </div>
+
+        <div class="content col-sm-9 col-lg-8">
+            <div class="blog-posts col-xs-12 no-gutter">
+                @foreach (var item in Model.BlogPosts)
+                {
+                    <div class="post">
+                        <div class="post-head">
+                            <a class="post-title" href="@Url.RouteUrl("Blog Post", new { urlkey = item.UrlKey })">@item.Title</a>
+                            <span class="post-date">@item.CreatedOn.ToString("D")</span>
+                        </div>
+                        <div class="post-body">
+                            @Html.Raw(!string.IsNullOrEmpty(item.BodyOverview) ? item.BodyOverview : item.Body)
+                        </div>
+                        @if (item.Tags.Count > 0)
+                        {
+                            <div class="tags">
+                                <label>Tags:</label>
+                                <ul>
+                                    @for (int i = 0; i < item.Tags.Count; i++)
+                                    {
+                                        var tag = item.Tags[i];
+                                        <li><a href="@Url.RouteUrl("Blog By Tag", new { tag = tag })">@tag</a></li>
+                                        if (i != item.Tags.Count - 1)
+                                        {
+                                            <li class="separator">,</li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        }
+                        <div class="buttons row">
+                            @if (item.AllowComments)
+                            {
+                                <label class="col-sm-12">@string.Format("Comment ({0})", item.NumberOfComments)</label>
+                            }
+
+                            <div class="form-group col-sm-4">
+                                <a href="@Url.RouteUrl("Blog Post", new { urlkey = item.UrlKey })" class="read-more btn btn-default">READ MORE</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                }
+            </div>
+            @{
+                var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+            }
+            @if (!pager.IsEmpty())
+            {
+                <div class="pagination-footer sm-col-12 text-center">
+                    @pager
+                </div>
+            }            
+        </div>        
+    </div>
+</div>

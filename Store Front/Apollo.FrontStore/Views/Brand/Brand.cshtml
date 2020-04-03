@@ -1,0 +1,318 @@
+﻿@using Apollo.Core;
+@using Apollo.Core.Domain;
+@using Apollo.Core.Domain.Seo;
+@using Apollo.Core.Infrastructure;
+@using Apollo.FrontStore.Models.Brand;
+@model BrandModel
+
+@{
+    var metaTitle = string.IsNullOrEmpty(Model.MetaTitle) ? Model.Name : Model.MetaTitle;
+    Html.AddTitleParts(metaTitle);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    if (Model.Logo != null)
+    {
+        Html.AddHeadCustomParts(string.Format("<meta property=\"thumbnail\" content=\"{0}\"/>", Url.GenerateAbsoluteUrl(Model.Logo.ImageUrl)));
+    }
+
+    var brandUrl = Url.RouteUrl("Brand", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme);
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+
+    if (canonicalUrlsEnabled)
+    {
+        Html.AddCanonicalUrlParts(brandUrl);
+    }
+
+    var brandAmpUrl = Url.RouteUrl("Brand AMP", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme);
+    Html.AddHeadCustomParts(string.Format("<link rel=\"amphtml\" href=\"{0}\">", brandAmpUrl));
+
+    var workContext = EngineContext.Current.Resolve<IWorkContext>();
+    var currencyHtmlEntity = workContext.WorkingCurrency.HtmlEntity;
+    var storeSettings = EngineContext.Current.Resolve<StoreInformationSettings>();
+
+    // Open Graph tags
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:title\" content=\"{0}\"/>", metaTitle));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:description\" content=\"{0}\"/>", Model.MetaDescription));
+    if (Model.Logo != null)
+    {
+        Html.AddHeadCustomParts(string.Format("<meta property=\"og:image\" content=\"{0}\"/>", Url.GenerateAbsoluteUrl(Model.Logo.ImageUrl)));
+    }
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:url\" content=\"{0}\" />", brandUrl));
+    Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"website\" />");
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:site_name\" content=\"{0}\" />", storeSettings.CompanyName));
+
+    // Twitter Card tags
+    // TODO: Move twitter:site, twitter:creator to settings
+    Html.AddHeadCustomParts("<meta property=\"twitter:card\" content=\"summary\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:site\" content=\"@Apollo\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:creator\" content=\"@Apollo\" />");
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:title\" content=\"{0}\"/>", metaTitle));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:description\" content=\"{0}\"/>", Model.MetaDescription));
+    if (Model.Logo != null)
+    {
+        Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:image:src\" content=\"{0}\"/>", Url.GenerateAbsoluteUrl(Model.Logo.ImageUrl)));
+        Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:image:alt\" content=\"{0}\"/>", Model.Logo.AlternateText));
+    }
+    
+    // Facebook tags
+    // TODO: Move fb:app_id to settings
+    Html.AddHeadCustomParts(string.Format("<meta property=\"fb:app_id\" content=\"231491834056841\"/>"));
+
+    int min;
+    int.TryParse(Model.PagingFilteringContext.PriceRangeFilter.Min, out min);
+
+    int from;
+    int.TryParse(Model.PagingFilteringContext.PriceRangeFilter.From, out from);
+
+    int max;
+    int.TryParse(Model.PagingFilteringContext.PriceRangeFilter.Max, out max);
+
+    int to;
+    int.TryParse(Model.PagingFilteringContext.PriceRangeFilter.To, out to);
+}
+
+@section head {
+    @if (Model.HasMicrosite && Model.FeatureItemTypes.Count > 0)
+    {
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/assets/owl.carousel.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/assets/owl.theme.default.min.css" rel="stylesheet" />
+    }
+}
+
+<div id="breadcrumb">
+    <div class="container list hidden-xs">
+        <ul>
+            <li><a href="@Url.GenerateAbsoluteUrl("/")">Home</a></li>
+            <li><a href="@Url.RouteUrl("Brand", new { urlKey = Model.UrlKey }, Request.Url.Scheme)" class="active">@Html.Raw(Model.Name)</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="brand" itemscope itemtype="https://schema.org/Brand">
+    <div class="container">
+        @if (Model.HasMicrosite)
+        {
+            Html.RenderPartial("_BrandGridTemplate", Model);
+        }
+        else
+        {
+            <div class="side-nav visible-xs">
+                <h3>@Html.Raw(Model.Name)</h3>
+                @if (Model.Products.Count > 0)
+                {
+                    <a class="filter-refine pull-right" data-toggle="collapse" href="#refine-panel">refine</a>
+                    <div class="selected">
+                        <span class="badge">@Html.Raw(currencyHtmlEntity)@(min < from ? from : min) - @Html.Raw(currencyHtmlEntity)@(max > to ? to : max)</span>
+                    </div>
+                    <div id="refine-panel" class="collapse">
+                        <h3>Refine Results</h3>
+                        <div class="panel-group" id="mobile-filters" role="tablist" aria-multiselectable="true">                        
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingThree">
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#mobile-filters" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            Price
+                                            <span class="glyphicon glyphicon-plus pull-right"></span>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="selected">
+                                    <span class="badge">@Html.Raw(currencyHtmlEntity)@(min < from ? from : min) - @Html.Raw(currencyHtmlEntity)@(max > to ? to : max)</span>
+                                </div>
+                                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                    <div class="panel-body">
+                                        <div class="price-slider col-xs-12">
+                                            <b>Range: @Html.Raw(currencyHtmlEntity)<span id="mobile-min-price">@(min < from ? from : min)</span> - @Html.Raw(currencyHtmlEntity)<span id="mobile-max-price">@(max > to ? to : max)</span></b>
+                                            <input id="mobile-priceSlider" type="text" value=""
+                                                    data-slider-min="@Model.PagingFilteringContext.PriceRangeFilter.Min"
+                                                    data-slider-max="@Model.PagingFilteringContext.PriceRangeFilter.Max"
+                                                    data-slider-step="1"
+                                                    data-slider-value="[@(min < from ? from : min),@(max > to ? to : max)]" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="side-nav hidden-xs col-sm-3 col-lg-4">
+                <div class="default">
+                    <div class="filter">
+                        <h3>Filter Selection</h3>
+                        <div class="price-filter col-sm-12">
+                            <h5>Price</h5>
+                            <input id="priceSlider" type="text" value=""
+                                   data-slider-min="@Model.PagingFilteringContext.PriceRangeFilter.Min"
+                                   data-slider-max="@Model.PagingFilteringContext.PriceRangeFilter.Max"
+                                   data-slider-step="1"
+                                   data-slider-value="[@(min < from ? from : min),@(max > to ? to : max)]" />
+                            <div class="range col-sm-12"><b>Range: @Html.Raw(currencyHtmlEntity)<span id="min-price">@(min < from ? from : min)</span> - @Html.Raw(currencyHtmlEntity)<span id="max-price">@(max > to ? to : max)</span></b></div>
+                        </div>
+                        <div class="col-sm-12">
+                            <a class="btn btn-default text-center" href="javascript:reset();"><p><i class="fa fa-times-circle clear-filter"></i> Clear All Filters</p></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content col-sm-9 col-lg-8">
+                <div class="hidden-xs default-header">
+                    <h2 itemprop="name">@Html.Raw(Model.Name)</h2>
+                    <meta itemprop="url" content="@Url.RouteUrl("Brand", new { urlKey = Model.UrlKey }, Request.Url.Scheme)" />
+                </div>
+                <div class="pagination-header hidden-xs">
+                    <span class="showing pull-left">
+                        Showing @Model.PagingFilteringContext.FirstItem – @Model.PagingFilteringContext.LastItem of @Model.PagingFilteringContext.TotalItems results
+                    </span>
+                    <div class="sort-by pull-right">
+                        <ul class="text-right">
+                            <li class="dropdown">
+                                Show
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                    @Model.PagingFilteringContext.SelectedPageSize items<span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="show-items" href="#">18 items</a></li>
+                                    <li><a class="show-items" href="#">36 items</a></li>
+                                    <li><a class="show-items" href="#">72 items</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                Sort By
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                    @Model.PagingFilteringContext.ConvertEnum(Model.PagingFilteringContext.OrderBy)<span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @foreach (var item in Model.PagingFilteringContext.AvailableSortOptions)
+                                    {
+                                        <li><a class="sort-items" data-sortby="@item.Value" href="#">@item.Text</a></li>
+                                    }
+                                </ul>
+                            </li>
+                            @foreach (var item in Model.PagingFilteringContext.AvailableViewModes)
+                            {
+                                <li><a class="view-modes" data-view="@item.Value" href="#"><span class="glyphicon @item.Text @(item.Selected ? "selected" : null)"></span></a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="products col-sm-12">
+                    @if (Model.Products.Count > 0)
+                    {
+                        foreach (var item in Model.Products)
+                        {
+                            if (Model.PagingFilteringContext.ViewMode == "grid")
+                            {
+                                @Html.Partial("_ProductBox", item)
+                            }
+                            else
+                            {
+                                @Html.Partial("_ProductRow", item)
+                            }
+                        }
+                    }
+                    </div>
+                    @{
+                        var pager = Html.Pager(Model.PagingFilteringContext)
+                            .QueryParam("pagenumber")
+                            .BooleanParameterName("adv")
+                            .BooleanParameterName("isc")
+                            .BooleanParameterName("sid")
+                            .RenderEmptyParameters(true);
+                    }
+                    @if (!pager.IsEmpty())
+                    {
+                        <div class="pagination-footer sm-col-12 text-center">
+                            @Html.Raw(pager)
+                        </div>
+                    }
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        (function defer() {
+            if (window.jQuery) {
+                // [INSERT CODE HERE
+                $(document).ready(function () {
+                    $('.view-modes').on('click', function () {
+                        var value = $(this).data('view');
+                        window.location = updateQueryString('viewmode', value, null);
+                    });
+
+                    $('.sort-items').on('click', function () {
+                        var value = $(this).data('sortby');
+                        window.location = updateQueryString('orderby', value, null);
+                    });
+
+                    $('.show-items').on('click', function () {
+                        var value = $(this).text().replace(' items', '');
+                        window.location = updateQueryString('pagesize', value, null);
+                    });
+
+                    var currentMinValue;
+                    var currentMaxValue;
+
+                    var $priceSlider = $('#priceSlider').slider({ tooltip: 'hide' });
+                    if ($priceSlider) {
+                        $priceSlider.on('slideStart', onSlideStart);
+                        $priceSlider.on('slide', onSlide);
+                        $priceSlider.on('slideStop', onSlideStop);
+                    }
+
+                    var $mobilePriceSlider = $('#mobile-priceSlider').slider();
+                    if ($mobilePriceSlider) {
+                        $mobilePriceSlider.on('slideStart', onSlideStart);
+                        $mobilePriceSlider.on('slide', onSlide);
+                        $mobilePriceSlider.on('slideStop', onSlideStop);
+                    }
+
+                    function onSlideStart(e) {
+                        currentMinValue = e.value[0];
+                        currentMaxValue = e.value[1];
+                    }
+
+                    function onSlide(e) {
+                        $('#mobile-min-price').text(e.value[0]);
+                        $('#mobile-max-price').text(e.value[1]);
+                        $('#min-price').text(e.value[0]);
+                        $('#max-price').text(e.value[1]);
+                    }
+
+                    function onSlideStop(e) {
+                        var newMinValue = e.value[0];
+                        var newMaxValue = e.value[1];
+
+                        if (currentMinValue != newMinValue) {
+                            var url = updateQueryString('from', newMinValue, null);
+                            //alert(url);
+                            window.location = url;
+                        }
+
+                        if (currentMaxValue != newMaxValue) {
+                            var url = updateQueryString('to', newMaxValue, null);
+                            //alert(url);
+                            window.location = url;
+                        }
+
+                        $priceSlider.slider('setValue', [newMinValue, newMaxValue]);
+                        $mobilePriceSlider.slider('setValue', [newMinValue, newMaxValue]);
+                    }
+                });
+            } else {
+                setTimeout(function () { defer() }, 50);
+            }
+        })();
+    </script>
+
+    @if (Model.HasMicrosite && Model.FeatureItemTypes.Count > 0)
+    {
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
+        <script type="text/javascript" src="@Url.GenerateAbsoluteUrl("/scripts/public.productgroup.js?201712281014")"></script>
+    }
+}

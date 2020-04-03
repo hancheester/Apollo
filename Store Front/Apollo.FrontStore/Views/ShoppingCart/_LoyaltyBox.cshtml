@@ -1,0 +1,50 @@
+﻿@using Apollo.FrontStore.Models.ShoppingCart
+@model ShoppingCartModel.LoyaltyBoxModel
+
+<div class="loyalty">    
+    <div><h5>Loyalty points</h5></div>
+    <div>
+        @if (Model.IsLoggedIn)
+        {
+            <p>You currently have @( Model.MyPoints > 0 ? Model.MyPoints.ToString() + " points" : "no point" ) to use on this purchase.</p>
+
+                if (Model.MyPoints > 0 && Model.AllocatedPoints == 0)
+                {
+                <div class="input-group">
+                    <input id="allocated-points" type="text" class="form-control" placeholder="Enter your earned points">
+                    <span class="input-group-btn">
+                        <button id="apply-points" class="btn btn-default" type="button">APPLY</button>
+                    </span>
+                </div>
+            }
+            else if (Model.AllocatedPoints > 0)
+            { 
+                <a class="clearpoints btn btn-default btn-block" href="@Url.RouteUrl("Clear Points")">CLEAR MY POINTS</a>
+            }
+        }
+        else
+        {
+            <p>Please sign in to view your points.</p>
+            <a class="login btn btn-default btn-block" href="@Url.RouteUrl("Login")?ReturnUrl=@Url.RouteUrl("Shopping Cart")"><span class="glyphicon glyphicon-lock"></span>LOGIN IN</a>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function defer() {
+        if (window.jQuery) {
+            $(function () {
+                $('#apply-points').on('click', function () {
+                    var allocatedPoints = $('#allocated-points').val();
+
+                    if (allocatedPoints != '') {
+                        console.log(allocatedPoints);
+                        submitForm('@Url.RouteUrl("Apply Points")', { Points: allocatedPoints });
+                    }
+                });
+            });
+        } else {
+            setTimeout(function () { defer() }, 50);
+        }
+    })();
+</script>

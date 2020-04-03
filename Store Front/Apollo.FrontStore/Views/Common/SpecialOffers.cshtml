@@ -1,0 +1,104 @@
+﻿@using Apollo.FrontStore.Models.Common;
+@model SpecialOfferModel
+
+@{
+    Html.AddTitleParts("Special Offers");
+}
+
+<div id="breadcrumb">
+    <div class="container list hidden-xs">
+        <ul>
+            <li><a href="@Url.GenerateAbsoluteUrl("/")">Home</a></li>
+            <li><a href="@Url.RouteUrl("Special Offers", null, this.Request.Url.Scheme)" class="active">Special Offers</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="offers">
+    <div class="container">
+        <div class="row">
+            <div class="visible-xs">
+                @Html.Partial("~/Views/Common/_Banners.cshtml", Model.Banners)
+            </div>
+            <div class="col-lg-12">
+                <div class="side-nav hidden-xs col-sm-3">
+                    <div class="filter">
+                        @{ Html.RenderPartial("_SpecialOfferFilter", new SpecialOfferFilterModel { OfferTypes = Model.OfferTypes, SelectedOfferTypeId = Model.SelectedOfferTypeId }); }
+                    </div>
+                </div>
+                <div class="content hidden-xs col-sm-9">
+                    <div class="header">
+                        @if (Model.SelectedOfferTypeId == 0)
+                        {
+                            @Html.Action("OfferBanners", "Common")
+                        }
+                        else
+                        {
+                            <h4>@Model.SelectedOfferType</h4>
+                        }
+                    </div>
+
+                    <div class="body row">
+                        @if (Model.Offers.Count > 0)
+                        {
+                            var count = 1;
+                            foreach (var offer in Model.Offers)
+                            {
+                                <div class="offer-section col-sm-6">
+                                    <div>
+                                        <a href="@Url.RouteUrl("Individual Offer", new { urlkey = offer.UrlKey }, this.Request.Url.Scheme)">
+                                            <img data-original="@Url.GenerateAbsoluteUrl("/media/offer/" + @offer.Image.ImageUrl)"
+                                                 src="@Url.GenerateAbsoluteUrl("/content/img/loading-400x110.gif")"
+                                                 title="@offer.Image.Title"
+                                                 alt="@offer.Image.AlternateText"
+                                                 class="img-responsive main-img lazy"
+                                                 width="400" height="110">
+                                        </a>
+                                        @*<div class="img-tag">
+                                                <h4>@Html.Raw(offer.Alias)</h4>
+                                                <img src="/content/img/offer-box-underline.png" alt="">
+                                            </div>*@
+                                    </div>
+                                    <div class="description">
+                                        <h5>@Html.Raw(offer.Alias)</h5>
+                                        <img src="@Url.GenerateAbsoluteUrl("/content/img/offer-title-underline.png")" alt="" class="img-responsive">
+                                        <p>@Html.Raw(offer.Description)</p>
+                                        <div class="text-right"><a class="button" href="@Url.RouteUrl("Individual Offer", new { urlkey = offer.UrlKey }, this.Request.Url.Scheme)">READ MORE</a></div>
+                                    </div>
+                                </div>
+
+                                if (count % 2 == 0)
+                                {
+                                    <div class="clearfix"></div>
+                                }
+
+                                count++;
+                            }
+                        }
+                        else
+                        {
+                            <p>Stay tuned for more offer!</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container visible-xs">
+        @{ Html.RenderPartial("_SpecialOfferFilter", new SpecialOfferFilterModel { OfferTypes = Model.OfferTypes, IsForMobile = true }); }
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#offer-types li a').on('click', function () {
+                var value = $(this).data('typeid');
+                window.location = updateQueryString('typeid', value, null);
+            });
+        });
+
+    </script>
+}

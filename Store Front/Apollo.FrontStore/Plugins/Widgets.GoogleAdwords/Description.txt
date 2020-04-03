@@ -1,0 +1,8 @@
+﻿Group: Widgets
+FriendlyName: Google Adwords
+SystemName: Widgets.GoogleAdwords
+Version: 1.00
+SupportedVersions: 1.00
+Author: Apollo team, Han Chee
+DisplayOrder: 1
+FileName: Apollo.Plugin.Widgets.GoogleAdwords.dll

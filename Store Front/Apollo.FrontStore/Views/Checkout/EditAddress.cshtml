@@ -1,0 +1,137 @@
+﻿@using Apollo.Core.Model;
+@using Apollo.FrontStore.Models.Common;
+@using Apollo.Web.Framework;
+
+@model AddressModel
+
+@{
+    var title = "Edit Address";
+    
+    Html.AddTitleParts(title);
+}
+
+<div id="breadcrumb">
+    <div class="container list">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li><a href="/" class="active">Address</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="checkout">
+    <div class="container">
+        <div class="row">
+
+            @if (!string.IsNullOrEmpty(ViewBag.Message as string))
+            {
+                <p class="message bg-success visible-xs">@Html.Raw(ViewBag.Message)</p>
+
+                <div class="col-sm-12 hidden-xs">
+                    <p class="message bg-success">@Html.Raw(ViewBag.Message)</p>
+                </div>
+            }
+
+            <div class="col-xs-12">
+                <h4>@title</h4>
+            </div>
+
+            <div class="address col-xs-12 col-lg-6">
+                @using (Html.BeginForm())
+                {
+                    @Html.HiddenFor(model => model.Id);
+
+                    var validationSummary = Html.ValidationSummary(true);
+                    if (!MvcHtmlString.IsNullOrEmpty(validationSummary))
+                    {
+                        <div class="message-error alert alert-danger">@validationSummary</div>
+                    }
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name)@Html.RequiredHint()
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AddressLine1)@Html.RequiredHint()
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.AddressLine1, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AddressLine1)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AddressLine2)
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.AddressLine2, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AddressLine2)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.City)@Html.RequiredHint()
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.City, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.City)
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PostCode)
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.PostCode, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.PostCode)
+                        </div>
+                    </div>
+                    
+                    <div class="states form-group" style="display: @(Model.USStateId == 0 ? "none" : "block");">
+                        @Html.LabelFor(model => model.USState)
+                        <div class="input-group">
+                            @Html.DropDownListFor(model => model.USStateId, Model.AvailableStates, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CountryName)@Html.RequiredHint()
+                        <div class="input-group">
+                            @Html.DropDownListFor(model => model.CountryId, Model.AvailableCountries, new { @class = "country-list form-control" })
+                            @Html.ValidationMessageFor(model => model.CountryId)
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-lg-6 no-gutter">
+                        <input type="submit" class="button add-address" value="UPDATE ADDRESS" />
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="form-group col-lg-6 no-gutter">
+                        <a class="btn btn-default btn-block" href="@Url.RouteUrl("Checkout Display Address", new { type = Convert.ToInt32(Model.AddressType) })">BACK</a>
+                    </div>
+                    
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        (function () {
+            $('.country-list').change(function () {                
+                var country = $(this).find('option:selected').text();
+                
+                if (country === 'United States') {
+                    $('.states').show();
+                }
+                else {
+                    $('.states').hide();
+                }
+            });
+        })();
+    </script>
+}

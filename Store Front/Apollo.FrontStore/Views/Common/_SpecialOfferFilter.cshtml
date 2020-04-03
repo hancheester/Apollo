@@ -1,0 +1,98 @@
+﻿@using Apollo.FrontStore.Models.Common;
+@model SpecialOfferFilterModel
+
+@if (Model.OfferTypes.Count > 0)
+{
+    if (Model.IsForMobile)
+    {
+        <h4>Special Offers</h4>
+        <div class="panel-group" id="offer-tree">
+            @if (Model.OfferTypes.Count > 0)
+            {
+                foreach (var type in Model.OfferTypes)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a href="#@type.Id" data-toggle="collapse" data-parent="#offer-tree">
+                                    @type.Name<span class="glyphicon glyphicon-plus pull-right"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="@type.Id" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    @foreach (var offer in type.OfferRules)
+                                    {
+                                        <li><a href="@Url.RouteUrl("Individual Offer", new { urlkey = offer.UrlKey }, this.Request.Url.Scheme)">@Html.Raw(offer.Name)<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+    else
+    {
+        <h3>Special Offers</h3>
+        <div class="panel-group" id="offer-types">
+            @foreach (var type in Model.OfferTypes)
+            {
+                // For mobile
+                <div class="panel panel-default visible-xs">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#of-@type.Id" data-toggle="collapse" data-parent="#offer-types">
+                                @Html.Raw(type.Name)
+                                <span class="glyphicon glyphicon-plus pull-right"></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="of-@type.Id" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <ul>
+                                @foreach (var offer in type.OfferRules)
+                                {
+                                    <li><a href="@Url.RouteUrl("Individual Offer", new { urlkey = offer.UrlKey }, this.Request.Url.Scheme)">@Html.Raw(offer.Name)<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                // For desktop / tablet
+                <div class="panel panel-default hidden-xs">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#" class="types" data-offertype="@type.Id">
+                                @Html.Raw(type.Name)
+                                <span class="glyphicon glyphicon-chevron-right pull-right @(@type.Id == Model.SelectedOfferTypeId ? "selected" : null)"></span>
+                            </a>
+                        </h4>
+                    </div>                    
+                </div>
+            }
+        </div>
+    }
+
+    <div class="hidden-xs col-sm-12">
+        <a class="btn btn-default text-center" href="javascript:reset();"><p><i class="fa fa-times-circle clear-filter"></i> Clear All Filters</p></a>
+    </div>
+}
+
+<script type="text/javascript">
+    (function defer() {
+        if (window.jQuery) {            
+            $(document).ready(function () {
+                $('.types').on('click', function () {
+                    var value = $(this).data('offertype');
+                    window.location = updateQueryString('offertype', value, null);
+                });
+            });
+        } else {
+            setTimeout(function () { defer() }, 50);
+        }
+    })();
+</script>

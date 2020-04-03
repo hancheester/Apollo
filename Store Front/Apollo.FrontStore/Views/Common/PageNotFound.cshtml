@@ -1,0 +1,49 @@
+﻿@{
+    Html.AddTitleParts("Page Not Found");
+}
+
+<div id="breadcrumb">
+    <div class="container list hidden-xs">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#" class="active">Page Not Found</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="error">
+    <div class="container">
+        <div class="row">
+            <div class="content text-center">
+                <span class="invalid glyphicon glyphicon-exclamation-sign"></span>
+                <div class="col-sm-12"><h3>OOPS! This page doesn't exists.</h3></div>
+                <div class="col-sm-12">
+                    <p>
+                        Sorry, but the page you are looking for might have been removed or is not available right now. Another<br>
+                        reason might be that the product you are looking for perhaps sold out completely!
+                    </p>
+                    <p>
+                        Try searching our site or starting on our home page.
+                    </p>
+                </div>                
+                <div class="col-xs-12 col-md-offset-2 col-md-8 search">
+                    <form action="@Url.RouteUrl("Search")" method="get">
+                        <meta content="@Url.RouteUrl("Home")?q={q}" />
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="I'm looking for...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">SEARCH</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="content col-sm-8 col-sm-offset-2">
+                @Html.Action("BoxMenu", "Category", new { isForSearchResult = true })
+            </div>
+            <div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4 space20">
+                <a href="/" class="btn btn-default">CONTINUE TO HOME PAGE</a>
+            </div>
+        </div>
+    </div>
+</div>

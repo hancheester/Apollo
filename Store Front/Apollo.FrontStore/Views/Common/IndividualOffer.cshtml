@@ -1,0 +1,85 @@
+﻿@using Apollo.FrontStore.Models.Common;
+
+@model IndividualOfferModel
+
+@{
+    Html.AddTitleParts("Offer | " + Model.Alias);    
+}
+
+<div id="breadcrumb">
+    <div class="container list hidden-xs">
+        <ul>
+            <li><a href="@Url.GenerateAbsoluteUrl("/")">Home</a></li>
+            <li><a href="@Url.RouteUrl("Special Offers", null, this.Request.Url.Scheme)">Special Offers</a></li>
+            <li><a href="@Url.RouteUrl("Individual Offer", new { urlkey = Model.UrlKey }, this.Request.Url.Scheme)" class="active">@Html.Raw(Model.Alias)</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="offers" class="single">
+    <div class="container individual">
+        <div class="side-nav col-sm-3 hidden-xs">
+            <div class="filter">
+                @{ Html.RenderPartial("_SpecialOfferFilter", new SpecialOfferFilterModel { OfferTypes = Model.OfferTypes }); }
+            </div>
+        </div>
+        <div class="main col-sm-9">
+            <div class="banner">
+                <img src="@Url.GenerateAbsoluteUrl("/media/offer/" + Model.Image.ImageUrl)" title="@Model.Image.Title" alt="@Model.Image.AlternateText" class="img-responsive center-block" />
+            </div>
+            <h5 class="visible-xs">@Model.Alias</h5>
+            <h3 class="hidden-xs">@Model.Alias</h3>
+            <p>@Html.Raw(Model.Description)</p>
+
+            @if (Model.Products.Count > 0)
+            {
+                <div class="related-items visible-xs col-sm-12">
+                    <h3>Related Products</h3>                    
+                    @for (int i = 0; i < Model.Products.Count; i++)
+                    {
+                        @Html.Partial("_ProductBox", Model.Products[i])
+                    }
+                </div>
+            }
+
+            <div class="button row col-sm-4">
+                @if (!string.IsNullOrEmpty(Model.OfferUrl))
+                {
+                    <a href="@Model.OfferUrl" class="btn btn-primary shop-for-offer">Shop For Offer</a>
+                }
+                <a href="@Url.RouteUrl("Special Offers", null, this.Request.Url.Scheme)" class="btn btn-primary back visible-xs">Back</a>
+            </div>
+            <div class="clearfix"></div>
+            @if (Model.Products.Count > 0)
+            {
+                <div class="related-items hidden-xs">
+                    <div class="title">Related Products</div>
+                    <ul class="bxslider">                    
+                        @for (int i = 0; i < Model.Products.Count; i++)
+                        {
+                            if (i % 6 == 0)
+                            {
+                                @:<li>
+                            }
+
+                            @Html.Partial("_ProductBox", Model.Products[i])
+
+                            if (i % 6 == 6)
+                            {
+                                @:</li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            slider = $('#offers .bxslider').bxSlider({ auto: false });
+        });
+    </script>
+}

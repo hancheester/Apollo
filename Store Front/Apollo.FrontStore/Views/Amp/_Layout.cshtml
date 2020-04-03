@@ -1,0 +1,205 @@
+﻿@using Apollo.Core.Services.Interfaces;
+@using Apollo.Core;
+@using Apollo.Core.Infrastructure;
+
+@{
+    var workContext = EngineContext.Current.Resolve<IWorkContext>();
+    var webHelper = EngineContext.Current.Resolve<IWebHelper>();
+    var cartService = EngineContext.Current.Resolve<ICartService>();
+    var items = cartService.GetCartItemOverviewModelByProfileId(workContext.CurrentProfile.Id);
+    var quantity = items.Select(x => x.Quantity).Sum();
+    var basketNotify = quantity > 0 ? string.Format("<span class=\"badge badge-notify\">{0}</span>", quantity) : string.Empty;
+}
+
+<!DOCTYPE html>
+<html amp>
+<head>
+    <meta charset="utf-8">
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
+    <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
+    <script async custom-template="amp-mustache" src="https://cdn.ampproject.org/v0/amp-mustache-0.1.js"></script>
+    @RenderSection("amp_script", required: false)
+    <title>@Html.ApolloTitle(true, "Home Of Health And Beauty")</title>
+    <meta name="description" content="@(Html.ApolloMetaDescription())" />
+    <meta name="keywords" content="@(Html.ApolloMetaKeywords())" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    <meta name="theme-color" content="#231f20" />
+    @Html.ApolloHeadCustom()
+    @Html.ApolloPrevUrls()
+    @Html.ApolloCanonicalUrls()
+    @Html.ApolloNextUrls()
+    <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400italic,700,700italic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,300,100,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,100,100italic,300,300italic,400italic,700italic,900,900italic,700" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    @*backup scripts <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>*@
+    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+    <style amp-custom>
+        @@font-face{font-family:'Glyphicons Halflings';src:url(/content/fonts/glyphicons-halflings-regular.eot);src:url(/content/fonts/glyphicons-halflings-regular.eot?#iefix) format("embedded-opentype"),url(/content/fonts/glyphicons-halflings-regular.woff2) format("woff2"),url(/content/fonts/glyphicons-halflings-regular.woff) format("woff"),url(/content/fonts/glyphicons-halflings-regular.ttf) format("truetype"),url(/content/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular) format("svg")}.glyphicon{position:relative;top:1px;display:inline-block;font-family:'Glyphicons Halflings';font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased}.glyphicon-shopping-cart:before{content:"\e116"}.glyphicon-search:before{content:"\e003"}.glyphicon-chevron-down:before{content:"\e114"}.glyphicon-alert:before{content:"\e209"}.glyphicon-ok-sign:before{content:"\e084"}.glyphicon-minus:before{content:"\2212"}.glyphicon-plus:before{content:"\002b"}.glyphicon-chevron-right:before{content:"\e080"}.glyphicon-fast-backward:before{content:"\e070"}.glyphicon-backward:before{content:"\e071"}.glyphicon-forward:before{content:"\e075"}.glyphicon-fast-forward:before{content:"\e076"}.glyphicon-menu-right:before{content:"\e258"}.glyphicon-triangle-right:before{content:"\e250"}.glyphicon-triangle-bottom:before{content:"\e252"}.flag-icon,.flag-icon-background{background-repeat:no-repeat;background-size:contain;background-position:50%}.flag-icon{position:relative;display:inline-block;width:1.33333333em;line-height:1em}.flag-icon:before{content:"\00a0"}.flag-icon-ad{background-image:url(/content/flags/4x3/ad.svg)}.flag-icon-ae{background-image:url(/content/flags/4x3/ae.svg)}.flag-icon-al{background-image:url(/content/flags/4x3/al.svg)}.flag-icon-am{background-image:url(/content/flags/4x3/am.svg)}.flag-icon-ar{background-image:url(/content/flags/4x3/ar.svg)}.flag-icon-at{background-image:url(/content/flags/4x3/at.svg)}.flag-icon-au{background-image:url(/content/flags/4x3/au.svg)}.flag-icon-ax{background-image:url(/content/flags/4x3/ax.svg)}.flag-icon-az{background-image:url(/content/flags/4x3/az.svg)}.flag-icon-be{background-image:url(/content/flags/4x3/be.svg)}.flag-icon-bg{background-image:url(/content/flags/4x3/bg.svg)}.flag-icon-bh{background-image:url(/content/flags/4x3/bh.svg)}.flag-icon-bm{background-image:url(/content/flags/4x3/bm.svg)}.flag-icon-bn{background-image:url(/content/flags/4x3/bn.svg)}.flag-icon-br{background-image:url(/content/flags/4x3/br.svg)}.flag-icon-by{background-image:url(/content/flags/4x3/by.svg)}.flag-icon-ca{background-image:url(/content/flags/4x3/ca.svg)}.flag-icon-ch{background-image:url(/content/flags/4x3/ch.svg)}.flag-icon-gb{background-image:url(/content/flags/4x3/gb.svg)}.flag-icon-cl{background-image:url(/content/flags/4x3/cl.svg)}.flag-icon-cn{background-image:url(/content/flags/4x3/cn.svg)}.flag-icon-co{background-image:url(/content/flags/4x3/co.svg)}.flag-icon-cy{background-image:url(/content/flags/4x3/cy.svg)}.flag-icon-cz{background-image:url(/content/flags/4x3/cz.svg)}.flag-icon-de{background-image:url(/content/flags/4x3/de.svg)}.flag-icon-dk{background-image:url(/content/flags/4x3/dk.svg)}.flag-icon-ee{background-image:url(/content/flags/4x3/ee.svg)}.flag-icon-es{background-image:url(/content/flags/4x3/es.svg)}.flag-icon-fi{background-image:url(/content/flags/4x3/fi.svg)}.flag-icon-fo{background-image:url(/content/flags/4x3/fo.svg)}.flag-icon-fr{background-image:url(/content/flags/4x3/fr.svg)}.flag-icon-ge{background-image:url(/content/flags/4x3/ge.svg)}.flag-icon-gf{background-image:url(/content/flags/4x3/gf.svg)}.flag-icon-gg{background-image:url(/content/flags/4x3/gg.svg)}.flag-icon-gh{background-image:url(/content/flags/4x3/gh.svg)}.flag-icon-gi{background-image:url(/content/flags/4x3/gi.svg)}.flag-icon-gl{background-image:url(/content/flags/4x3/gl.svg)}.flag-icon-gp{background-image:url(/content/flags/4x3/gp.svg)}.flag-icon-gr{background-image:url(/content/flags/4x3/gr.svg)}.flag-icon-hk{background-image:url(/content/flags/4x3/hk.svg)}.flag-icon-hr{background-image:url(/content/flags/4x3/hr.svg)}.flag-icon-hu{background-image:url(/content/flags/4x3/hu.svg)}.flag-icon-id{background-image:url(/content/flags/4x3/id.svg)}.flag-icon-ie{background-image:url(/content/flags/4x3/ie.svg)}.flag-icon-il{background-image:url(/content/flags/4x3/il.svg)}.flag-icon-im{background-image:url(/content/flags/4x3/im.svg)}.flag-icon-in{background-image:url(/content/flags/4x3/in.svg)}.flag-icon-ir{background-image:url(/content/flags/4x3/ir.svg)}.flag-icon-is{background-image:url(/content/flags/4x3/is.svg)}.flag-icon-it{background-image:url(/content/flags/4x3/it.svg)}.flag-icon-je{background-image:url(/content/flags/4x3/je.svg)}.flag-icon-jp{background-image:url(/content/flags/4x3/jp.svg)}.flag-icon-ke{background-image:url(/content/flags/4x3/ke.svg)}.flag-icon-kr{background-image:url(/content/flags/4x3/kr.svg)}.flag-icon-kw{background-image:url(/content/flags/4x3/kw.svg)}.flag-icon-kz{background-image:url(/content/flags/4x3/kz.svg)}.flag-icon-lb{background-image:url(/content/flags/4x3/lb.svg)}.flag-icon-lk{background-image:url(/content/flags/4x3/lk.svg)}.flag-icon-lt{background-image:url(/content/flags/4x3/lt.svg)}.flag-icon-lu{background-image:url(/content/flags/4x3/lu.svg)}.flag-icon-lv{background-image:url(/content/flags/4x3/lv.svg)}.flag-icon-ma{background-image:url(/content/flags/4x3/ma.svg)}.flag-icon-mc{background-image:url(/content/flags/4x3/mc.svg)}.flag-icon-md{background-image:url(/content/flags/4x3/md.svg)}.flag-icon-mk{background-image:url(/content/flags/4x3/mk.svg)}.flag-icon-mo{background-image:url(/content/flags/4x3/mo.svg)}.flag-icon-mq{background-image:url(/content/flags/4x3/mq.svg)}.flag-icon-mt{background-image:url(/content/flags/4x3/mt.svg)}.flag-icon-mu{background-image:url(/content/flags/4x3/mu.svg)}.flag-icon-mv{background-image:url(/content/flags/4x3/mv.svg)}.flag-icon-my{background-image:url(/content/flags/4x3/my.svg)}.flag-icon-nl{background-image:url(/content/flags/4x3/nl.svg)}.flag-icon-no{background-image:url(/content/flags/4x3/no.svg)}.flag-icon-nz{background-image:url(/content/flags/4x3/nz.svg)}.flag-icon-om{background-image:url(/content/flags/4x3/om.svg)}.flag-icon-pe{background-image:url(/content/flags/4x3/pe.svg)}.flag-icon-ph{background-image:url(/content/flags/4x3/ph.svg)}.flag-icon-pl{background-image:url(/content/flags/4x3/pl.svg)}.flag-icon-pm{background-image:url(/content/flags/4x3/pm.svg)}.flag-icon-pt{background-image:url(/content/flags/4x3/pt.svg)}.flag-icon-qa{background-image:url(/content/flags/4x3/qa.svg)}.flag-icon-re{background-image:url(/content/flags/4x3/re.svg)}.flag-icon-ro{background-image:url(/content/flags/4x3/ro.svg)}.flag-icon-rs{background-image:url(/content/flags/4x3/rs.svg)}.flag-icon-ru{background-image:url(/content/flags/4x3/ru.svg)}.flag-icon-sa{background-image:url(/content/flags/4x3/sa.svg)}.flag-icon-sc{background-image:url(/content/flags/4x3/sc.svg)}.flag-icon-se{background-image:url(/content/flags/4x3/se.svg)}.flag-icon-sg{background-image:url(/content/flags/4x3/sg.svg)}.flag-icon-si{background-image:url(/content/flags/4x3/si.svg)}.flag-icon-sk{background-image:url(/content/flags/4x3/sk.svg)}.flag-icon-sm{background-image:url(/content/flags/4x3/sm.svg)}.flag-icon-th{background-image:url(/content/flags/4x3/th.svg)}.flag-icon-tr{background-image:url(/content/flags/4x3/tr.svg)}.flag-icon-tt{background-image:url(/content/flags/4x3/tt.svg)}.flag-icon-tw{background-image:url(/content/flags/4x3/tw.svg)}.flag-icon-ua{background-image:url(/content/flags/4x3/ua.svg)}.flag-icon-us{background-image:url(/content/flags/4x3/us.svg)}.flag-icon-vn{background-image:url(/content/flags/4x3/vn.svg)}.flag-icon-za{background-image:url(/content/flags/4x3/za.svg)}html{font-family:sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}html{font-size:10px;-webkit-tap-highlight-color:rgba(0,0,0,0)}body{background:#fff;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff;margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}input{padding-left:20px}input::-webkit-input-placeholder{color:#bdbdbd}button,input,optgroup,select,textarea{margin:0;font:inherit;color:inherit}button,input,select,textarea{font-family:inherit;font-size:inherit;line-height:inherit}button{overflow:visible}button,select{text-transform:none}button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}a{background-color:transparent;color:#337ab7;text-decoration:none}a:active,a:hover{outline:0}a:focus,a:hover{color:#23527c;text-decoration:underline}ol,ul{margin-top:0;margin-bottom:10px}ul{margin-left:0;margin-bottom:0;padding-left:0}li{list-style:none}amp-img{border:0;vertical-align:middle}:after,:before{-webkit-box-sizing:border-box;box-sizing:border-box}*{-webkit-box-sizing:border-box;box-sizing:border-box}.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-xs-1,.col-xs-10,.col-xs-11,.col-xs-12,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9{position:relative;min-height:1px;padding-right:15px;padding-left:15px}.col-xs-1,.col-xs-10,.col-xs-11,.col-xs-12,.col-xs-2,.col-xs-3,.col-xs-4,.col-xs-5,.col-xs-6,.col-xs-7,.col-xs-8,.col-xs-9{float:left}.col-xs-4{width:33.33333333%}.col-xs-8{width:66.66666667%}.col-xs-12{width:100%}.btn-group-vertical>.btn-group:after,.btn-group-vertical>.btn-group:before,.btn-toolbar:after,.btn-toolbar:before,.clearfix:after,.clearfix:before,.container-fluid:after,.container-fluid:before,.container:after,.container:before,.dl-horizontal dd:after,.dl-horizontal dd:before,.form-horizontal .form-group:after,.form-horizontal .form-group:before,.modal-footer:after,.modal-footer:before,.modal-header:after,.modal-header:before,.nav:after,.nav:before,.navbar-collapse:after,.navbar-collapse:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.pager:after,.pager:before,.panel-body:after,.panel-body:before,.row:after,.row:before{display:table;content:" "}.btn-group-vertical>.btn-group:after,.btn-toolbar:after,.clearfix:after,.container-fluid:after,.container:after,.dl-horizontal dd:after,.form-horizontal .form-group:after,.modal-footer:after,.modal-header:after,.nav:after,.navbar-collapse:after,.navbar-header:after,.navbar:after,.pager:after,.panel-body:after,.row:after{clear:both}.h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6{font-family:inherit;font-weight:500;line-height:1.1;color:inherit}.h1,.h2,.h3,h1,h2,h3{margin-top:20px;margin-bottom:10px}.h4,.h5,.h6,h4,h5,h6{margin-top:10px;margin-bottom:10px}.h3,h3{font-size:24px}.h4,h4{font-size:18px}.h5,h5{font-size:14px}.h6,h6{font-size:12px}h1,h2,h3,h4,h5,h6,p,a,span,li,input,button,label{font-family:'Montserrat',sans-serif;color:#212121}p,a,span,li,input,button{font-size:12px}p{margin:0 0 10px;color:#878787}.text-center{text-align:center}.red{color:red}.no-gutter{padding-right:0;padding-left:0}.container{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}.row{margin-right:-15px;margin-left:-15px}.pull-right{float:right}.collapse{display:none}.fa.fa-star{color:#fe5656}.fa.fa-star.gray{color:#ddd}.form-control{display:block;width:100%;height:34px;padding:6px 12px;font-size:14px;line-height:1.42857143;color:#555;background-color:#fff;background-image:none;border:1px solid #ccc;border-radius:4px;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075);box-shadow:inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition:border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;-o-transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s}.form-control::-webkit-input-placeholder{color:#999}.input-group{position:relative;display:table;border-collapse:separate}.input-group[class*=col-]{float:none;padding-right:0;padding-left:0}.input-group .form-control{position:relative;z-index:2;float:left;width:100%;margin-bottom:0}.input-group .form-control,.input-group-addon,.input-group-btn{display:table-cell}.input-group-addon,.input-group-btn{width:1%;white-space:nowrap;vertical-align:middle}.input-group-btn{position:relative;font-size:0;white-space:nowrap}.input-group .form-control:not(:first-child):not(:last-child),.input-group-addon:not(:first-child):not(:last-child),.input-group-btn:not(:first-child):not(:last-child){border-radius:0}.input-group-btn>.btn{position:relative}.input-group .form-control:first-child,.input-group-addon:first-child,.input-group-btn:first-child>.btn,.input-group-btn:first-child>.btn-group>.btn,.input-group-btn:first-child>.dropdown-toggle,.input-group-btn:last-child>.btn-group:not(:last-child)>.btn,.input-group-btn:last-child>.btn:not(:last-child):not(.dropdown-toggle){border-top-right-radius:0;border-bottom-right-radius:0}.input-group-btn:last-child>.btn,.input-group-btn:last-child>.btn-group{z-index:2;margin-left:-1px}.nav{padding-left:0;margin-bottom:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}.navbar-brand{float:left;height:50px;padding:15px;font-size:18px;line-height:20px}.navbar-brand>amp-img{display:block}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-toggle{border-color:#ddd}.navbar-default .navbar-toggle .icon-bar{background-color:#888}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-nav>li>a{color:#777}.navbar-toggle .icon-bar+.icon-bar{margin-top:4px}.navbar-toggle{position:relative;float:right;padding:9px 10px;margin-top:8px;margin-right:15px;margin-bottom:8px;background-color:transparent;background-image:none;border:1px solid transparent;border-radius:4px}.navbar-toggle .icon-bar{display:block;width:22px;height:2px;border-radius:1px}.navbar-default .navbar-toggle .icon-bar{background-color:#888}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-fixed-bottom,.navbar-fixed-top{right:0;left:0;background-color:#231f20;border:none;margin-bottom:0}.btn{display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;-ms-touch-action:manipulation;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;-ms-user-select:none;user-select:none;background-image:none;border:1px solid transparent;border-radius:4px}.btn-default{color:#333;background-color:#fff;border-color:#ccc}.btn-block{display:block;width:100%}input[type=button].btn-block,input[type=reset].btn-block,input[type=submit].btn-block{width:100%}.btn-group-lg>.btn,.btn-lg{padding:10px 16px;font-size:18px;line-height:1.3333333;border-radius:6px}.input-group{position:relative;display:table;border-collapse:separate}.badge{display:inline-block;min-width:10px;padding:3px 7px;font-size:12px;font-weight:700;line-height:1;color:#fff;text-align:center;white-space:nowrap;vertical-align:middle;background-color:#777;border-radius:10px}.badges span.eu{margin-right:2px}.badges span.group{display:inline-block}.badges span.eu a img,.badges span.eu a amp-img,.badges span.ts a img,.badges span.ts a amp-img{vertical-align:top}.badges span a.pharmacy,.badges span a.nhs-england{display:block;margin-bottom:6px}.btn-default .badge{color:#fff;background-color:#333}.btn .badge{position:relative;top:-1px}.close{float:right;font-size:21px;font-weight:700;line-height:1;color:#000;text-shadow:0 1px 0 #fff;filter:alpha(opacity=20);opacity:.2}.side-nav{padding:0}.side-nav h3{text-transform:uppercase;font-size:16px;line-height:25px;margin-top:10px}.product-box{height:270px;margin-left:-15px;margin-right:-15px;border:1px solid transparent}.product-box .image{border:1px solid #eee}.product-box .border-red,.product-row .border-red{border-top:3px solid #ff5757}.product-box .image{padding:20px 0;height:150px}.product-box .image amp-img{margin:0 auto}.product-box .border-yellow h6,.product-box .border-red h6,.product-box .border-grey h6,.product-box .border-orange h6{position:absolute;top:1px;left:16px;color:#fff;margin:0;line-height:26px;padding:0 5px;text-transform:uppercase}.product-box .border-red h6,.product-row .border-red h6{background:#ff5757}.product-box .border-yellow h6,.product-box .border-red h6,.product-box .border-orange h6,.product-box .border-grey h6{top:0;left:0}.product-box .magnifier{display:none;line-height:50px;position:relative;z-index:9999;margin-top:-52px}.product-box .text{padding:0 5px}.product-box .text h4{font-size:15px;color:#202020;font-weight:600}.product-box .text h5{font-size:15px;font-weight:600}.product-box .text .option h5{color:#5f5f5f;text-align:left}.product-box .text h4,.product-box .text h5{font-size:13px}.product-box .text .prices h5{color:#fe5757;font-weight:600;font-family:'Roboto Slab',serif}.product-box .text .action .add{line-height:50px;padding:0}.product-box .text .action .action-button{background:#fe5656;border-radius:0;border:0;color:#fff;line-height:30px;margin-top:10px;border-bottom:2px solid #cf3838;text-transform:uppercase;padding:1px 20px}.product-box:hover,.product-box.hover{border:1px solid #bbb}.product-box .swatch{position:absolute;display:inline-block;bottom:0;right:0;line-height:28px;padding:0 9px;z-index:2;background-color:rgba(255,255,255,.65);color:rgba(0,0,0,.35);transition:opacity 0.5s ease}.product-box .swatch .value{color:rgba(0,0,0,.35)}.product-box .offer{text-align:left}.product-box .catalog-offer{color:#62a0ca;border:1px solid #62a0ca;display:inline-block;line-height:26px;padding:0 .75em;text-align:center}.product-box .cart-offer{color:#d72245;border:1px solid #d72245;display:inline-block;line-height:26px;padding:0 .75em;text-align:center}.product-box .catalog-offer::after{content:">";display:inline;margin-left:5px}amp-carousel .product-box{margin-left:0;margin-right:0}.feature-header{font-family:'Open Sans',sans-serif;font-weight:600;font-size:15px;background:none;border:none;border-radius:0;padding-left:0;text-decoration:none;border-bottom:1px solid #eee;margin:20px 0;padding-bottom:7px}.pagination-footer{float:left;width:100%}.pagination{display:inline-block;padding-left:0;margin:20px 0;border-radius:4px}.pagination{margin:0}.pagination>li{display:inline}.pagination>li>a,.pagination>li>span{position:relative;float:left;padding:6px 12px;margin-left:-1px;line-height:1.42857143;color:#337ab7;text-decoration:none;background-color:#fff;border:1px solid #ddd}.pagination>li>a{border:none;background:none;color:#333;font-weight:700;font-size:15px}.pagination>li>a{padding:6px 9px}.pagination>li:first-child>a,.pagination>li:first-child>span{margin-left:0;border-top-left-radius:4px;border-bottom-left-radius:4px}.pagination>li>a.active{background:#333;color:#fff;border-radius:0}.a-icon-star{position:relative;overflow:hidden;font-size:0;text-indent:-99em;vertical-align:middle;background-color:transparent;background-repeat:no-repeat;background-image:url(/Content/img/rating-stars.png);background-size:cover;background-repeat:no-repeat;background-size:100px 133px;display:inline-block}.a-icon-star{width:85px;height:18px}.a-star-1{background-position:-9px -87px}.a-star-2{background-position:-9px -67px}.a-star-3{background-position:-9px -46px}.a-star-4{background-position:-9px -26px}.a-star-5{background-position:-9px -5px}.a-icon-alt{position:absolute;left:-9999px;top:auto;display:block;width:1px;height:1px;line-height:1px;font-size:1px;overflow:hidden}[class*=a-icon-star]>.a-icon-alt{left:auto;width:100%;height:100%;font-size:inherit;line-height:normal;opacity:0}.rates .count{font-size:13px;display:inline-block;vertical-align:middle;line-height:18px}.underline{text-decoration:underline}#top-header{width:100%;position:fixed;background:#231f20;text-transform:uppercase;z-index:1000}#top-header .navbar-fixed-top,#top-header .navbar-default{position:fixed}#top-header .navbar-fixed-top,#top-header .navbar-default,#sidebarMenu{background-color:#231f20;border:none;margin-bottom:0}#top-header button.navbar-toggle,#top-header a.navbar-toggle{float:left;border:0;margin-right:5px}#top-header .navbar-toggle .icon-bar{background-color:#ddd}#top-header .navbar-header span,#top-header .navbar-header label{font-size:15px;color:#ddd}#top-header .shopping .badge-notify{background:#fe5353;position:absolute;top:5px;right:5px;font-size:10px}#top-header .navbar-header .navbar-brand{padding:13px 13px}#top-header .navbar-brand>amp-img{height:100%;width:100%}#top-header .navbar-toggle .icon-bar{background-color:#ddd}#top-header .navbar-header .search,#top-header .navbar-header .shopping{border:0;background:#231f20;color:#ddd}#searchbox{-webkit-transition:display 500ms cubic-bezier(.17,.04,.03,.94);transition:display 500ms cubic-bezier(.17,.04,.03,.94)}#searchbox .input-group{padding:5px 5px;border-top:1px solid #333}#searchbox .input-group input{border-top-left-radius:0;border-bottom-left-radius:0;box-shadow:none;border:1px solid #333}#searchbox .btn{background:#231f20;border:1px solid #333;border-top-right-radius:0;border-bottom-right-radius:0}#searchbox .btn span{color:#fff}#searchToggle{position:absolute;appearance:none;cursor:pointer;left:-100%;top:-100%}#searchToggle:checked~#searchbox{display:block}#sidebarMenu ul{margin-top:0;margin-left:0;margin-right:0;width:250px}#sidebarMenu li{text-align:center}#sidebarMenu .navbar-nav>li>a{color:#aaa;text-transform:uppercase;font-size:11px;border-bottom:1px solid #333}#subscription .container{padding:0}#subscription .form{background:#fe7070;padding:15px 10px}#subscription .form div.description{padding-left:0}#subscription .form p,#subscription .form span{color:#fff}#subscription .form .input-group-btn{border-left:1px solid #eee}#subscription .form p{font-size:11px;padding-left:0}#subscription .form input{font-size:11px;border-top-left-radius:0;border-bottom-left-radius:0;box-shadow:none;border:0}#subscription input::-webkit-input-placeholder{font-size:14px}#subscription .form button[type=submit]{background-color:#e4f222;border:1px solid #e4f222;border-radius:0;font-weight:600}#subscription ul{border-bottom:1px solid #cdcdcd}#subscription ul li{list-style:none;display:inline-block;font-weight:600;color:#1f1f1f;font-size:11px;padding-right:15px;margin-top:5px;margin-bottom:5px}#subscription ul li a{color:#aaa;font-size:24px}#subscription form.amp-form-submit-success [submit-success],#subscription form.amp-form-submit-error [submit-error]{font-family:'Montserrat',sans-serif;font-size:11px;margin-top:10px;color:#fff}#subscription form.amp-form-submit-error [submit-error] span.glyphicon,#subscription form.amp-form-submit-success [submit-success] span.glyphicon{line-height:20px}#location{background:#575757}#location .container{padding-right:10px;padding-left:10px}#location .navbar-default{background-color:#575757;border:none;margin-bottom:0}#location .navbar-header{margin-bottom:10px}#location .navbar-header a,#location .navbar-header span.glyphicon,#location .navbar-header label.glyphicon,#location #location-preference,#location #location-preference a{color:#fff}#location .navbar-header a{background-color:#575757;border-color:#575757;display:block;text-align:left;padding-left:0;padding-right:0;padding-top:13px;white-space:normal}#location .navbar-header span.glyphicon,#location .navbar-header label.glyphicon{float:right;line-height:20px}#locationToggle{position:absolute;appearance:none;cursor:pointer;left:-100%;top:-100%}#locationToggle:checked~#location-preference{display:block}#location #location-preference{font-size:12px}#location #location-preference a{text-decoration:underline}#location #location-preference .options{margin-top:10px}#location #location-preference select{color:#000;cursor:pointer;height:40px;line-height:40px;position:relative;z-index:1;margin-bottom:10px;font-size:14px}#location #location-preference input[type=submit]{color:#fff;background:#231f20;border:1px solid #231f20;border-radius:0;line-height:30px;margin-bottom:10px}#footer .row{padding-left:3%;padding-right:3%}#footer h3,#footer h3 span{color:#242424;font-weight:600;border-bottom:1px solid #ccc;font-size:18px;padding-bottom:13px;margin-bottom:25px}#footer h3 span{border-bottom:3px solid #e32a53;padding-bottom:13px}#footer ul li{font-size:15px;list-style:none;padding:0;margin-bottom:9px}#footer ul li a{color:#141414;font-size:15px;font-weight:500;text-decoration:none;font-family:'Roboto',sans-serif}#copyright{width:100%}#copyright .row{padding-left:3%;padding-right:3%;border-top:1px solid #cdcdcd;padding-top:13px}#brand,#category,#search{margin-top:50px}
+        @RenderSection("amp_custom", required: false)
+    </style>
+</head>
+<body>
+    <amp-sidebar id="sidebarMenu" layout="nodisplay">
+        <ul class="nav navbar-nav">
+            @if (!workContext.CurrentProfile.IsAnonymous)
+            {
+                <li><a href="@Url.RouteUrl("Account", null, this.Request.Url.Scheme)">My Account</a></li>
+                <li><a href="@Url.RouteUrl("Logout", null, this.Request.Url.Scheme)">Logout</a></li>
+            }
+            else
+            {
+                <li><a href="@Url.RouteUrl("Login", null, this.Request.Url.Scheme)">Login / Signup</a></li>
+            }
+            <li><a href="@Url.RouteUrl("Shop By Brand", null, this.Request.Url.Scheme)">Brands</a></li>
+            <li><a href="@Url.RouteUrl("i-Zone", null, this.Request.Url.Scheme)">i-Zone</a></li>
+            <li><a href="@Url.RouteUrl("Special Offers", null, this.Request.Url.Scheme)">Offers</a></li>
+            @Html.Action("SimpleMenu", "Category")
+            @*
+                <li role="listitem" tabindex="0" on="tap:sidebarMenu.close"> Close</li>*@
+        </ul>
+    </amp-sidebar>
+    <div id="top-header">
+        <div class="container">
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" on="tap:sidebarMenu.toggle">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="shopping pull-right btn btn-default btn-lg" href="@Url.RouteUrl("Shopping Cart", null, this.Request.Url.Scheme)"><span class="glyphicon glyphicon-shopping-cart"></span><span id="mini-basket-notify">@Html.Raw(basketNotify)</span></a>
+                    @*<a class="search pull-right btn btn-default btn-lg"><span class="glyphicon glyphicon-search"></span></a>*@
+                    <a class="search pull-right btn btn-default btn-lg">
+                        <label for="searchToggle" class="glyphicon glyphicon-search"></label>
+                    </a>
+                    <a class="navbar-brand" href="/">
+                        <amp-img src="@Url.GenerateAbsoluteUrl("/content/img/simple-logo.svg")" height="24" width="107" layout="fixed" alt="Apollo"></amp-img>
+                    </a>
+                </div>
+                <form action="@Url.RouteUrl("Search")" method="get" target="_top">
+                    <input type="checkbox" name="searchToggle" id="searchToggle" />
+                    <div id="searchbox" class="collapse" aria-expanded="true" role="search">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="I'm looking for...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-md" type="submit">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </nav>
+        </div>
+    </div>
+
+    @RenderBody()
+
+    <div id="subscription">
+        <div class="container">
+            <div class="form">
+                <div class="description col-xs-12 col-sm-6 col-lg-5">
+                    <p class="col-sm-12">Sign up for the latest news, offers and ideas.</p>
+                </div>
+                <form action-xhr="@Url.RouteUrl("Subscription AMP", null, this.Request.Url.Scheme)" method="post" target="_blank">
+                    <div class="input-group col-sm-5 col-lg-6">
+                        <input type="text" id="subscribe-email" name="email" class="form-control" placeholder="Your email..." />
+                        <span class="input-group-btn">
+                            <button id="subscribe" class="btn btn-default btn-md" type="submit">
+                                SUBSCRIBE
+                            </button>
+                        </span>
+                    </div>
+                    <div submit-success>
+                        <template type="amp-mustache">
+                            <span class="glyphicon glyphicon-ok-sign"></span> {{message}}
+                        </template>
+                    </div>
+                    <div submit-error>
+                        <template type="amp-mustache">
+                            <span class="glyphicon glyphicon-alert"></span> {{message}}
+                        </template>
+                    </div>
+                </form>
+            </div>
+            <div class="text-center" itemscope itemtype="https://schema.org/Organization">
+                <ul>
+                    <li>Connect with us</li>
+                    <li><a itemprop="sameAs" href="https://twitter.com/Apollo" rel="noopener" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                    <li><a itemprop="sameAs" href="https://www.facebook.com/Apolloonline" rel="noopener" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                    <li><a itemprop="sameAs" href="https://plus.google.com/113368743495297675139" rel="noopener" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+                    <li><a itemprop="sameAs" href="https://www.instagram.com/Apolloonline" rel="noopener" target="_blank"><i class="fa fa-instagram"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    @Html.Action("LocationPreference", "Amp")
+
+    <div id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="no-gutter col-xs-12 col-lg-3">
+                    <h3><span>Us</span>eful Links</h3>
+                    <ul>
+                        <li><a href="@Url.RouteUrl("About Us", null, this.Request.Url.Scheme)">About Us</a></li>
+                        <li><a href="@Url.RouteUrl("Contact Us", null, this.Request.Url.Scheme)">Contact Us</a></li>
+                        <li><a href="@Url.RouteUrl("Delivery Information", null, this.Request.Url.Scheme)">Delivery Information</a></li>
+                        <li><a href="@Url.RouteUrl("Terms And Conditions", null, this.Request.Url.Scheme)">Terms and Conditions</a></li>
+                        <li><a href="@Url.RouteUrl("Privacy Policy", null, this.Request.Url.Scheme)">Privacy Policy</a></li>
+                        <li><a href="@Url.RouteUrl("Affiliates", null, this.Request.Url.Scheme)">Affiliates</a></li>
+                        @*<li><a href="@Url.RouteUrl("Careers", null, this.Request.Url.Scheme)">Careers</a></li>*@
+                    </ul>
+                </div>
+                <div class="no-gutter col-xs-12 col-lg-2">
+                    <h3><span>My</span> Account</h3>
+                    <ul>
+                        <li><a href="@Url.RouteUrl("Shopping Cart", null, this.Request.Url.Scheme)">Cart</a></li>
+                        @if (!workContext.CurrentProfile.IsAnonymous)
+                        {
+                            <li><a href="@Url.RouteUrl("Account", null, this.Request.Url.Scheme)">My Account</a></li>
+                            <li><a href="@Url.RouteUrl("Logout", null, this.Request.Url.Scheme)">Logout</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.RouteUrl("Register", null, this.Request.Url.Scheme)">Register</a></li>
+                            <li><a href="@Url.RouteUrl("Login", null, this.Request.Url.Scheme)">Login</a></li>
+                        }
+                    </ul>
+                </div>
+                <div class="no-gutter col-xs-12 col-lg-3">
+                    <h3><span>Qu</span>estions?</h3>
+                    <ul>
+                        <li>We are here for you.</li>
+                        <li><i class="fa fa-phone fa-lg"></i> <a href="tel:+441923296780">+44(0)1923 296 780</a></li>
+                        <li><i class="fa fa-envelope"></i> <a href="mailto:customerservices@Apollo.co.uk">customerservices@Apollo.co.uk</a></li>
+                        <li><i class="fa fa-comment"></i> <a href="https://chat.Apollo.co.uk/chat.php?a=78d61" target="_blank">Live chat with a member of support.</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="badges no-gutter col-xs-12 col-sm-offset-2 col-sm-4">
+                    <span class="eu"><a href="https://medicine-seller-register.mhra.gov.uk/search-registry/353" target="_blank"><amp-img src="@Url.GenerateAbsoluteUrl("/content/img/common-eu-logo-for-online-pharmacies.png")" width="90" height="75" alt="Common EU Logo for Online Pharmacies"></amp-img></a></span>
+                    <span class="group">
+                        <a class="pharmacy" href="https://pharmacyregulation.org/registers/pharmacy/registrationnumber/1112275" target="_blank"><amp-img id="pharmacyLogo" alt="Online Pharmacy Logo" width="91" height="36" src="@Url.GenerateAbsoluteUrl("/content/img/1112275.jpg")"></amp-img></a>
+                        <a class="nhs-england" href="https://www.england.nhs.uk/" target="_blank"><amp-img src="@Url.GenerateAbsoluteUrl("/content/img/nhs-england.jpg")" alt="NHS England" width="91" height="33"></amp-img></a>
+                    </span>
+                    <span class="ts">
+                        <a href="https://www.trustedshops.co.uk/buyerrating/info_X7D4F1507D34D99073ABDAD72218D9E28.html?utm_source=shop&utm_medium=link&utm_content=trustcard&utm_campaign=trustbadge" target="_blank"><amp-img src="/content/img/trusted-shop.png" width="75" height="75" alt="Trusted Shop Logo"></amp-img></a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

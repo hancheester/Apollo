@@ -1,0 +1,106 @@
+﻿@using Apollo.Web.Framework;
+@using Apollo.FrontStore.Models.Checkout
+@model CheckoutPaymentModel
+
+@{ 
+    Html.AddTitleParts("Payment");
+}
+
+<div id="breadcrumb">
+    <div class="container list">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="@Url.RouteUrl("Shopping Cart")">Cart</a></li>
+            <li><a href="@Url.RouteUrl("Checkout Confirm Address")">Address</a></li>
+            <li><a href="@Url.RouteUrl("Checkout Confirm Order")">Confirm</a></li>
+            <li><a href="@Url.RouteUrl("Checkout Payment")" class="active">Pay</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="checkout">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 hidden-xs checkout-progress">
+                <ul>
+                    <li><a href="@Url.RouteUrl("Shopping Cart")">1</a><span>My Cart</span></li>
+                    <li><a href="@Url.RouteUrl("Checkout Confirm Address")">2</a><span>Address</span></li>
+                    <li><a href="@Url.RouteUrl("Checkout Confirm Order")">3</a><span>Confirmation</span></li>
+                    <li class="active"><a href="#">4</a><span>Payment</span></li>
+                </ul>
+            </div>
+
+            @{
+                var validationSummary = Html.ValidationSummary(true);
+                if (!MvcHtmlString.IsNullOrEmpty(validationSummary))
+                {
+                    <div class="col-sm-12">
+                        <p class="text-danger warning">@validationSummary</p>
+                    </div>
+                }
+
+                if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="col-sm-12">
+                        <p class="text-danger warning">@Html.Raw(ViewBag.ErrorMessage)</p>
+                    </div>
+                }
+            }
+
+            <div class="col-xs-12">
+                <h3>Payment</h3>
+            </div>
+
+            <div class="col-xs-12 col-lg-6">                
+                <h4 class="total-payment">Total payment is @Html.Raw(Model.OrderTotal)</h4>
+                @using (Html.BeginForm("ConfirmPayment", "Checkout", FormMethod.Post))
+                {                  
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CardTypes)@Html.RequiredHint()
+                        <div class="input-group">
+                            @Html.DropDownListFor(model => model.CardType, Model.CardTypes, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CardTypes)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CardNumber)@Html.RequiredHint()
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.CardNumber, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CardNumber)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CardHolderName)@Html.RequiredHint()
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.CardHolderName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CardHolderName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CardCode)@Html.RequiredHint()
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.CardCode, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CardCode)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ExpireMonth)@Html.RequiredHint()                        
+                        <div class="input-group">
+                            @Html.DropDownListFor(model => model.ExpireMonth, Model.ExpireMonths, new { @class = "expiry-month" })
+                            /
+                            @Html.DropDownListFor(model => model.ExpireYear, Model.ExpireYears, new { @class = "expiry-year" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-lg-6 row">
+                        <button type="submit" class="button" @(Model.DisableProceed ? "disabled=disabled" : null)><span class="glyphicon glyphicon-lock"></span>PAY SECURELY NOW</button>
+                    </div>                        
+                }
+            </div>
+        </div>
+    </div>
+</div>

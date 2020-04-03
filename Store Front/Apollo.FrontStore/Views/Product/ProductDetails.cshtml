@@ -1,0 +1,714 @@
+﻿@using Apollo.Core;
+@using Apollo.Core.Domain;
+@using Apollo.Core.Domain.Seo;
+@using Apollo.Core.Infrastructure;
+@using Apollo.FrontStore.Models.Product;
+
+@model ProductDetailsModel
+
+@{
+    var metaTitle = string.IsNullOrEmpty(Model.MetaTitle) ? Model.Name : Model.MetaTitle;
+    Html.AddTitleParts(metaTitle);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+    Html.AddHeadCustomParts(string.Format("<meta property=\"thumbnail\" content=\"{0}\"/>", Url.GenerateAbsoluteUrl(Model.DefaultPicture.ImageUrl)));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"rating\" content=\"{0}\"/>", Model.AverageReviewRating));
+
+    var productAmpUrl = Url.RouteUrl("Product AMP", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme);
+    Html.AddHeadCustomParts(string.Format("<link rel=\"amphtml\" href=\"{0}\">", productAmpUrl));
+
+    var workContext = EngineContext.Current.Resolve<IWorkContext>();
+    var currencyHtmlEntity = workContext.WorkingCurrency.HtmlEntity;
+    var productUrl = Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme);
+    var storeSettings = EngineContext.Current.Resolve<StoreInformationSettings>();
+    var imgUrl = Url.GenerateAbsoluteUrl(Model.DefaultPicture.FullSizeImageUrl);
+
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    if (canonicalUrlsEnabled)
+    {
+        Html.AddCanonicalUrlParts(productUrl);
+    }
+
+    // Open Graph tags
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:title\" content=\"{0}\"/>", metaTitle));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:description\" content=\"{0}\"/>", Model.MetaDescription));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:image\" content=\"{0}\"/>", imgUrl));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:url\" content=\"{0}\" />", productUrl));
+    Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"product\" />");
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:site_name\" content=\"{0}\" />", storeSettings.CompanyName));
+
+    // Twitter Card tags
+    // TODO: Move twitter:site, twitter:creator to settings
+    Html.AddHeadCustomParts("<meta property=\"twitter:card\" content=\"product\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:site\" content=\"@Apollo\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:creator\" content=\"@Apollo\" />");
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:title\" content=\"{0}\"/>", metaTitle));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:description\" content=\"{0}\"/>", Model.MetaDescription));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:image:src\" content=\"{0}\"/>", imgUrl));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:image:alt\" content=\"{0}\"/>", Model.DefaultPicture.AlternateText));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:data1\" content=\"{0}\"/>", Model.DefaultProductPrice.OfferPrice));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:label1\" content=\"Price\"/>"));
+
+    // Facebook tags
+    // TODO: Move fb:app_id to settings
+    Html.AddHeadCustomParts(string.Format("<meta property=\"fb:app_id\" content=\"231491834056841\"/>"));
+}
+
+@section head {    
+    @if (Model.ProductOffer.Visible)
+    {
+        <link href="@Url.GenerateAbsoluteUrl("/content/css/flipclock.css")" type="text/css" rel="stylesheet" />
+    }
+}
+
+<div id="breadcrumb">
+    <div class="container list hidden-xs">
+        <ul>
+            <li><a href="/">Home</a></li>
+            @if (Model.ProductBreadcrumb != null)
+            {
+                foreach (var item in Model.ProductBreadcrumb.BreadCrumb)
+                {
+                    <li><a href="@item.Url">@Html.Raw(item.Name)</a></li>
+                }
+            }
+            <li><a class="active" href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, Request.Url.Scheme)">@Html.Raw(Model.Name)</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="product" itemscope itemtype="https://schema.org/Product">
+    <div class="container">
+        @using (Html.BeginRouteForm("Product", null, FormMethod.Post, new { id = "product-details-form" }))
+        {
+            Html.ViewData.Add("ShowForMobile", true);
+
+            <h1 itemprop="name" class="visible-xs">@Html.Raw(Model.Name)</h1>
+            <meta itemprop="url" content="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, Request.Url.Scheme)" />
+
+            if (Model.Reviews.Count > 0)
+            {
+                <div class="visible-xs rates no-gutter col-sm-12">
+                    <span class="a-icon a-icon-star a-star-@Model.AverageReviewRating">
+                        <span class="a-icon-alt">@Model.AverageReviewRating/5</span>
+                    </span>
+
+                    <a href="#" class="mob-customer-reviews underline">
+                        @Model.Reviews.Count <span>
+                            @if (Model.Reviews.Count == 1)
+                            {
+                                @:customer review
+                            }
+                            else
+                            {
+                                @:customer reviews
+                            }
+                        </span>
+                    </a>
+                </div>
+            }
+
+            Html.RenderPartial("ProductPriceInfo", Model.DefaultProductPrice, Html.ViewData);
+
+            <div class="product-image left-side">
+                @if (Model.PictureModels.Count > 0)
+                {
+                    <div class="image-container">
+                        <div class="image-holder">
+                            <ul id="image-slider">
+                                @for (int i = 0; i < Model.PictureModels.Count; i++)
+                                {
+                                    <li><img itemprop="image" data-media-id="@Model.PictureModels[i].Id" src="@Url.GenerateAbsoluteUrl(Model.PictureModels[i].FullSizeImageUrl)" alt="@Model.PictureModels[i].AlternateText" /></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                    <ul class="image-pager">
+                        @* Support only 48 images *@
+                        @for (int x = 0; x < 48; x = x + 4)
+                        {
+                            if (Model.PictureModels.Count > 0 && Model.PictureModels.Count >= x)
+                            {
+                                <li>
+                                    @for (int i = x; i < Model.PictureModels.Count && i < (x + 4); i++)
+                                    {
+                                        <a data-slide-index="@i" href="#"><img class="img-responsive" src="@Url.GenerateAbsoluteUrl(Model.PictureModels[i].ImageUrl)" alt="@Model.PictureModels[i].AlternateText"></a>
+                                    }
+                                </li>
+                            }
+                        }
+                    </ul>
+                }
+            </div>
+
+            <div class="right-side">
+                <h1>@Html.Raw(Model.Name)</h1>
+                <div class="rates no-gutter col-sm-12">
+                    @if (Model.Reviews.Count > 0)
+                    {
+                        <span itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+                            <meta itemprop="ratingValue" content="@Model.AverageReviewRating" />
+                            <meta itemprop="reviewCount" content="@Model.Reviews.Count" />
+                        </span>
+
+                        <span class="a-icon a-icon-star a-star-@Model.AverageReviewRating">
+                            <span class="a-icon-alt">@Model.AverageReviewRating/5</span>
+                        </span>
+
+                        <a href="#" class="mob-customer-reviews underline visible-xs-inline">
+                            @Model.Reviews.Count <span>
+                                @if (Model.Reviews.Count == 1)
+                                {
+                                    @:customer review
+                                }
+                                else
+                                {
+                                    @:customer reviews
+                                }
+                            </span>
+                        </a>
+
+                        <a href="#" class="customer-reviews underline hidden-xs">
+                            @Model.Reviews.Count <span>
+                                @if (Model.Reviews.Count == 1)
+                                {
+                                    @:customer review
+                                }
+                                else
+                                {
+                                    @:customer reviews
+                                }
+                            </span>
+                        </a>
+                    }
+                    else
+                    {
+                        <p>There are no reviews for this product. Be the first to <a class="underline" rel="nofollow" href="@Url.RouteUrl("Add Product Review", new { productId = Model.Id }, Request.Url.Scheme)">write a review</a>.</p>
+                    }
+                </div>
+
+                @{Html.RenderPartial("ProductPriceInfo", Model.DefaultProductPrice);}
+
+                <p>Product code: <span itemprop="sku">@Model.Id</span></p>
+                <p>Despatched in @Model.DeliveryTimeLine</p>
+
+                @if (Model.ProductBrand.Visible)
+                {
+                    <div itemprop="brand" itemscope itemtype="https://schema.org/Brand">
+                        @if (Model.ProductBrand.Picture != null)
+                        {
+                            <a itemprop="url" href="@Model.ProductBrand.BrandUrl">
+                                <meta itemprop="name" content="@Html.Raw(Model.ProductBrand.Name)" />
+                                <img itemprop="image" class="img-responsive" src="@Url.GenerateAbsoluteUrl(Model.ProductBrand.Picture.ImageUrl)" alt="@Model.ProductBrand.Picture.AlternateText" title="@Model.ProductBrand.Picture.Title" />
+                                <span class="underline">Shop @Html.Raw(Model.ProductBrand.Name)</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a itemprop="url" href="@Model.ProductBrand.BrandUrl">
+                                <span class="underline"><span itemprop="name">Shop @Html.Raw(Model.ProductBrand.Name)</span></span>
+                            </a>
+                        }
+                    </div>
+                }
+
+                <div class="product-options">
+
+                    @if (Model.IsPhoneOrder == false)
+                    {
+                        <!--options-->
+                        var attributes = new ViewDataDictionary();
+                        attributes.TemplateInfo.HtmlFieldPrefix = string.Format("attributes_{0}", Model.Id);
+                        attributes.Add("ProductId", Model.Id);
+                        attributes.Add("OptionType", Model.OptionType);
+                        @Html.Partial("_ProductPrices", Model.ProductPrices, attributes)
+
+                        <!--add to cart-->
+                        <div class="add-to-cart-info">
+                            @{
+                                var addToCart = new ViewDataDictionary();
+                                addToCart.TemplateInfo.HtmlFieldPrefix = string.Format("addtocart_{0}", Model.Id);
+                                @Html.Partial("_AddToCart", Model.AddToCart, addToCart)
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="phone-order">@Html.Raw(Model.PhoneOrderMessage)</p>
+                    }
+
+                    @if (Model.ProductOffer.Visible)
+                    {
+                        <!--offer countdown-->
+                        <div id="offer-countdown">
+                            <h5>Limited time only!</h5>
+                            <div class="clock"></div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="information hidden-xs">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab-description" data-toggle="tab"><span>Des</span>cription</a></li>
+
+                    @if (Model.ProductTags.Count > 0)
+                    {
+                        for (int i = 0; i < Model.ProductTags.Count; i++)
+                        {
+                            <li><a href="#tab-@Model.ProductTags[i].Id" data-toggle="tab">@Html.Raw(Model.ProductTags[i].Tag.Insert(3, "</span>").Insert(0, "<span>"))</a></li>
+                        }
+                    }
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab-description">
+                        <p itemprop="description">@Html.Raw(Model.FullDescription)</p>
+                    </div>
+                    @if (Model.ProductTags.Count > 0)
+                    {
+                        for (int i = 0; i < Model.ProductTags.Count; i++)
+                        {
+                            <div class="tab-pane" id="tab-@Model.ProductTags[i].Id">
+                                <p>@Html.Raw(Model.ProductTags[i].Description)</p>
+                            </div>
+                        }
+                    }
+                </div>
+
+                @if (Model.Reviews.Count > 0)
+                {
+                    <div class="reviews" id="reviews">
+                        <div class="title">CUSTOMER REVIEWS</div>
+                        <div id="tab-review">
+                            <h5>Average rating</h5>
+                            <ul>
+                                <li>
+                                    <span class="a-icon a-icon-star a-star-@Model.AverageReviewRating">
+                                        <span class="a-icon-alt">@Model.AverageReviewRating/5</span>
+                                    </span>
+                                </li>
+                            </ul>
+
+                            <span>@Model.Reviews.Count customer reviews</span>
+                            <a class="underline" rel="nofollow" href="@Url.RouteUrl("Add Product Review", new { productId = Model.Id }, Request.Url.Scheme)">Write a review</a>
+
+                            <dl class="review-list">
+                                @for (int i = 0; i < Model.Reviews.Count; i++)
+                                {
+                                    <dt>@Html.Raw(Model.Reviews[i].Title)</dt>
+                                    <dd>
+                                        <span class="a-icon a-icon-star a-star-@Model.Reviews[i].Score">
+                                            <span class="a-icon-alt">@Model.Reviews[i].Score/5</span>
+                                        </span>
+                                        <p>@Html.Raw(Model.Reviews[i].Comment)</p>
+                                        <span><i>@Model.Reviews[i].Alias</i> from @Html.GetTimeAgo(Model.Reviews[i].TimeStamp)</span>
+                                    </dd>
+                                }
+                            </dl>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="information visible-xs">
+                <h3>Product Information</h3>
+                <div class="panel-group" id="product-information">
+                    <div class="panel-heading panel-default">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#product-information" href="#description">
+                                Description <span class="glyphicon glyphicon-triangle-bottom"></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="description" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <p>@Html.Raw(Model.FullDescription)</p>
+                        </div>
+                    </div>
+
+                    @if (Model.ProductTags.Count > 0)
+                    {
+                        for (int i = 0; i < Model.ProductTags.Count; i++)
+                        {
+                            <div class="panel-heading panel-default">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#product-information" href="#tag_@Model.ProductTags[i].Id">
+                                        @Model.ProductTags[i].Tag <span class="glyphicon glyphicon-triangle-right"></span>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="tag_@Model.ProductTags[i].Id" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <p>@Html.Raw(Model.ProductTags[i].Description)</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+
+                @if (Model.Reviews.Count > 0)
+                {
+                    <h3 id="customer-reviews">Customer Reviews</h3>
+                    <div class="reviews">
+                        <div id="tab-review">
+                            <h5>Average rating</h5>
+                            <ul>
+                                <li>
+                                    <span class="a-icon a-icon-star a-star-@Model.AverageReviewRating">
+                                        <span class="a-icon-alt">@Model.AverageReviewRating/5</span>
+                                    </span>
+                                </li>
+                            </ul>
+
+                            <span>@Model.Reviews.Count customer reviews</span>
+                            <a class="underline" href="@Url.RouteUrl("Add Product Review", new { productId = Model.Id }, Request.Url.Scheme)">Write a review</a>
+
+                            <dl class="review-list">
+                                @for (int i = 0; i < Model.Reviews.Count; i++)
+                                {
+                                    <dt>@Html.Raw(Model.Reviews[i].Title)</dt>
+                                    <dd>
+                                        <span class="a-icon a-icon-star a-star-@Model.Reviews[i].Score">
+                                            <span class="a-icon-alt">@Model.Reviews[i].Score/5</span>
+                                        </span>
+                                        <p>@Html.Raw(Model.Reviews[i].Comment)</p>
+                                        <span><i>@Model.Reviews[i].Alias</i> from @Html.GetTimeAgo(Model.Reviews[i].TimeStamp)</span>
+                                    </dd>
+                                }
+                            </dl>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="stock-notifier-modal" tabindex="-1" role="dialog" aria-labelledby="stock-notifier-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content stock-notifier">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="stock-notifier-modal">Email me when available</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Thank you for your interest in <strong>@Html.Raw(Model.Name)</strong>. Enter your email and we'll contact you as soon as it's available again.</p>
+                    <form id="stock-notifier-form">
+                        <input type="text" id="stock-notifier-email" name="Email" class="form-control" placeholder="Your email..." />
+                        <span id="help-stock-validation" class="field-validation-error"> Please enter your email.</span>
+                        <input type="hidden" id="stock-notifier-productid" name="ProductId" value="@Model.Id" />
+                        <input type="hidden" id="stock-notifier-priceid" name="ProductPriceId" value="0" />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="help-stock-cancel" type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+                    <button id="help-stock-notifier" type="button" class="btn btn-primary">SEND</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stock-notifier clearfix no-gutter space20 hidden"></div>
+
+    <script type="text/javascript">
+    (function defer() {
+        if (window.jQuery) {
+            $(function () {
+                $('#help-stock-notifier').on('click', function () {
+                    $('#help-stock-validation').hide();
+
+                    if (!$('#stock-notifier-email').val()) {
+                        $('#help-stock-validation').show();
+                        return false;
+                    }
+
+                    $('#help-stock-notifier').text('SENDING...');
+                    $('#help-stock-notifier').addClass('disabled');
+                    $('#help-stock-cancel').addClass('disabled');
+
+                    $.ajax({
+                        cache: false,
+                        url: '@Url.RouteUrl("Help Stock Notification", null, this.Request.Url.Scheme)',
+                        data: $('#stock-notifier-form').serialize(),
+                        type: 'post',
+                        success: function(response) {
+                            if (response.helpStockNoficationResultSectionHtml) {
+                                $('#stock-notifier-modal .stock-notifier').html(response.helpStockNoficationResultSectionHtml);
+                            }
+                        },
+                        complete: function() {
+                            $('#help-stock-notifier').text('SEND');
+                            $('#help-stock-notifier').removeClass('disabled');
+                            $('#help-stock-cancel').removeClass('disabled');
+                        },
+                        error: function () {
+                            alert('Failed to subscribe. Please refresh the page and try one more time.');
+                        }
+                    });
+
+                });
+            });
+        } else {
+            setTimeout(function () { defer() }, 50);
+        }
+    })();
+    </script>
+
+</div>
+
+@section scripts {
+
+    @*<script src="https://hammerjs.github.io/dist/hammer.min.js"></script>*@
+
+    <script type="text/javascript">
+        (function () {
+            var imageSlider = $('#image-slider').bxSlider({
+                pagerCustom: '.image-pager',
+                controls: false,
+                auto: true
+            });
+
+            window.imageSlider = imageSlider;
+
+            $('.image-pager').bxSlider({
+                controls: true,
+                pager: false,
+                infiniteLoop: false
+            });
+            
+            //let's disable first
+            /*
+            $('#product .image-container .image-holder img').each(function () {
+
+                if (this.naturalWidth > 300 && this.naturalHeight > 300) {
+
+                    var myImage = this;
+                    var mc = new Hammer(this);
+
+                    mc.get('pan').set({
+                        direction: Hammer.DIRECTION_ALL
+                    });
+
+                    var lastPosX = 0;
+                    var lastPosY = 0;
+                    var lastScale = 1;
+                    var maxX;
+                    var maxY;
+                    var panInitX = 0;
+                    var panInitY = 0;
+                    var cursorType = 'default';
+
+                    myImage.onload = function () {
+                        maxX = (this.naturalWidth - myImage.width) / 2;
+                        maxY = (this.naturalHeight - myImage.height) / 2;
+                    };
+
+                    mc.on('panstart panmove panend doubletap', function (ev) {
+                        switch (ev.type) {
+                            case 'panend':
+                                if (lastScale === 4) {
+                                    cursorType = 'grab';
+                                }
+                                break;
+                            case 'panstart':
+                                if (lastScale === 4) {
+                                    cursorType = 'grabbing';
+                                    panInitX = lastPosX;
+                                    panInitY = lastPosY;
+                                }
+                                break;
+                            case 'panmove':
+                                if (lastScale === 4) {
+                                    cursorType = 'grabbing';
+                                    lastPosX = panInitX + ev.deltaX;
+                                    lastPosY = panInitY + ev.deltaY;
+
+                                    if (maxX < lastPosX) lastPosX = maxX;
+                                    if (-maxX > lastPosX) lastPosX = -maxX;
+                                    if (maxY < lastPosY) lastPosY = maxY;
+                                    if (-maxY > lastPosY) lastPosY = -maxY;
+                                }
+                                break;
+                            case 'doubletap':
+                                lastPosX = 0;
+                                lastPosY = 0;
+                                cursorType = 'grab';
+                                if (lastScale <= 1) {
+                                    imageSlider.reloadSlider({
+                                        pagerCustom: '#image-pager',
+                                        controls: false,
+                                        touchEnabled: false,
+                                        startSlide: imageSlider.getCurrentSlide()
+                                    });
+                                    lastScale = 4;
+                                } else {
+                                    imageSlider.reloadSlider({
+                                        pagerCustom: '#image-pager',
+                                        controls: false,
+                                        touchEnabled: true,
+                                        startSlide: imageSlider.getCurrentSlide()
+                                    });
+
+                                    cursorType = 'zoom-in';
+                                    lastScale = 1;
+                                }
+                                break;
+                        }
+
+                        var transform = "translate(" + lastPosX + "px, " + lastPosY + "px) " +
+                                        "scale(" + lastScale + ") ";
+
+                        setVendorStyle(myImage, 'cursor', cursorType);
+                        myImage.style.transform = transform;
+                        myImage.style.oTransform = transform;
+                        myImage.style.msTransform = transform;
+                        myImage.style.mozTransform = transform;
+                        myImage.style.webkitTransform = transform;
+                    });
+                }
+            });
+            */
+
+            var scrolling;
+
+            $(window).scroll(function () {
+                scrolling = true;
+            });
+
+            setInterval(function () {
+                if (scrolling) {
+                    relocateStickyBuyButton();
+                }
+
+                scrolling = false;
+            }, 150);
+
+            $('.color-squares').delegate('input', 'click', function (event) {
+                $('.color-squares').find('li').removeClass('selected-value');
+                $(this).closest('li').addClass('selected-value');
+
+                console.log($(this).attr('data-media-id'));
+
+                goToSlide(getImageIndex($(this).attr('data-media-id')));
+
+                if ($('#selectedColour').html() !== $(this).attr('data-name')) {
+                    $('#selectedColour').html($(this).attr('data-name'));
+
+                    $('#product .price-info .price-tag').text(product.selectedCurrencySymbol + product[this.value].price)
+                    $('#product .price-info .value').text(product[this.value].price);
+                    $('#product .price-info .value').attr('content', product[this.value].price);
+                    $('#product .price-info .stock-status').removeClass('stock').removeClass('out-of-stock').addClass(product[this.value].availability == 'yes' ? 'stock' : 'out-of-stock');
+                    $('#product .price-info .stock-status i').removeClass().addClass('fa ' + (product[this.value].availability == 'yes' ? 'fa-check-circle' : 'fa-times-circle'));
+                    $('#product .price-info .stock-status span').text(product[this.value].availability == 'yes' ? 'Available in stock' : 'Out of stock');
+
+                    $('#product .stock-notifier').removeClass('hidden').removeClass('show').addClass((product[this.value].availability == 'yes' ? 'hidden' : 'show'));
+                    $('#product .stock-notifier input[type=hidden][name=ProductPriceId]').val(this.value);
+
+                    $('#product .stock-email').removeClass('hidden').removeClass('show').addClass((product[this.value].availability == 'yes' ? 'hidden' : 'show'));
+
+                    if (product[this.value].note) {
+                        $priceStatus = $('#product .price-status-clone').clone().removeClass('price-status-clone').removeClass('hidden');
+                        $priceStatus.find('.old-price').html(product[this.value].oldprice);
+                        $priceStatus.find('.red').html(product[this.value].note);
+                        $('#product .price-status span[class*="rrp"]').remove();
+                        $priceStatus.appendTo('#product .price-status');
+                    }
+                }
+            });
+            
+            $('.options li').on('click', function () {
+                $('#product .price-info .price-tag').text(product.selectedCurrencySymbol + product[this.value].price)
+                $('#product .price-info .value').text(product[this.value].price);
+                $('#product .price-info .value').attr('content', product[this.value].price);
+                $('#product .price-info .stock-status').removeClass('stock').removeClass('out-of-stock').addClass(product[this.value].availability == 'yes' ? 'stock' : 'out-of-stock');
+                $('#product .price-info .stock-status i').removeClass().addClass('fa ' + (product[this.value].availability == 'yes' ? 'fa-check-circle' : 'fa-times-circle'));
+                $('#product .price-info .stock-status span').text(product[this.value].availability == 'yes' ? 'Available in stock' : 'Out of stock');
+
+                $('#product li').removeClass('selected');
+                $('#product li[value=' + this.value + ']').addClass('selected');
+                $('#product li[value=' + this.value + '] input[type=radio]').attr('checked', 'checked');
+
+                $('#product .stock-notifier').removeClass('hidden').addClass((product[this.value].availability == 'yes' ? 'hidden' : 'show'));
+                $('#product .stock-notifier input[type=hidden][name=ProductPriceId]').val(this.value);
+
+                $('#product .stock-email').removeClass('hidden').removeClass('show').addClass((product[this.value].availability == 'yes' ? 'hidden' : 'show'));
+
+                if (product[this.value].note) {
+                    $priceStatus = $('#product .price-status-clone').clone().removeClass('price-status-clone').removeClass('hidden');
+                    $priceStatus.find('.old-price').html(product[this.value].oldprice);
+                    $priceStatus.find('.red').html(product[this.value].note);
+                    $('#product .price-status span[class*="rrp"]').remove();
+                    $priceStatus.appendTo('#product .price-status');
+                }
+
+                goToSlide(getImageIndex($('#product li[value=' + this.value + '] input[type=radio]').attr('data-media-id')));
+                
+            });
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('#product-information').on('hidden.bs.collapse', function (e) {                
+                hiddenCollapse('product-information', e);
+            });
+            $('#product-information').on('shown.bs.collapse', function (e) {
+                shownCollapse('product-information', e);
+            });
+
+        })();
+
+        function getImageIndex(mediaId) {
+            let index = $('#image-slider li img')
+                .index(
+                $('#image-slider li img').filter(function (index) {
+                    return $(this).attr('data-media-id') === mediaId;
+                }));
+
+            return index;
+        }
+
+        function goToSlide(index) {
+            if (index >= 0) {
+                window.imageSlider.goToSlide(index - 1);
+                window.imageSlider.stopAuto();
+            }                
+        }
+
+        function hiddenCollapse(id, e) {
+            $('#' + id + ' > .panel-heading > .panel-title a.collapsed span').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right');
+            e.stopPropagation();
+        }
+
+        function shownCollapse(id, e) {
+            $('#' + id + ' > .panel-heading > .panel-title a:not(.collapsed) span').removeClass('glyphicon-triangle-right').addClass('glyphicon-triangle-bottom');
+            e.stopPropagation();
+        }
+
+    </script>
+
+    @if (Model.ProductOffer.Visible)
+    {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.js"></script>
+
+        <script type="text/javascript">
+            (function () {
+                var year = @Model.ProductOffer.ExpiryDate.Year;
+                var month = @(Model.ProductOffer.ExpiryDate.Month - 1);
+                var day = @Model.ProductOffer.ExpiryDate.Day;
+                var hour = @Model.ProductOffer.ExpiryDate.Hour;
+                var min = @Model.ProductOffer.ExpiryDate.Minute;
+                var sec = @Model.ProductOffer.ExpiryDate.Second;
+
+                var target_date = new Date(year, month, day, hour, min, sec).getTime();
+
+                // find the amount of "seconds" between now and target
+                var current_date = new Date().getTime();
+                var seconds_left = (target_date - current_date) / 1000;
+
+                clock = $('.clock').FlipClock(seconds_left, {
+                    countdown: true
+                });
+            })();
+        </script>
+    }
+}

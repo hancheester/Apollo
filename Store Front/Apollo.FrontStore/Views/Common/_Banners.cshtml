@@ -1,0 +1,42 @@
+﻿@using Apollo.FrontStore.Models.Common;
+@model IList<BannerModel>
+
+@{ 
+    string displayFlag = null;
+
+    var showForMobile = Html.ViewData["ShowForMobile"] as bool?;
+    if (showForMobile.HasValue && showForMobile.Value)
+    {
+        displayFlag = "mobile";
+    }
+}
+
+@if (Model.Count > 0)
+{
+    <div id="mainbanner_@displayFlag" class="carousel slide" data-ride="carousel">    
+        <div class="carousel-inner">
+            @if (Model.Count > 0)
+            {
+                for (int i = 0; i < Model.Count; i++)
+                {
+                    <div class="item@(i == 0 ? " active" : null )">
+                        <a href="@Model[i].Link">
+                            <img src="@Url.GenerateAbsoluteUrl(Model[i].Picture.ImageUrl)" alt="@Model[i].Picture.AlternateText" title="@Model[i].Picture.Title" class="img-responsive" />
+                            <div class="carousel-caption"></div>
+                        </a>
+                    </div>
+                }
+            }                
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#mainbanner_@displayFlag" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#mainbanner_@displayFlag" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+}

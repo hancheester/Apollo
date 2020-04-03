@@ -1,0 +1,88 @@
+﻿@using Apollo.Core.Model;
+@using Apollo.FrontStore.Models.Category;
+@model CategoryModel
+
+<div class="default-header hidden-xs">
+    <div class="category-desc">
+        @Html.Raw(Model.Category.Description)
+    </div>
+</div>
+<div class="default-body hidden-xs">
+    <div class="category-body">
+        <div class="col-sm-12 no-gutter">
+            <div class="tabbed">
+                @if (Model.FeatureItemTypes.Count > 0)
+                {
+                    <ul class="nav nav-tabs" role="tablist">
+                        @for (int i = 0; i < Model.FeatureItemTypes.Count; i++)
+                        {                            
+                            <li class="@(i == 0 ? "active": null)">
+                                <a href="#featured_@Model.FeatureItemTypes[i]" role="tab" data-toggle="tab">
+                                    @switch ((FeaturedItemType)@Model.FeatureItemTypes[i])
+                                    {
+                                        case FeaturedItemType.WhatsNew:
+                                            @:What's new
+                                            break;
+                                        case FeaturedItemType.TopRated:
+                                            @:We love
+                                            break;
+                                        case FeaturedItemType.BestSeller:
+                                            @:Bestselling
+                                            break;
+                                        case FeaturedItemType.Position:
+                                        default:
+                                            break;
+                                    }
+                                </a>
+                            </li>                            
+                        }
+                    </ul>
+                }
+                
+                @if (Model.FeatureItemTypes.Count > 0)
+                {
+                    <div class="tab-content">
+                        @for (int i = 0; i < Model.FeatureItemTypes.Count; i++)
+                        {
+                            <div role="tabpanel" class="tab-pane @(i == 0 ? "active": null)" id="featured_@Model.FeatureItemTypes[i]">
+                                @Html.Action("CategoryFeaturedProducts", "Product", new { categoryId = Model.Category.Id, featuredItemTypeId = @Model.FeatureItemTypes[i] })
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.FeatureItemTypes.Count > 0)
+{
+    foreach (var type in Model.FeatureItemTypes)
+    {
+        if (type != Convert.ToInt32(FeaturedItemType.Position) && type != 0)
+        {
+            <div class="visible-xs">
+                <div class="feature-header">
+                    @switch ((FeaturedItemType)type)
+                    {
+                        case FeaturedItemType.WhatsNew:
+                            @:What's new
+                            break;
+                        case FeaturedItemType.TopRated:
+                            @:We love
+                            break;
+                        case FeaturedItemType.BestSeller:
+                            @:Bestselling
+                            break;
+                        case FeaturedItemType.Position:
+                        default:
+                            break;
+                    }
+                </div>
+                <div class="feature-body">
+                    @Html.Action("CategoryFeaturedProducts", "Product", new { categoryId = Model.Category.Id, featuredItemTypeId = type })
+                </div>
+            </div>
+        }
+    }
+}

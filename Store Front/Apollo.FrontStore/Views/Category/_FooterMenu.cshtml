@@ -1,0 +1,28 @@
+﻿@using Apollo.FrontStore.Models;
+@model MenuModel
+
+<h3><span>Ou</span>r Departments</h3>
+<ul class="col-lg-4 no-gutter">    
+    @for (int i = 0; i < 5; i++)
+    {
+        if ((i + 1) <= Model.SimpleCategories.Count)
+        {
+            <li><a href="@Model.SimpleCategories[i].Url">@Html.Raw(Model.SimpleCategories[i].Name)</a></li>
+        }
+    }    
+</ul>
+
+<ul class="col-lg-4 no-gutter-right">
+    @for (int i = 5; i < 10; i++)
+    {
+        if ((i + 1) <= Model.SimpleCategories.Count)
+        {
+            <li><a href="@Model.SimpleCategories[i].Url">@Html.Raw(Model.SimpleCategories[i].Name)</a></li>
+        }
+    }
+    <li><a href="@Url.RouteUrl("Special Offers", null, this.Request.Url.Scheme)">Offers</a></li>
+    <li><a href="@Url.RouteUrl("i-Zone", null, this.Request.Url.Scheme)">i-Zone</a></li>
+    <li><a href="@Url.RouteUrl("Shop By Brand", null, this.Request.Url.Scheme)">Brands</a></li>    
+</ul>
+
+<ul class="col-lg-4 no-gutter-right"></ul>

@@ -1,0 +1,20 @@
+﻿We sometimes encounter some unknown crawlers/bots which we need to add to browscap.xml.
+We may just add additional item to the xml file.
+Below list is the additional items we may want to append to the list in xml.
+
+<!-- My addtional user agents -->
+<browscapitem name="VeBot ( http://www.veinteractive.com/vebot)">
+<item name="Parent" value=""/>
+<item name="Comment" value=""/>
+<item name="Browser" value=""/>
+<item name="Browser_Maker" value="VeInteractive"/>
+<item name="Version" value="0.0"/>
+<item name="MajorVer" value="0"/>
+<item name="MinorVer" value="0"/>
+<item name="Platform" value=""/>
+<item name="isMobileDevice" value="false"/>
+<item name="isTablet" value="false"/>
+<item name="Crawler" value="true"/>
+<item name="Device_Type" value=""/>
+<item name="Device_Pointing_Method" value=""/>
+</browscapitem>

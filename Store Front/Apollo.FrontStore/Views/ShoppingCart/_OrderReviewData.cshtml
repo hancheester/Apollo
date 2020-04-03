@@ -1,0 +1,80 @@
+﻿@using Apollo.FrontStore.Models.ShoppingCart;
+@model ShoppingCartModel.OrderReviewDataModel
+
+@if (Model.Display)
+{
+    <div class="container">      
+        <div class="row address">
+            @if (Model.DisplayBillingAddress)
+            {
+            <div class="col-lg-6 col-sm-6">
+                <h4>Billing</h4>
+                <p>@Model.BillingAddress.Name,</p>
+                <p>@Model.BillingAddress.AddressLine1,</p>
+                
+                @if (!string.IsNullOrEmpty(Model.BillingAddress.AddressLine2))
+                {
+                    <p>@Model.BillingAddress.AddressLine2,</p>
+                }
+                    
+                <p>@Model.BillingAddress.City,</p>
+                
+                @if (!string.IsNullOrEmpty(Model.BillingAddress.PostCode))
+                { 
+                    <p>@Model.BillingAddress.PostCode,</p>                    
+                }
+                @if (!string.IsNullOrEmpty(Model.BillingAddress.USState))
+                {
+                    <p>@Model.BillingAddress.USState,</p>                    
+                }
+                
+                <p>@Model.BillingAddress.CountryName</p>
+                
+            </div>
+            }
+            <div class="col-lg-6 col-sm-6">
+                <h4>Shipping</h4>
+                <p>@Model.ShippingAddress.Name,</p>
+                <p>@Model.ShippingAddress.AddressLine1,</p>
+                
+                @if (!string.IsNullOrEmpty(Model.ShippingAddress.AddressLine2))
+                { 
+                    <p>@Model.ShippingAddress.AddressLine2,</p>                    
+                }
+                
+                <p>@Model.ShippingAddress.City,</p>
+                
+                @if (!string.IsNullOrEmpty(Model.ShippingAddress.PostCode))
+                {
+                    <p>@Model.ShippingAddress.PostCode,</p>                    
+                }
+
+                @if (!string.IsNullOrEmpty(Model.ShippingAddress.USState))
+                {
+                    <p>@Model.ShippingAddress.USState,</p>
+                }
+
+                <p>@Model.ShippingAddress.CountryName</p>
+                
+            </div>
+
+            <div class="col-lg-12">
+                <h4>Option</h4>
+                @if (Model.DisplayContactNumberInDespatch)
+                {
+                    <div class="form-group">
+                        <label>Your contact number on delivery label</label>
+                        <h5>@Model.ContactNumber</h5>
+                        <p>To opt out or update your contact number, please <a class="contact-option" href="@Url.RouteUrl("Account")">go here</a>.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">                        
+                        <p>To opt to display your contact number on delivery label, please <a class="contact-option" href="@Url.RouteUrl("Account")">go here</a> to change your option.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

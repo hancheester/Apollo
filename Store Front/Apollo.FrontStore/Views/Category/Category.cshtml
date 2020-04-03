@@ -1,0 +1,74 @@
+﻿@using Apollo.Core.Domain.Seo;
+@using Apollo.Core.Infrastructure;
+@using Apollo.FrontStore.Models.Category;
+
+@model CategoryModel
+
+@{
+    Html.AddTitleParts(Model.Category.Name);
+    var metaTitle = string.IsNullOrEmpty(Model.Category.MetaTitle) ? Model.Category.Name : Model.Category.MetaTitle;
+    Html.AddTitleParts(metaTitle);
+    Html.AddMetaDescriptionParts(Model.Category.MetaDescription);
+    Html.AddMetaKeywordParts(Model.Category.MetaKeywords);
+
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    if (canonicalUrlsEnabled)
+    {
+        var categoryUrl = Url.RouteUrl("Category", new { top = Model.Category.UrlKey }, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(categoryUrl);
+    }
+
+    var categoryAmpUrl = Url.RouteUrl("Category AMP", new { top = Model.Category.UrlKey }, this.Request.Url.Scheme);
+    Html.AddHeadCustomParts(string.Format("<link rel=\"amphtml\" href=\"{0}\">", categoryAmpUrl));
+
+    Html.ViewData.Add("ShowForMobile", true);
+}
+
+@section head {
+    @if (Model.CategoryTemplateViewPath == "CategoryTemplate.FeaturedItemTab")
+    {
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/assets/owl.carousel.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/assets/owl.theme.default.min.css" rel="stylesheet" />
+    }
+}
+
+@section scripts {
+    @if (Model.CategoryTemplateViewPath == "CategoryTemplate.FeaturedItemTab")
+    {
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
+        <script type="text/javascript" src="@Url.GenerateAbsoluteUrl("/scripts/public.productgroup.js?201712281014")"></script>
+    }
+}
+
+<div id="breadcrumb">
+    <div class="container list hidden-xs">
+        <ul>
+            <li><a href="@Url.GenerateAbsoluteUrl("/")">Home</a></li>
+            <li><a class="active" href="@Url.RouteUrl("Category", new { top = Model.Category.UrlKey })">@Html.Raw(Model.Category.Name)</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="category">
+    <div class="container">
+        <div class="row">
+            <div class="visible-xs">
+                @Html.Partial("~/Views/Common/_Banners.cshtml", Model.Banners, Html.ViewData)
+            </div>
+            <div class="col-lg-12">                
+                <div class="side-nav visible-xs">
+                    <div class="default">
+                        <h3>@Html.Raw(Model.Category.Name)</h3>
+                        @Html.Partial("_CategoryTree", Model)
+                    </div>
+                </div>
+                <div class="content col-sm-12 col-lg-12 row">
+                    <div class="hidden-xs">
+                        @Html.Partial("~/Views/Common/_Banners.cshtml", Model.Banners)
+                    </div>
+                    @Html.Partial(Model.CategoryTemplateViewPath, Model)
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>

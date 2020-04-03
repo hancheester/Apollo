@@ -1,0 +1,27 @@
+﻿@using Apollo.FrontStore.Models.Product;
+@model AddToCartModel
+
+@if (Model.Visible)
+{
+    <div class="add-to-cart">
+        <span class="add-to-cart-anchor"></span>        
+        @if (Model.AllowedQuantities.Count > 0)
+        {
+            <h5>Quantity:</h5>
+            @Html.DropDownListFor(model => Model.EnteredQuantity, Model.AllowedQuantities, new { @class = "add-quantity" })
+
+            <div class="buy-now">
+                @{ 
+                    var buttonMessage = "ADD TO CART";
+                    if (Model.AvailableForPreOrder)
+                    {
+                        buttonMessage = "PRE-ORDER NOW";
+                    }
+                }
+                <input type="submit" class="btn btn-default btn-block" value="@buttonMessage" />
+            </div>
+        }
+    </div>
+
+    <input name="clientId" type="hidden" value="CLIENT_ID(cart)" data-amp-replace="CLIENT_ID">
+}

@@ -1,0 +1,163 @@
+﻿@using Apollo.FrontStore.Models.Order
+
+@model CustomerOrderModel
+
+@{
+    Html.AddTitleParts("My Order");
+}
+
+<div id="account">
+    <div class="container">
+        <div class="row">
+            @Html.Partial("_AccountTopMenu")
+
+            @if (!string.IsNullOrEmpty(ViewBag.Message as string))
+            {
+                <div class="col-sm-12">
+                    <p class="text-danger warning">@Html.Raw(ViewBag.Message)</p>
+                </div>
+            }
+
+            <div class="col-xs-12">
+                <h4>My Order #@Model.Id</h4>
+            </div>
+
+            <div class="details col-xs-12 col-lg-6">
+                <div class="header">
+                    <table>
+                        <tr>
+                            <td>Order Status</td>
+                            <td> : </td>
+                            <td class="text-danger">@Model.OrderStatus</td>
+                        </tr>
+                        <tr>
+                            <td>Order Date</td>
+                            <td> : </td>
+                            <td>@Model.CreatedOn.ToLongDateString()</td>
+                        </tr>
+                        <tr>
+                            <td>Order Total</td>
+                            <td> : </td>
+                            <td>@Model.OrderTotal</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="items">
+                    @if (Model.Items.Count > 0)
+                    {
+                        foreach (var item in Model.Items)
+                        {
+                            <div class="item">
+                                <h5>@Html.Raw(item.Name)</h5>
+                                <p>
+                                    @Html.Raw(string.IsNullOrEmpty(item.Option) ? null : item.Option + "<br />")
+                                    Quantity: @item.Quantity<br />
+                                    Unit Price: @item.UnitPrice<br />
+                                    Subtotal: @item.Subtotal
+                                </p>
+                            </div>
+                        }
+                    }                    
+                </div>
+
+                <div class="totals">
+                    <table class="col-xs-6">                        
+                        <tr>
+                            <td>Subtotal</td>
+                            <td> : </td>
+                            <td>@Model.Totals.Subtotal</td>
+                        </tr>
+                        @if (string.IsNullOrEmpty(Model.Totals.Discount) == false)
+                        {
+                            <tr>
+                                <td>Discount</td>
+                                <td> : </td>
+                                <td>@Model.Totals.Discount</td>
+                            </tr>
+                        }
+                        @if (string.IsNullOrEmpty(Model.Totals.UsedPointsAmount) == false)
+                        {
+                            <tr>
+                                <td>Used Points</td>
+                                <td> : </td>
+                                <td>@Model.Totals.UsedPointsAmount</td>
+                            </tr>
+                            <tr>
+                                <td><small>(@Model.Totals.UsedPoints points)</small></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }                        
+                        <tr>
+                            <td>Shipping</td>
+                            <td> : </td>
+                            <td>@Model.Totals.ShippingCost</td>
+                        </tr>
+                        @if (string.IsNullOrEmpty(Model.Totals.VAT) == false)
+                        {
+                            <tr>
+                                <td>VAT @Model.Totals.VATMessage</td>
+                                <td> : </td>
+                                <td>@Model.Totals.VAT</td>
+                            </tr>
+                        }  
+                        <tr>
+                            <td>Total</td>
+                            <td> : </td>
+                            <td>@Model.OrderTotal</td>
+                        </tr>
+                    </table>
+                    <div class="col-xs-6"></div>
+                    <div class="clearfix"></div>
+                </div>
+               
+                @if (Model.Shipping != null)
+                {
+                    <div class="address">
+                        <h5>Shipping Address</h5>
+                        <p>
+                            @Html.Raw(string.IsNullOrEmpty(Model.Shipping.Name) ? null : Model.Shipping.Name + "<br/>")
+                            @Html.Raw(string.IsNullOrEmpty(Model.Shipping.AddressLine1) ? null : Model.Shipping.AddressLine1 + "<br/>")
+                            @Html.Raw(string.IsNullOrEmpty(Model.Shipping.AddressLine2) ? null : Model.Shipping.AddressLine2 + "<br/>")
+                            @Html.Raw(string.IsNullOrEmpty(Model.Shipping.City) ? null : Model.Shipping.City + "<br/>")
+                            @Html.Raw(string.IsNullOrEmpty(Model.Shipping.PostCode) ? null : Model.Shipping.PostCode + "<br/>")
+                            @Model.Shipping.CountryName<br/>
+                        </p>
+                    </div>
+                }
+
+                @if (Model.Billing != null)
+                {
+                    <div class="address">
+                        <h5>Billing Address</h5>
+                        <p>
+                            @Html.Raw(string.IsNullOrEmpty(Model.Billing.Name) ? null : Model.Billing.Name + "<br/>")
+                            @Html.Raw(string.IsNullOrEmpty(Model.Billing.AddressLine1) ? null : Model.Billing.AddressLine1 + "<br/>")
+                            @Html.Raw(string.IsNullOrEmpty(Model.Billing.AddressLine2) ? null : Model.Billing.AddressLine2 + "<br/>")
+                            @Html.Raw(string.IsNullOrEmpty(Model.Billing.City) ? null : Model.Billing.City + "<br/>")
+                            @Html.Raw(string.IsNullOrEmpty(Model.Billing.PostCode) ? null : Model.Billing.PostCode + "<br/>")
+                            @Model.Billing.CountryName<br />
+                        </p>
+                    </div>
+                }                
+
+                @if (Model.IsAllowedToDownloadInvoice)
+                {
+                    <div class="form-group col-lg-6 row">
+                        <a href="@Url.RouteUrl("Customer Order Invoice PDF", new { id = Model.Id })" class="button invoice col-xs-12 text-center"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> DOWNLOAD INVOICE</a>
+                    </div>
+
+                    <div class="clearfix"></div>
+                }
+                
+                <div class="form-group col-lg-6 row clearfix">
+                    <a class="button back col-xs-12 text-center" href="@Url.RouteUrl("Customer Orders")">BACK</a>
+                </div>
+
+            </div>
+
+            @Html.Partial("_AccountBottomMenu")
+        </div>
+    </div>
+</div>

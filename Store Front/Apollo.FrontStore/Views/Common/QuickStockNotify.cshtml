@@ -1,0 +1,83 @@
+﻿@using Apollo.FrontStore.Models.ShoppingCart;
+@model QuickStockNotifyModel
+
+<div class="modal-content content">
+    <div class="modal-header header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-3">
+                <img class="img-responsive" src="@Url.GenerateAbsoluteUrl("/media/product/" + Model.Product.ThumbMediaFilename)" />
+            </div>
+            <div class="col-md-9">
+                <h2>@Html.Raw(Model.Product.Name)</h2>
+                <span style="color: red;">is out of stock</span>
+            </div>
+            <div class="col-md-12">
+                <div class="quick-stock-notifiy-message">
+                    Shall we tell you when this is in stock?
+                    <form id="quick-stock-notifier-form">
+                        <input type="text" id="quick-stock-notifier-email" name="Email" class="form-control" placeholder="Your email..." />
+                        <span id="quick-stock-validation" class="field-validation-error"> Please enter your email.</span>
+                        <input type="hidden" id="quick-stock-notifier-productid" name="ProductId" value="@Model.Product.Id" />
+                    </form>
+                </div>                
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button id="quick-stock-notifier-cancel" type="button" class="btn btn-default" data-dismiss="modal">NO THANKS</button>
+        <button id="quick-stock-notifier-submit" type="button" class="btn btn-primary">LET ME KNOW</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function defer() {
+        if (window.jQuery) {
+            $(function () {
+                $('#quick-stock-notifier-submit').on('click', function () {
+
+                    $('#quick-stock-validation').hide();
+
+                    if (!$('#quick-stock-notifier-email').val()) {
+                        $('#quick-stock-validation').show();
+                        return false;
+                    }
+
+                    $('#quick-stock-notifier-submit').text('SENDING...');
+                    $('#quick-stock-notifier-submit').addClass('disabled');
+                    $('#quick-stock-notifier-cancel').addClass('disabled');
+
+                    $.ajax({
+                        cache: false,
+                        url: '@Url.RouteUrl("Help Stock Notification", null, this.Request.Url.Scheme)',
+                        data: $('#quick-stock-notifier-form').serialize(),
+                        type: 'post',
+                        success: function(response) {
+                            if (response.helpStockNoficationResultSectionHtml) {
+                                $('#quick-modal .modal-content').html(response.helpStockNoficationResultSectionHtml);
+                            }
+                        },
+                        complete: function() {
+                            $('#quick-stock-notifier-submit').text('LET ME KNOW');
+                            $('#quick-stock-notifier-submit').removeClass('disabled');
+                            $('#quick-stock-notifier-cancel').removeClass('disabled');
+                        },
+                        error: function () {
+                            alert('Failed to subscribe. Please refresh the page and try one more time.');
+                        }
+                    });
+
+                });
+
+                $('#quick-stock-notifier-cancel').on('click', function () {
+                    location.href = '@Url.RouteUrl("Product", new { urlKey = Model.Product.UrlKey }, this.Request.Url.Scheme)';
+                    return true;
+                });
+            });
+        } else {
+            setTimeout(function () { defer() }, 50);
+        }
+    })();
+</script>

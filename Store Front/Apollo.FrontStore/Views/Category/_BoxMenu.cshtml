@@ -1,0 +1,29 @@
+﻿@using Apollo.FrontStore.Models;
+@model MenuModel
+
+<div id="box-menu">
+    <div class="@(Model.IsForSearchResult ? string.Empty : "container visible-xs")">
+        @if (Model.SimpleCategories.Count > 0)
+        {
+            for (int i = 0; i < Model.SimpleCategories.Count; i++)
+            {
+                <div class="col-xs-4 box">                    
+                    <a href="@Model.SimpleCategories[i].Url">                        
+                        <img data-original="@Url.GenerateAbsoluteUrl(Model.SimpleCategories[i].Picture.ImageUrl)" 
+                             src="@Url.GenerateAbsoluteUrl("/content/img/loading-160x200.gif")"
+                             alt="@Html.Raw(Model.SimpleCategories[i].Picture.AlternateText)" 
+                             title="@Html.Raw(Model.SimpleCategories[i].Picture.Title)" 
+                             class="img-responsive lazy" 
+                             width="160" height="200" />
+                        <span class="text">@Html.Raw(@Model.SimpleCategories[i].Name)</span>
+                    </a>
+                </div>
+
+                if ((i + 1) % 3 == 0)
+                {
+                    <div class="clearfix"></div>
+                }
+            }
+        }
+    </div>
+</div>

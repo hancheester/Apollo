@@ -1,0 +1,201 @@
+﻿@using Apollo.Core.Domain.Seo;
+@using Apollo.Core.Infrastructure;
+
+@{
+    Html.AddTitleParts("Shop By Brand");
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    if (canonicalUrlsEnabled)
+    {
+        var shopByBrandUrl = Url.RouteUrl("Shop By Brand", null, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(shopByBrandUrl);
+    }
+}
+
+@section amp_script
+{
+    <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+}
+
+@section amp_custom 
+{
+    amp-accordion {
+        margin-bottom: 20px;
+    }
+
+    amp-accordion section {
+        border-bottom: 1px solid #eee;
+        background-color: #fff;
+    }
+
+    amp-accordion section+section {
+        margin-top: 5px;
+    }
+
+    amp-accordion section h4.title {
+        color: #333;
+        background: url(/content/img/dot.png) left center no-repeat;
+        width: 100%;
+        padding: 0;
+        font-size: 14px;
+        text-decoration: none;
+        height: 35px;
+        display: block;
+        box-sizing: border-box;
+        padding: 0 5px 0 20px;
+        line-height: 35px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-transform: uppercase;
+        border: none;
+    }
+
+    amp-accordion section h4.title span.glyphicon {
+        line-height: 35px;
+        color: #fe5757;
+    }
+
+    amp-accordion section h4.title span.glyphicon:before {
+        content: "\002b";
+    }
+
+    amp-accordion section[expanded] h4.title span.glyphicon:before {
+        content: "\2212";
+    }
+
+    amp-accordion section .panel-body {
+        padding: 0 0 0 10px;
+    }
+
+    amp-accordion section .panel-body > ul > li {
+        padding: 10px;
+        padding-right: 5px;
+        border-bottom: 1px solid #eee;
+    }
+
+    amp-accordion section .panel-body > ul > li:last-child {
+        border-bottom: 0;
+    }
+
+    amp-accordion section .panel-body > ul > li > a {
+        font-size: 14px;
+        display: block;
+        text-decoration: none;
+    }
+
+    amp-accordion section .panel-body > ul > li > a span {
+        line-height: 18px;
+    }
+
+    .panel-group {
+        margin-bottom: 20px;
+    }
+
+    .panel-group .panel {
+        margin-bottom: 0;
+        border-radius: 4px;
+    }
+
+    .panel-heading {
+        padding: 10px 15px;
+        border-bottom: 1px solid transparent;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+
+    .panel-group .panel-heading {
+        border-bottom: 0;
+    }
+
+    .panel-group .panel+.panel {
+        margin-top: 5px;
+    }
+
+    .panel-default>.panel-heading {
+        color: #333;
+        background-color: #f5f5f5;
+        border-color: #ddd;
+    }
+
+    .panel-title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 16px;
+        color: inherit;
+    }
+
+    #shopbybrand {
+        margin-top: 50px;
+    }
+
+    #shopbybrand h4 {
+        text-transform: uppercase;
+    }
+
+    #shopbybrand .panel-default {
+        border: 0;
+        background: none;
+        border-radius: 0;
+        box-shadow: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    #shopbybrand .panel-default > .panel-heading {
+        border: 0;
+        background: url(/content/img/dot.png) left center no-repeat;
+        text-align: left;
+        width: 100%;
+        padding: 0;
+        border-bottom: 0;
+    }
+
+    #shopbybrand .panel-default > .panel-heading .panel-title {
+        color: #333;
+        text-decoration: none;
+    }
+
+    #shopbybrand .panel-default > .panel-heading .panel-title a {
+        font-size: 14px;
+        text-decoration: none;
+        height: 35px;
+        display: block;
+        box-sizing: border-box;
+        padding: 0 5px 0 20px;
+        line-height: 35px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    #shopbybrand .panel-default > .panel-heading .panel-title a span {
+        line-height: 35px;
+        color: #fe5757;
+    }
+}
+
+<div id="shopbybrand">
+    <div class="container visible-xs">
+        <h4>Brands A-Z</h4>
+        <amp-accordion>
+            <section>
+                <h4 class="title">
+                    #<span class="glyphicon pull-right"></span>
+                </h4>
+                <div class="panel-body">
+                    @Html.Action("BrandListByAlpha", "Brand", new { letter = '#', forMobile = true })
+                </div>
+            </section>
+            @for (char c = 'A'; c <= 'Z'; c++)
+            {
+                <section>
+                    <h4 class="title">
+                        @c<span class="glyphicon pull-right"></span>
+                    </h4>
+                    <div class="panel-body">
+                        @Html.Action("BrandListByAlpha", "Brand", new { letter = c, forMobile = true })
+                    </div>
+                </section>                
+            }
+        </amp-accordion>
+    </div>    
+</div>

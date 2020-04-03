@@ -1,0 +1,104 @@
+﻿@using Apollo.Core.Model;
+@using Apollo.FrontStore.Models.Product;
+@model ProductBoxModel
+
+@{
+    ProductMarkType type = (ProductMarkType)Model.ProductMarkType;
+    string border = string.Empty;
+
+    switch (type)
+    {
+        case ProductMarkType.Yellow:
+            border = "border-yellow";
+            break;
+        case ProductMarkType.Red:
+            border = "border-red";
+            break;
+        case ProductMarkType.Grey:
+            border = "border-grey";
+            break;
+        case ProductMarkType.Orange:
+            border = "border-orange";
+            break;
+        default:
+        case ProductMarkType.None:
+            border = string.Empty;
+            break;
+    }
+}
+
+<div itemscope itemtype="https://schema.org/Product" class="product-row col-sm-12">
+    <meta itemprop="sku" content="@Model.Id" />
+    <span itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+        <meta itemprop="priceCurrency" content="@Model.CurrencyCode" />
+        <meta itemprop="price" content="@Model.PriceValue" />
+        @if (Model.StockAvailability)
+        {
+            <link itemprop="availability" href="https://schema.org/InStock" />
+        }
+        else
+        {
+            <link itemprop="availability" href="https://schema.org/OutOfStock" />
+        }
+    </span>
+    <div class="col-sm-4 @border">
+        @if (string.IsNullOrEmpty(Model.Options) == false)
+        {
+            <div class="swatch">
+                <span class="value">@Model.Options</span>
+            </div>
+        }
+        <a href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)">
+            <img itemprop="image" src="/media/product/@Model.Picture.ImageUrl" alt="@Html.Raw(Model.Picture.AlternateText)" title="@Html.Raw(Model.Picture.Title)" class="img-responsive">
+        </a>
+        @if (!string.IsNullOrEmpty(Model.ProductMark))
+        {
+            <h6>@Model.ProductMark</h6>
+        }
+    </div>
+    <div class="col-sm-8">
+        <a itemprop="url" href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)"><h5 itemprop="name">@Html.Raw(Model.Name)</h5></a>
+        @if (Model.AverageReviewRating > 0)
+        {
+            <span itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+                <meta itemprop="ratingValue" content="@Model.AverageReviewRating" />
+                <meta itemprop="reviewCount" content="@Model.ReviewCount" />
+            </span>
+
+            <div class="rates col-sm-12">
+                <span class="a-icon a-icon-star a-star-@Model.AverageReviewRating">
+                    <span class="a-icon-alt">@Model.AverageReviewRating/5</span>
+                </span>
+                <span class="count">@Html.Raw("(" + Model.ReviewCount + ")")</span>
+            </div>
+        }
+
+        @if (Model.RelatedOffers.Count > 0)
+        {
+            <div class="offer col-sm-12">
+                @foreach (var offer in Model.RelatedOffers)
+                {
+                    if (offer.DisableOfferLabel == false)
+                    {
+                        <a href="@Url.RouteUrl("Individual Offer", new { urlkey = offer.UrlKey })" target="_blank" class="@offer.OfferRuleType.ToString().ToLower()-offer">@offer.OfferTag</a>
+                    }
+                }
+            </div>
+        }
+
+        <a href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)">
+            <div class="prices no-gutter col-sm-12">
+                <h5>@Html.Raw(Model.PriceRange)</h5>
+            </div>
+        </a>
+        <p>@Html.Raw(Model.ShortDescription)</p>
+        <div class="action no-gutter col-sm-12">
+            <div class="no-gutter col-sm-6">
+                <a href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)">@Html.Raw(Model.Note)</a>
+            </div>
+            <div class="text-right">
+                @*<a href="#"><i class="fa fa-heart-o"></i></a>*@
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+﻿@using Apollo.FrontStore.Models.ShoppingCart;
+
+@model ShoppingCartModel
+
+@{ 
+    Html.AddTitleParts("Cart");
+}
+
+<div id="breadcrumb">
+    <div class="container list hidden-xs">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="@Url.RouteUrl("Shopping Cart")" class="active">Cart</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="cart">
+    <div class="container">
+        <div class="row">            
+            @{
+                if (!string.IsNullOrEmpty(ViewBag.ErrorMessage as string))
+                {
+                    <p class="message bg-danger visible-xs">@Html.Raw(ViewBag.ErrorMessage)</p>
+
+                    <div class="col-sm-12 hidden-xs">
+                        <p class="message bg-danger">@Html.Raw(ViewBag.ErrorMessage)</p>
+                    </div>
+                }
+            }
+
+            <div class="col-xs-12 visible-xs-block">
+                <h4>Cart</h4>
+            </div>
+            
+            @if (Model.Items.Count > 0)
+            {
+                <div class="col-sm-12 hidden-xs checkout-progress">
+                    <ul>
+                        <li class="active"><a href="#">1</a><span>My Cart</span></li>
+                        <li><a href="#">2</a><span>Address</span></li>
+                        <li><a href="#">3</a><span>Confirmation</span></li>
+                        <li><a href="#">4</a><span>Payment</span></li>
+                    </ul>
+                </div>
+                @Html.Partial("OrderSummary", Model)
+            }
+            else
+            {
+                <div class="col-sm-12">
+                    <h5>You have no items in your shopping bag.</h5>
+                </div>
+                <div class="col-xs-12 cart-buttons">
+                    <div class="col-xs-12 col-md-3 col-md-offset-9 no-gutter">
+                        <a class="btn btn-default btn-block" href="/">CONTINUE SHOPPING</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $('.quantity').change(function () {            
+                var id = this.name;
+                var q = this.value;
+                submitForm('@Url.RouteUrl("Update Item Quantity")', { cartitemid: id, quantity: q });
+            });            
+        });    
+    </script>
+}

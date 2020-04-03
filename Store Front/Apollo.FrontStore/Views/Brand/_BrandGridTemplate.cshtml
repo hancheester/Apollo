@@ -1,0 +1,166 @@
+﻿@using Apollo.Core.Model;
+@using Apollo.FrontStore.Models.Brand;
+
+@model BrandModel
+
+<div class="row">
+    <div class="col-sm-12 no-gutter">
+        @Html.Partial("~/Views/Common/_Banners.cshtml", Model.Banners)
+    </div>
+    <div class="col-sm-12">        
+        <div class="side-nav col-sm-4 visible-xs">
+            <div class="default">
+                <h3 class="visible-xs">@Html.Raw(Model.Name)</h3>
+                
+                @if (Model.Categories.Count > 0)
+                {
+                    <h3 class="hidden-xs">Categories</h3>
+                    @Html.Partial("_BrandCategoryTree", Model)
+                }
+                else
+                {
+                    //if there is no category for this brand, we load products instead
+                    <h3 class="hidden-xs">Products</h3>
+                    <div class="product-list hidden-xs">
+                        @foreach (var product in Model.Products)
+                        {
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a title="@product.Name" href="@Url.RouteUrl("Product", new { urlKey = product.UrlKey }, this.Request.Url.Scheme)">
+                                            @Html.Raw(product.Name.Replace(Model.Name + " ", string.Empty))
+                                        </a>
+                                    </h4>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="products col-sm-12 visible-xs">
+                        @if (Model.Products.Count > 0)
+                        {
+                            foreach (var item in Model.Products)
+                            {
+                                @Html.Partial("_ProductBox", item);
+                            }
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="hidden-xs">
+            <h2 itemprop="name">@Html.Raw(Model.Name)</h2>
+            <div itemprop="description" class="description">@Html.Raw(Model.Description)</div>
+            <meta itemprop="url" content="@Url.RouteUrl("Brand", new { urlKey = Model.UrlKey }, Request.Url.Scheme)" />
+
+            @if (Model.Categories.Count > 0)
+            {
+                <div class="border"><span class="border"></span></div>
+
+                for (int i = 1; i < Model.Categories.Count + 1; i++)
+                {
+                    @Html.Raw(i % 2 == 1 ? "<div class=\"row\">" : string.Empty)
+
+                    <div class="col-sm-6 brand-category no-gutter@(i % 2 == 1 ? "-left" : "-right")">
+                        <div class="brand-category-img col-sm-8">
+                            <a href="@Url.RouteUrl("Brand With Products", new { urlKey = Model.UrlKey, top = Model.Categories[i - 1].UrlKey }, this.Request.Url.Scheme)">
+                                <img class="img-responsive lazy" 
+                                     data-original="@Url.GenerateAbsoluteUrl(Model.Categories[i - 1].ImageUrl)" 
+                                     src="@Url.GenerateAbsoluteUrl("/content/img/loading-420x250.gif")"
+                                     alt="@Model.Categories[i - 1].Name" 
+                                     width="420" height="250">
+                            </a>
+                            <div class="brand-category-tag col-sm-8">
+                                <a href="@Url.RouteUrl("Brand With Products", new { urlKey = Model.UrlKey, top = Model.Categories[i - 1].UrlKey }, this.Request.Url.Scheme)">
+                                    <h5 class="col-sm-12">@Html.Raw(Model.Categories[i - 1].Name)</h5>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <p>@Html.Raw(Model.Categories[i - 1].Description)</p>
+                            <div class="explore hidden"><a href="@Url.RouteUrl("Brand With Products", new { urlKey = Model.UrlKey, top = Model.Categories[i - 1].UrlKey }, this.Request.Url.Scheme)" class="btn btn-sm">EXPLORE NOW</a></div>
+                        </div>
+                    </div>
+                                                    
+                    @Html.Raw(i % 2 == 0 || i == Model.Categories.Count ? "</div>" : string.Empty)
+                }
+            }
+
+            <div class="col-sm-12 no-gutter">
+                <div class="tabbed">
+                    @if (Model.FeatureItemTypes.Count > 0)
+                    {
+                        <ul class="nav nav-tabs" role="tablist">
+                            @for (int i = 0; i < Model.FeatureItemTypes.Count; i++)
+                            {
+                                <li class="@(i == 0 ? "active": null)">
+                                    <a href="#featured_@Model.FeatureItemTypes[i]" role="tab" data-toggle="tab">
+                                        @switch ((FeaturedItemType)@Model.FeatureItemTypes[i])
+                                        {
+                                            case FeaturedItemType.WhatsNew:
+                                                @:What's new
+                                            break;
+                                            case FeaturedItemType.TopRated:
+                                                @:We love
+                                            break;
+                                            case FeaturedItemType.BestSeller:
+                                                @:Bestselling
+                                            break;
+                                            case FeaturedItemType.Position:
+                                            default:
+                                                break;
+                                        }
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    }
+
+                    @if (Model.FeatureItemTypes.Count > 0)
+                    {
+                        <div class="tab-content">
+                            @for (int i = 0; i < Model.FeatureItemTypes.Count; i++)
+                            {
+                                <div role="tabpanel" class="tab-pane @(i == 0 ? "active": null)" id="featured_@Model.FeatureItemTypes[i]">
+                                    @Html.Action("BrandFeaturedProducts", "Product", new { brandId = Model.Id, featuredItemTypeId = @Model.FeatureItemTypes[i] })
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="visible-xs">
+            @if (Model.FeatureItemTypes.Count > 0)
+            {
+                foreach (var type in Model.FeatureItemTypes)
+                {
+                    if (type != Convert.ToInt32(FeaturedItemType.Position) && type != 0)
+                    {
+                        <div class="feature-header">
+                            @switch ((FeaturedItemType)type)
+                            {
+                                case FeaturedItemType.WhatsNew:
+                                    @:What's new
+                                    break;
+                                case FeaturedItemType.TopRated:
+                                    @:We love
+                                    break;
+                                case FeaturedItemType.BestSeller:
+                                    @:Bestselling
+                                    break;
+                                case FeaturedItemType.Position:
+                                default:
+                                    break;
+                            }
+                        </div>
+                        <div class="feature-body">
+                            @Html.Action("BrandFeaturedProducts", "Product", new { brandId = Model.Id, featuredItemTypeId = type })
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>

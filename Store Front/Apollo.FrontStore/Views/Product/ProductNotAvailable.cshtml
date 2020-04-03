@@ -1,0 +1,36 @@
+﻿@using Apollo.FrontStore.Models.Product;
+@model ProductNotAvailableModel
+
+@{
+    Html.AddTitleParts(Model.Name);
+}
+
+<div id="breadcrumb">
+    <div class="container list hidden-xs">
+        <ul>
+            <li><a href="/">Home</a></li>            
+            <li><a class="active" href="#">@Html.Raw(Model.Name)</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="product">
+    <div class="container">
+        <h1>Sorry, this product is no longer available.</h1>
+        <p class="text-danger warning f16">This @Html.Raw(Model.Name) is no longer available although you may find similar products below.</p>
+        
+        @Html.Action("AlternativeProducts", "Product", new { productId = Model.ProductId})
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var sliderNew;
+        var sliderTrending;
+
+        $(document).ready(function () {
+            sliderNew = $('#product .bxslider').bxSlider({ auto: false });
+        });
+        
+    </script>
+}

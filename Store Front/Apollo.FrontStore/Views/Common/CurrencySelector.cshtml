@@ -1,0 +1,22 @@
+﻿@using Apollo.FrontStore.Models.Common;
+@using Apollo.Core;
+@using Apollo.Core.Infrastructure;
+
+@model CurrencySelectorModel
+
+<ul class="currency-selector">
+    <li role="presentation" class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            Currency <b>@Model.CurrencyCurrencyCode</b> <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            @{
+                var webHelper = EngineContext.Current.Resolve<IWebHelper>();
+                foreach (var item in Model.AvailableCurrencies)
+                {
+                    <li><a rel="nofollow" href="@webHelper.ModifyQueryString(Url.RouteUrl("Change Currency", new { customercurrency = item.Id }, this.Request.Url.Scheme), "returnurl=" + HttpUtility.UrlEncode(HttpContext.Current.Request.RawUrl), null)">@Html.Raw(item.CurrencySymbol) @item.CurrencyCode</a></li>
+                }
+            }
+        </ul>
+    </li>
+</ul>

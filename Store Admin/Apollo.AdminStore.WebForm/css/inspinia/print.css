@@ -1,0 +1,138 @@
+﻿@media print {
+    .row, .wrapper {
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    .page-heading {
+        padding-bottom: 0 !important;
+    }
+
+    .tabs-container .tabs-left .panel-body {
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    .tabs-container .panel-body {
+        padding: 0 !important;
+        border: 0 !important;
+    }
+
+    a.hidden-link[href]:after {
+        content: none !important;
+    }
+
+    #page-wrapper {
+        min-height: inherit !important;        
+        margin: 0 !important;
+        display: inline !important;        
+    }
+
+    #wrapper {        
+        margin: 0 !important;
+        display: inline !important;
+        /*background-color: #ff0000 !important;*/
+    }
+
+    /******************** Pharm Form ********************/
+
+    .pharm-form h4 {
+        font-size: 12px;
+    }
+
+    .pharm-form div {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .pharm-form .table td, .pharm-form .table th {
+        line-height: 10px !important;
+    }
+
+    .pharm-form .table th {
+        font-weight: normal;
+    }
+
+    .pharm-form .table .table {
+        margin-bottom: 0 !important;
+    }
+
+    /******************** D-Note ********************/
+
+    table.dnote {        
+        width: 100% !important;
+        margin-top: -20px !important;
+        border-collapse: collapse;
+    }
+
+    table.dnote h4 {
+        padding-bottom: 5px;
+        padding-left: 5px;        
+        border-bottom: solid 1px #000;        
+        margin-bottom: 5px;
+        margin-top: 0 !important;        
+    }
+
+    table.dnote .info {
+        width: 235px;
+        padding-left: 5px;
+        vertical-align: top;
+        font-size: 13px;
+        line-height: 15px;        
+    }
+
+    table.dnote .info .orderNumber {
+        padding-bottom: 5px;        
+    }
+
+    table.dnote .stamp .cn22 {
+        float: left;
+        font-size: 7px;
+        padding-right: 5px;
+        margin-right: 5px;
+        width: 150px;
+    }
+
+    table.dnote .stamp .cn22 .title {
+        font-weight: bold;
+        font-size: 12px;
+        float: right;
+    }
+
+    table.dnote .stamp .cn22 .description {
+        text-transform: uppercase;
+    }
+
+    table.dnote .stamp .cn22 .merchandise {
+        padding-left: 70px;
+    }
+
+    table.dnote .stamp .cn22 .box {
+        border: solid 1px #eee;
+        margin-top: 5px;
+        padding: 5px;
+        height: 35px;
+    }
+
+    table.dnote .stamp .cn22 .box img {
+        margin-left: 30px;
+        height: 25px;
+    }
+
+    table.dnote .stamp .address {
+        float: left;
+        font-size: 12px;
+        padding-right: 5px;
+        padding-left: 5px;
+        margin-right: 10px;
+        border-left: solid 1px #ccc;
+        width: 130px;
+        min-height: 200px;
+    }
+
+    table.dnote .stamp .return {
+        font-size: 7px;
+        line-height: 8px;
+        color: #ccc !important;
+    }    
+}

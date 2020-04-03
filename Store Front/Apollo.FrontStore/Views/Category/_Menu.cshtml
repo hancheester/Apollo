@@ -1,0 +1,128 @@
+﻿@using Apollo.Core.Model;
+@using Apollo.Core.Domain;
+@using Apollo.Core.Infrastructure;
+@using Apollo.FrontStore.Models;
+
+@model MenuModel
+
+@{
+    var storeInformationSettings = EngineContext.Current.Resolve<StoreInformationSettings>();
+}
+
+<div id="nav-header">
+    <div class="container hidden-xs">
+        <div class="navbar-collapse collapse">
+            <ul class="menu-top nav navbar-nav">
+                @if (Model.Categories.Count > 0)
+                {
+                    for (int i = 0; i < Model.Categories.Count; i++)
+                    {
+                        <li class="@((i == Model.CategorySelectedIndex) ? "open" : Model.Categories[i].ColourScheme)">
+                            @*<a href="@Url.RouteUrl("Category", new { top = Model.Categories[i].UrlKey }, this.Request.Url.Scheme)">@Html.Raw(Model.Categories[i].Name)</a>*@
+                            <a href="@string.Format("{0}category/{1}", storeInformationSettings.StoreFrontLink, @Model.Categories[i].UrlKey)">@Html.Raw(Model.Categories[i].Name)</a>
+                            <ul class="menu-middle nav navbar-nav dropdown-menu open">
+                                @if (Model.Categories[i].Children.Count > 0)
+                                {
+                                    for (int j = 0; j < Model.Categories[i].Children.Count; j++)
+                                    {
+                                        <li>
+                                            @*<a href="@Url.RouteUrl("Category With Products", new { top = Model.Categories[i].UrlKey, second = Model.Categories[i].Children[j].UrlKey, third = "" }, this.Request.Url.Scheme)">*@
+                                            <a href="@string.Format("{0}category/{1}/{2}", storeInformationSettings.StoreFrontLink, @Model.Categories[i].UrlKey, @Model.Categories[i].Children[j].UrlKey)">
+                                                @Html.Raw(Model.Categories[i].Children[j].Name)
+                                            </a>
+                                            <div class="menu-dropdown">
+                                                <div class="col-sm-8">
+                                                    <ul class="col-sm-4">                                                        
+                                                        @if (Model.Categories[i].Children[j].Children.Count > 0)
+                                                        {
+                                                            <li><h3><span>CATE</span>GORIES</h3></li>
+                                                            for (int k = 0; k < Model.Categories[i].Children[j].Children.Count; k++)
+                                                            {
+                                                                <li>
+                                                                    @*<a href="@Url.RouteUrl("Category With Products",
+                                                                        new
+                                                                        {
+                                                                            top = Model.Categories[i].UrlKey,
+                                                                            second = Model.Categories[i].Children[j].UrlKey,
+                                                                            third = Model.Categories[i].Children[j].Children[k].UrlKey
+                                                                        }, this.Request.Url.Scheme)">*@
+                                                                    <a href="@string.Format("{0}category/{1}/{2}/{3}",
+                                                                        storeInformationSettings.StoreFrontLink,
+                                                                        @Model.Categories[i].UrlKey,
+                                                                        @Model.Categories[i].Children[j].UrlKey,
+                                                                        @Model.Categories[i].Children[j].Children[k].UrlKey)">
+                                                                        @Html.Raw(Model.Categories[i].Children[j].Children[k].Name)
+                                                                    </a>
+                                                                </li>
+                                                            }
+                                                        }
+                                                    </ul>
+                                                    <ul class="col-sm-4">
+                                                        @if (Model.Categories[i].Children[j].FeaturedBrands.Count > 0)
+                                                        {
+                                                            <li><h3><span>POPU</span>LAR BRANDS</h3></li>
+                                                            for (int k = 0; k < Model.Categories[i].Children[j].FeaturedBrands.Count; k++)
+                                                            {
+                                                                <li>@*<a href="@Url.RouteUrl("Brand",
+                                                                        new { urlKey = Model.Categories[i].Children[j].FeaturedBrands[k].UrlKey }, this.Request.Url.Scheme)">*@
+                                                                    <a href="@string.Format("{0}brand/{1}", storeInformationSettings.StoreFrontLink, Model.Categories[i].Children[j].FeaturedBrands[k].UrlKey)">
+                                                                        @Html.Raw(Model.Categories[i].Children[j].FeaturedBrands[k].Name)
+                                                                    </a>
+                                                                </li>
+                                                            }
+                                                        }
+                                                    </ul>
+                                                    <ul class="col-sm-4">
+                                                        @{ 
+                                                            var items = Model.Categories[i].Children[j].FeaturedItems
+                                                                .Where(x => x.FeaturedItemType == Convert.ToInt32(FeaturedItemType.Position)).ToList();
+                                                        }
+                                                        @if (items.Count > 0)
+                                                        {
+                                                            <li><h3><span>FEAT</span>URED ITEMS</h3></li>
+                                                            for (int k = 0; k < items.Count; k++)
+                                                            {
+                                                                <li>
+                                                                    @*<a href="@Url.RouteUrl("Product", new { urlKey = items[k].ProductUrlKey }, this.Request.Url.Scheme)">*@
+                                                                    <a href="@string.Format("{0}product/{1}", storeInformationSettings.StoreFrontLink, items[k].ProductUrlKey)">
+                                                                        @Html.Raw(items[k].ProductName)
+                                                                    </a>
+                                                                </li>
+                                                            }
+                                                        }
+                                                    </ul>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    @if (Model.Categories[i].Children[j].ActiveWhatsNew != null)
+                                                    {
+                                                        <div style="padding: 10px 30px 225px 30px; margin: 36px 0 0 0;">
+                                                            @Html.Raw(Model.Categories[i].Children[j].ActiveWhatsNew.HtmlContent)
+                                                        </div>
+                                                    }
+                                                </div>
+                                                @*<div class="col-sm-12 bottom-banner">
+                                                    <div style="height: 67px;
+                                                                    width: 96%;
+                                                                    padding: 15px;
+                                                                    position: absolute;
+                                                                    bottom: 0;
+                                                                    background: #ddd;">
+                                                        <p>FREE UK SHIPPING<br><span>on all orders</span></p>
+                                                    </div>
+                                                </div>*@
+                                            </div>
+                                        </li>
+                                    }
+                                }                             
+                            </ul>
+                        </li>
+                    }
+                }
+                <li><a href="@string.Format("{0}blog", storeInformationSettings.StoreFrontLink)">i-Zone</a></li>
+                <li><a href="@string.Format("{0}brands", storeInformationSettings.StoreFrontLink)">Brands</a></li>
+                <li><a href="@string.Format("{0}special-offers", storeInformationSettings.StoreFrontLink)">Offers</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="dropdown-black hidden-xs"></div>
+</div>

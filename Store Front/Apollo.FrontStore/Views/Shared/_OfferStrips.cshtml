@@ -1,0 +1,59 @@
+﻿@using Apollo.Web.Framework.Services.Catalog;
+@using Apollo.Core.Infrastructure;
+
+@{
+    var priceFormatter = EngineContext.Current.Resolve<IPriceFormatter>();    
+}
+
+<div id="offers-strip">
+    <div class="container hidden-xs">
+        <div class="row">
+            <div class="offers">
+                <div class="col-sm-3">
+                    <a href="@Url.RouteUrl("Special Offers", null, this.Request.Url.Scheme)">
+                        <div class="offers-details">
+                            <div class="col-md-4 special-offers"></div>
+                            <div class="col-md-8">
+                                <h3>Special Offers</h3>
+                                <h6>Competitive prices!</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-3">
+                    <a href="@Url.RouteUrl("Delivery Information", null, this.Request.Url.Scheme)">
+                        <div class="offers-details">
+                            <div class="col-md-4 delivery-info"></div>
+                            <div class="col-md-8">
+                                <h3>Free Standard Delivery</h3>
+                                <h6>On UK orders and over @Html.Raw(priceFormatter.FormatPrice(20M)) worldwide. SIMPLE!</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-3">
+                    <a href="@Url.RouteUrl("Shop By Brand", null, this.Request.Url.Scheme)">
+                        <div class="offers-details">
+                            <div class="col-md-4 shop-by-brand"></div>
+                            <div class="col-md-8">
+                                <h3>Over 800 Brands</h3>
+                                <h6>Official stockist for over 800 brands available to you!</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-3">
+                    <a href="@Url.RouteUrl("Loyalty Scheme", null, this.Request.Url.Scheme)">
+                        <div class="offers-details">
+                            <div class="col-md-4 loyalty"></div>
+                            <div class="col-md-8">
+                                <h3>Execellent Loyalty</h3>
+                                <h6>We love our customers and always look to reward them.</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

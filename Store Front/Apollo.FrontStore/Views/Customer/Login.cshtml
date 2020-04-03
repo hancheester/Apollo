@@ -1,0 +1,121 @@
+﻿@using Apollo.FrontStore.Models.Customer;
+@using Microsoft.Owin.Security;
+
+@model LoginModel
+
+@{
+    Html.AddTitleParts("Login");
+    //continue URL
+    var qs = this.Context.Request.QueryString["ReturnUrl"];
+    object returnUrl = null;
+    if (!string.IsNullOrEmpty(qs) && Url.IsLocalUrl(qs))
+    {
+        returnUrl = new { ReturnUrl = qs };
+    }
+}
+
+@{ Html.RenderPartial("_OfferStrips"); }
+
+<div id="login">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Login</h4>
+            </div>
+            <div class="col-sm-4">
+                <div class="form">
+                    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                    {
+                        <p class="text-danger">@ViewBag.ErrorMessage</p>
+                    }
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">                            
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="myicon icon-email fa-fw" aria-hidden="true"></i></div>
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", autofocus = "autofocus", @placeholder = "Email" })                                
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Email)
+                        </div>
+                        <div class="form-group">                            
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="myicon icon-pwd fa-fw" aria-hidden="true"></i></div>
+                                @Html.TextBoxFor(m => m.Password, new { @class = "form-control", type = "password", @placeholder = "Password" })                                
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Password)
+                        </div>
+                        @*<div class="form-group">
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.LabelFor(m => m.RememberMe, new { @class = "remember" })
+                        </div>*@
+                        <div class="form-group">
+                            <button class="login" type="submit"><span class="glyphicon glyphicon-lock"></span>LOGIN NOW</button>
+                        </div>
+                        <div class="col-lg-12 visible-lg-block no-gutter">
+                            <a class="link pull-left" href="@Url.RouteUrl("Forgot Password")">Forgot Password?</a>
+                            <a class="link pull-left" href="@Url.RouteUrl("Register", returnUrl)">Signup Now</a>
+                        </div>
+                        <div class="form-group hidden-lg">
+                            <a href="@Url.RouteUrl("Forgot Password")" class="btn btn-default">FORGOT PASSWORD?</a>
+                        </div>
+                        <div class="form-group hidden-lg">
+                            <a href="@Url.RouteUrl("Register")" class="btn btn-default">SIGNUP NOW</a>
+                        </div>
+                    }
+                </div>
+                <span class="divider">
+                    or sign-in with
+                </span>
+                <div class="form text-center">
+                    @{ 
+                        var providers = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+
+                        if (providers != null && providers.Any())
+                        {
+                            using (Html.BeginForm("ExternalAuthentication", "Customer", returnUrl, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                foreach (AuthenticationDescription p in providers)
+                                {
+                                    <span class="signin-@p.AuthenticationType.ToLower()">
+                                        <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">
+                                            @if(p.AuthenticationType.ToLower() == "google")
+                                            {
+                                                <i class="fa fa-google-plus"></i>
+                                            }
+                                            else if(p.AuthenticationType.ToLower() == "facebook")
+                                            {
+                                                <i class="fa fa-facebook"></i>
+                                            }
+                                            else if(p.AuthenticationType.ToLower() == "twitter")
+                                            {
+                                                <i class="fa fa-twitter"></i>
+                                            }
+                                            else if(p.AuthenticationType.ToLower() == "microsoft")
+                                            {
+                                                <i class="fa fa-microsoft"></i>
+                                            }
+                                            else
+                                            {
+                                                @p.AuthenticationType
+                                            }
+                                        </button>
+                                    </span>
+                                }
+                            }
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="hidden-xs col-sm-8">
+                <h4>Title here</h4>
+                Put your "Login" information here. You can edit this in the admin site.
+            </div>            
+        </div>
+    </div>
+</div>

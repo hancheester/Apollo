@@ -1,0 +1,16 @@
+﻿@using Apollo.FrontStore.Models.Common;
+@using Apollo.Core;
+@using Apollo.Core.Infrastructure;
+
+@model CurrencySelectorModel
+
+<div class="details-text">
+    <h3>select currency</h3>
+    @{
+        var webHelper = EngineContext.Current.Resolve<IWebHelper>();
+        foreach (var item in Model.AvailableCurrencies)
+        {
+            <a class="currency" href="@webHelper.ModifyQueryString(Url.RouteUrl("Change Currency", new { customercurrency = item.Id }, this.Request.Url.Scheme), "returnurl=" + HttpUtility.UrlEncode(HttpContext.Current.Request.RawUrl), null)">@Html.Raw(item.CurrencySymbol)</a>
+        }
+    }    
+</div>

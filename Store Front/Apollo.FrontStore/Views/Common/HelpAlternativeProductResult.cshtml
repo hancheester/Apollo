@@ -1,0 +1,36 @@
+﻿@using Apollo.FrontStore.Models.Common
+@model HelpAlternativeProductResultModel
+
+@{
+    //continue URL
+    var qs = this.Context.Request.QueryString["returnUrl"];
+    var continueUrl = "";
+    if (!string.IsNullOrEmpty(qs) && Url.IsLocalUrl(qs))
+    {
+        continueUrl = qs;
+    }
+    else
+    {
+        continueUrl = Url.RouteUrl("Home");
+    }
+
+    Html.AddTitleParts("Alternative Product Help Result");
+}
+
+@{ Html.RenderPartial("_OfferStrips"); }
+
+<div id="register">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Alternative Product Help</h4>
+            </div>
+            <div class="col-xs-12">
+                <h5>@Html.Raw(Model.Result)</h5>
+                <div class="form-group col-lg-3 row">
+                    <a class="btn btn-default btn-block" href="@continueUrl">CONTINUE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

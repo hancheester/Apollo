@@ -1,0 +1,134 @@
+﻿@using Apollo.Core.Infrastructure;
+@using Apollo.FrontStore.Models.ShoppingCart;
+@using Apollo.Web.Framework.Services.Catalog;
+
+@model ShoppingCartModel
+@{
+    var priceFormatter = EngineContext.Current.Resolve<IPriceFormatter>();
+}
+
+<div class="summary">
+    @Html.Partial("_OrderReviewData", Model.OrderReviewData)
+
+    <div class="header hidden-xs col-sm-12">
+        <div class="col-sm-8"></div>
+        <div class="col-sm-4">
+            <div class="col-sm-4">
+                <h6>Price</h6>
+            </div>
+            <div class="col-sm-4">
+                <h6>Quantity</h6>
+            </div>
+            <div class="col-sm-4">
+                <h6 class="pull-right">Line Total</h6>
+            </div>
+        </div>
+    </div>
+
+    @using (Html.BeginRouteForm("Shopping Cart", FormMethod.Post))
+    {
+        <div class="col-sm-12">
+            @foreach (var item in Model.Items)
+            {
+                <div class="row cart-item">
+                    <div class="col-xs-4 col-sm-2">
+                        <img src="/media/product/@item.ThumbnailFilename" alt="@Html.Raw(item.Name)" class="img-responsive">                        
+                    </div>
+                    <div class="col-xs-8 col-sm-6 no-gutter">
+                        <a href="@Url.RouteUrl("Product", new { urlkey = item.UrlKey })"><h5>@Html.Raw((item.Name + " " + item.Option).Trim())</h5></a>
+                        
+                        @if (string.IsNullOrEmpty(item.SavePercentageNote) == false)
+                        {
+                            <b>was</b><span class="old-price">@Html.Raw(priceFormatter.FormatPrice(item.OldPrice))</span>
+                            <span class="red">@Html.Raw(item.SavePercentageNote)</span>
+                        }
+                        <span class="unit-price visible-xs">Unit price: @Html.Raw(item.Price != 0M ? priceFormatter.FormatPrice(item.Price) : "FREE")</span>
+                    </div>
+
+                    <div class="col-xs-12 visible-xs-block cart-action">
+                        <div class="pull-right">
+                            <h5>@Html.Raw((item.Price * item.Quantity) != 0M ? priceFormatter.FormatPrice(item.Price * item.Quantity) : "FREE")</h5>
+                        </div>                        
+                            @if (Model.IsEditable)
+                            {
+                                <div>
+                                    @if (item.IsEditable)
+                                    {
+                                        <select name="@item.Id" class="quantity">
+                                            @for (int i = 0; i < item.AllowedQuantities.Count; i++)
+                                            {
+                                                <option @(item.Quantity.ToString() == @item.AllowedQuantities[i].Text ? "selected" : "") value="@item.AllowedQuantities[i].Value">@item.AllowedQuantities[i].Text</option>
+                                            }
+                                        </select>
+
+                                        <a href="@Url.RouteUrl("Remove Product From Cart", new { cartitemid = item.Id })" class="remove"><span class="glyphicon glyphicon-trash"></span></a>
+                                    }
+                                    else
+                                    {
+                                        <h5>Quantity: @item.Quantity</h5>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <h5>Quantity: @item.Quantity</h5>
+                            }   
+                    </div>                    
+                    <div class="hidden-xs col-sm-4">
+                        <div class="col-sm-4">
+                            <h5>@Html.Raw(item.Price != 0M ? priceFormatter.FormatPrice(item.Price) : "FREE")</h5>
+                        </div>
+                        <div class="col-sm-4">
+                            @if (item.IsEditable)
+                            {
+                                <select name="@item.Id" class="quantity">
+                                    @for (int i = 0; i < item.AllowedQuantities.Count; i++)
+                                    {
+                                        <option @(item.Quantity.ToString() == @item.AllowedQuantities[i].Text ? "selected" : "") value="@item.AllowedQuantities[i].Value">@item.AllowedQuantities[i].Text</option>
+                                    }
+                                </select>
+
+                                <a href="@Url.RouteUrl("Remove Product From Cart", new { cartitemid = item.Id })" class="remove"><span class="glyphicon glyphicon-trash"></span></a>
+                            }
+                            else
+                            {
+                                <h5>@item.Quantity</h5>
+                            }                            
+                        </div>
+                        <div class="col-sm-4 total">
+                            <h5>@Html.Raw((item.Price * item.Quantity) != 0M ? priceFormatter.FormatPrice(item.Price * item.Quantity) : "FREE")</h5>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="row summary">
+                @if (Model.IsEditable)
+                {
+                    <div class="discount col-sm-4">
+                        @{Html.RenderPartial("_DiscountBox", Model.DiscountBox);}
+
+                        @{Html.RenderPartial("_LoyaltyBox", Model.LoyaltyBox);}
+
+                    </div>
+
+                    Html.RenderPartial("_ShippingCalculatorBox", Model.EstimateShipping);
+                }
+                
+                @Html.Action("OrderTotals", "ShoppingCart", new { isEditable = Model.IsEditable })
+
+                @if (Model.IsEditable)
+                {
+                    <div class="col-xs-12 cart-buttons">
+                        <div class="col-xs-12 col-md-3 col-md-offset-9 no-gutter">
+                            <a class="btn btn-primary btn-block @(Model.IsAllowedToProceed ? null : "disabled")" href="@Url.RouteUrl("Checkout Confirm Address")">PROCEED TO CHECKOUT</a>
+                        </div>
+                        <div class="col-xs-12 col-md-3 col-md-offset-9 no-gutter">
+                            <a class="btn btn-default btn-block" href="/">BACK TO SHOP</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    
+</div>

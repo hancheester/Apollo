@@ -1,0 +1,95 @@
+﻿@using Apollo.FrontStore.Models.Brand;
+@using Apollo.Core;
+@using Apollo.Core.Infrastructure;
+@using Apollo.Core.Domain.Seo;
+
+@model BrandModel
+@{
+    string name = string.Empty;
+    if (!string.IsNullOrEmpty(Model.ThirdCategoryName))
+    {
+        name = Model.ThirdCategoryName;
+    }
+    else if (!string.IsNullOrEmpty(Model.SecondCategoryName))
+    {
+        name = Model.SecondCategoryName;
+    }
+    else if (!string.IsNullOrEmpty(Model.TopCategoryName))
+    {
+        name = Model.TopCategoryName;
+    }
+
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+
+    if (canonicalUrlsEnabled)
+    {
+        var brandUrl = "";
+        if (!string.IsNullOrEmpty(Model.ThirdCategoryName))
+        {
+            brandUrl = Url.RouteUrl("Brand With Products AMP", new { urlKey = Model.UrlKey, top = Model.TopUrlKey, second = Model.SecondUrlKey, third = Model.ThirdUrlKey }, this.Request.Url.Scheme);
+        }
+        else if (!string.IsNullOrEmpty(Model.SecondCategoryName))
+        {
+            brandUrl = Url.RouteUrl("Brand With Products AMP", new { urlKey = Model.UrlKey, top = Model.TopUrlKey, second = Model.SecondUrlKey, third = "" }, this.Request.Url.Scheme);
+        }
+        else if (!string.IsNullOrEmpty(Model.TopCategoryName))
+        {
+            brandUrl = Url.RouteUrl("Brand With Products AMP", new { urlKey = Model.UrlKey, top = Model.TopUrlKey, second = "", third = "" }, this.Request.Url.Scheme);
+        }
+
+        var currentPageNumber = Model.PagingFilteringContext.PageNumber;
+        var nextPageNumber = Model.PagingFilteringContext.TotalPages >= (currentPageNumber + 1) ? currentPageNumber + 1 : 0;
+        var prevPageNumber = currentPageNumber > 1 ? currentPageNumber - 1 : 0;
+
+        Html.AddCanonicalUrlParts(brandUrl + (currentPageNumber > 1 ? string.Format("?pagenumber={0}", currentPageNumber) : null));
+
+        if (prevPageNumber > 0)
+        {
+            Html.AddPrevUrlParts(string.Format("{0}?pagenumber={1}", brandUrl, prevPageNumber));
+        }
+
+        if (currentPageNumber > 0 && nextPageNumber != 0)
+        {
+            Html.AddNextUrlParts(string.Format("{0}?pagenumber={1}", brandUrl, nextPageNumber));
+        }
+    }
+
+    Html.AddTitleParts(WebUtility.HtmlDecode(name) + " - " + WebUtility.HtmlDecode(Model.Name));
+
+    var workContext = EngineContext.Current.Resolve<IWorkContext>();
+    var currencyHtmlEntity = @workContext.WorkingCurrency.HtmlEntity;
+}
+
+<div id="brand">
+    <div class="container">
+        <div class="side-nav visible-xs">
+            <h3>@Html.Raw(Model.Name)</h3>            
+        </div>
+        
+        <div class="content col-sm-9 col-lg-8">
+            <div class="products col-sm-12">
+                @if (Model.Products.Count > 0)
+                {
+                    foreach (var item in Model.Products)
+                    {
+                        @Html.Partial("_ProductBox", item)
+                    }
+                }
+            </div>
+            @{
+                var pager = Html.Pager(Model.PagingFilteringContext)
+                    .QueryParam("pagenumber")
+                    .BooleanParameterName("adv")
+                    .BooleanParameterName("isc")
+                    .BooleanParameterName("sid")
+                    .RenderEmptyParameters(true);
+            }
+            @if (!pager.IsEmpty())
+            {
+                <div class="pagination-footer sm-col-12 text-center">
+                    @Html.Raw(pager)
+                </div>
+            }
+        </div>
+    </div>
+</div>

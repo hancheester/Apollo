@@ -1,0 +1,75 @@
+﻿@using Apollo.FrontStore.Models.ShoppingCart;
+@using Apollo.Web.Framework;
+@model EstimateShippingModel
+
+<div class="discount col-sm-4">
+    <div><h5>Estimate shipping</h5></div>
+    <div class="select-country col-sm-12 no-gutter">
+        <div>
+            <label class="col-xs-3 no-gutter-left">Country:</label>
+            <select class="col-xs-9" id="CountryId" name="CountryId">
+                @for(int i = 0; i < Model.AvailableCountries.Count; i++)
+                {
+                    <option value="@Model.AvailableCountries[i].Value" @(Model.AvailableCountries[i].Selected ? "selected": "")>@Model.AvailableCountries[i].Text</option>
+                }
+            </select>            
+        </div>
+    </div>
+    <div class="select-option col-sm-12 no-gutter">        
+        <div id="estimate-shipping-loading-progress" class="progress" style="display: none;"><div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div>
+        <div id="shipping-options">
+            @{ Html.RenderPartial("_ShippingOptions", Model.ShippingOptions); }            
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    @*<div class="space30"><h5>Last posting dates Christmas 2017</h5></div>
+    <div class="col-sm-12 no-gutter">
+        <p><strong>UK Standard Delivery</strong><br/>Wednesday 20 December 2017**</p>
+        <p><strong>UK Next Day Delivery</strong><br />Thursday 21 December 2017**</p>
+        <p></p>
+        <p><strong>International Delivery</strong><br />
+           Africa, Middle East, Asia<br/>Saturday 2 December 2017**</p>
+        <p>Rest of world<br/>Wednesday 6 December 2017**</p>
+        <p>USA &amp; Canada<br/>Monday 11 December 2017**</p>
+        <p>Europe<br/>Thursday 14 December 2017**</p>
+        <p>**The last posting dates shown are advisory and are not guaranteed.</p>
+    </div>
+    <div class="space30"></div>*@
+</div>
+
+<script type="text/javascript">
+    (function defer() {
+        if (window.jQuery) {
+            $(function () {
+                $("#@Html.FieldIdFor(model => model.CountryId)").change(function () {
+                    var selectedItem = $(this).val();
+                    var $shippingOptions = $('#shipping-options');
+                    @*var ddlStates = $("#@Html.FieldIdFor(model => model.StateProvinceId)");*@
+
+                    var estimateProgress = $("#estimate-shipping-loading-progress");
+                    estimateProgress.show();
+
+                    $.ajax({
+                        cache: false,
+                        type: 'post',
+                        url: '@Url.RouteUrl("Load Shipping Options By Country")',
+                        data: { countryid : selectedItem },
+                        success: function (data) {
+                            $shippingOptions.html('');
+                            if (data.success == true) {
+                                $shippingOptions.html(data.shippingOptionSectionHtml);
+                            }                    
+                            estimateProgress.hide();
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            alert('Failed to retrieve shipping options. Please refresh the page and try one more time.');
+                            estimateProgress.hide();
+                        }
+                    });
+                });
+            });
+        } else {
+            setTimeout(function () { defer() }, 50);
+        }
+    })();
+</script>

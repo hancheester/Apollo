@@ -1,0 +1,64 @@
+﻿@using Apollo.Core.Infrastructure;
+@using Apollo.Web.Framework.Services.Catalog;
+@using Apollo.FrontStore.Models;
+
+@model MiniShoppingCartModel
+@{
+    var priceFormatter = EngineContext.Current.Resolve<IPriceFormatter>();
+}
+
+<div id="flyout-cart">
+    <ul class="dropdown-menu cart">
+        @if (Model.Items.Count > 0)
+        {
+            foreach (var item in Model.Items)
+            {
+                <li>
+                    <div class="col-lg-1 number-label"><span class="number">@item.Quantity</span></div>
+                    <div class="col-lg-3 no-gutter">
+                        <a href="@Url.RouteUrl("Product", new { urlKey = @item.UrlKey })"><img src="/media/product/@item.ThumbnailFilename" alt="@item.Name" /></a>
+                    </div>
+                    <div class="col-lg-8 no-gutter">
+                        <div class="col-lg-10">
+                            <a href="@Url.RouteUrl("Product", new { urlKey = @item.UrlKey })"><h3>@Html.Raw((item.Name + " " + item.Option).Trim())</h3></a>
+                        </div>
+                        <div class="col-lg-2">
+                            <a href="@Url.RouteUrl("Remove Product From Cart", new { cartitemid = item.Id })"><span class="glyphicon glyphicon-remove"></span></a>
+                        </div>
+                        <div class="col-lg-12">
+                            <p>
+                                @item.Option<br />
+                                @if (item.Price == 0M)
+                                {
+                                    @:FREE <span class="line-total">FREE</span>
+                                }
+                                else
+                                {
+                                    @Html.Raw(priceFormatter.FormatPrice(item.Price))<span class="line-total">@Html.Raw(priceFormatter.FormatPrice(item.Price * item.Quantity))</span>
+                                }
+                            </p>
+                        </div>                        
+                    </div>
+                </li>
+            }
+        }
+        <li>
+            <div class="col-lg-6">
+                <h3><b>subtotal</b></h3>
+            </div>
+            <div class="col-lg-6">
+                <h3><b class="subtotal">@Html.Raw(Model.SubTotal)</b></h3>
+            </div>
+        </li>
+        <li>
+            <div class="col-lg-12">
+                <a class="btn" href="@Url.RouteUrl("Shopping Cart")">checkout</a>
+            </div>
+        </li>
+        <li>
+            <div class="col-lg-12">
+                <h6>@Html.Raw(Model.Message)</h6>
+            </div>
+        </li>
+    </ul>
+</div>

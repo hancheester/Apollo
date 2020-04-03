@@ -1,0 +1,31 @@
+﻿@using Apollo.FrontStore.Models.ShoppingCart;
+@model IList<EstimateShippingModel.ShippingOptionModel>
+
+@if (Model.Count > 0)
+{
+    for (int i = 0; i < Model.Count; i++)
+    {
+        <div>
+            <input type="radio" name="optionsRadios" value="@Model[i].Id" @(Model[i].Selected ? "checked" : "")>
+            <b>@Model[i].Name</b>
+            <p style="margin-left: 20px;">@Html.Raw(Model[i].Description)</p>
+        </div>
+    }
+
+    <input type="button" id="update-shipping" class="btn btn-default btn-block" value="UPDATE SHIPPING"/>
+}
+
+<script type="text/javascript">
+    (function defer() {
+        if (window.jQuery) {            
+            $('#update-shipping').click(function () {
+                var selected = $('input[name=optionsRadios]:checked');
+                if (selected.length > 0) {
+                    submitForm('@Url.RouteUrl("Update Shipping Option")', { optionid: selected.val() });
+                }
+            });
+        } else {
+            setTimeout(function () { defer() }, 50);
+        }
+    })();
+</script>

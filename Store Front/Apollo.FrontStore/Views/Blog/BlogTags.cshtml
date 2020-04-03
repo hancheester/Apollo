@@ -1,0 +1,21 @@
+﻿@using Apollo.FrontStore.Models.Blog;
+@model BlogPostTagListModel
+
+@if (Model.Tags.Count > 0)
+{
+    <div class="blogtags">
+        <div class="title">
+            <strong>Popular blog tags</strong>
+        </div>
+        <div class="listbox">
+            <ul class="tags">
+                @foreach (var item in Model.Tags)
+                {
+                    <li>
+                        <a href="@Url.RouteUrl("Blog By Tag", new { tag = item.Name })" style="font-size:@(Model.GetFontSize(item))%;">@item.Name</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}

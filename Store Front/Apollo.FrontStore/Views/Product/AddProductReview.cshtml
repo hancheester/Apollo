@@ -1,0 +1,159 @@
+﻿@using Apollo.Core.Model;
+@using Apollo.FrontStore.Models.Product;
+@model AddProductReviewModel
+
+@{
+    ProductMarkType type = (ProductMarkType)Model.ProductBox.ProductMarkType;
+    string border = string.Empty;
+
+    switch (type)
+    {
+        case ProductMarkType.Yellow:
+            border = "border-yellow";
+            break;
+        case ProductMarkType.Red:
+            border = "border-red";
+            break;
+        case ProductMarkType.Grey:
+            border = "border-grey";
+            break;
+        case ProductMarkType.Orange:
+            border = "border-orange";
+            break;
+        default:
+        case ProductMarkType.None:
+            border = string.Empty;
+            break;
+    }
+}
+
+
+<div id="breadcrumb">
+    <div class="container list hidden-xs">
+        <ul>
+            <li><a href="/">Home</a></li>
+            @if (Model.ProductBreadcrumb != null)
+            {
+                foreach (var item in Model.ProductBreadcrumb.BreadCrumb)
+                {
+                    <li><a href="@item.Url">@Html.Raw(item.Name)</a></li>
+                }
+            }
+            <li><a class="active" href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, Request.Url.Scheme)">@Html.Raw(Model.Name)</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="product">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Write A Review</h4>
+            </div>
+
+            <div class="col-xs-12 col-md-4">
+                <div class="container">
+                    <a href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)">
+                        <div itemscope itemtype="https://schema.org/Product" class="product-box no-hover @Model.ProductBox.StyleClass">
+                            <div class="image @border col-xs-4 col-sm-12">
+                                <img itemprop="image" src="/media/product/@Model.ProductBox.Picture.ImageUrl" alt="@Html.Raw(Model.ProductBox.Picture.AlternateText)" title="@Html.Raw(Model.ProductBox.Picture.Title)" class="img-responsive">
+
+                                @if (!string.IsNullOrEmpty(Model.ProductBox.ProductMark))
+                                {
+                                <h6>@Model.ProductBox.ProductMark</h6>
+                                }
+                            </div>
+                            <div class="text col-xs-8 col-sm-12">
+                                <div class="name col-sm-12">
+                                    <h4 itemprop="name">@Html.Raw(Model.ProductBox.Name)</h4>
+                                </div>
+                                <div class="option col-sm-12">
+                                    <h5>@Model.ProductBox.Options</h5>
+                                </div>
+                                <div class="prices col-sm-12">
+                                    <h5>@Html.Raw(Model.ProductBox.PriceRange)</h5>
+                                </div>
+                                <div class="rates col-sm-12">
+                                    @for (int i = 0; i < Model.ProductBox.AverageReviewRating; i++)
+                                    {
+                                    <i class="fa fa-star"></i>
+                                    }
+
+                                    @for (int i = Model.ProductBox.AverageReviewRating; i < 5; i++)
+                                    {
+                                    <i class="fa fa-star gray"></i>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            @if (Model.SuccessfullyAdded)
+            {
+                <div class="col-sm-12">
+                    <h4>Thanks!</h4>
+                    <p class="text-danger warning">@Model.Result</p>
+                </div>
+            }
+            else
+            {
+                <div class="col-xs-12 col-md-8">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        var validationSummary = Html.ValidationSummary(true);
+                        if (!MvcHtmlString.IsNullOrEmpty(validationSummary))
+                        {
+                            <div class="message-error alert alert-danger">@validationSummary</div>
+                        }
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Title)@Html.RequiredHint()
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Title)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Comment)@Html.RequiredHint()
+                            <div class="input-group">
+                                @Html.TextAreaFor(model => model.Comment, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Comment)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Alias)@Html.RequiredHint()
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.Alias, new { @class = "form-control" })                                
+                                @Html.ValidationMessageFor(model => model.Alias)<br />
+                                <span>E.g. Andy88. For privacy reasons, do not use your full name or email address. Once entered, this cannot be edited.</span>
+                            </div>
+                        </div>
+
+                        <div class="review-rating">
+                            @Html.LabelFor(model => model.Rating)
+                            <div class="star-rating">
+                                <fieldset>
+                                    @Html.RadioButtonFor(model => model.Rating, "5", new { id = "addproductrating_5" })<label for="addproductrating_5" title="Outstanding">5 stars</label>
+                                    @Html.RadioButtonFor(model => model.Rating, "4", new { id = "addproductrating_4" })<label for="addproductrating_4" title="Very Good">4 stars</label>
+                                    @Html.RadioButtonFor(model => model.Rating, "3", new { id = "addproductrating_3" })<label for="addproductrating_3" title="Good">3 stars</label>
+                                    @Html.RadioButtonFor(model => model.Rating, "2", new { id = "addproductrating_2" })<label for="addproductrating_2" title="Poor">2 stars</label>
+                                    @Html.RadioButtonFor(model => model.Rating, "1", new { id = "addproductrating_1" })<label for="addproductrating_1" title="Very Poor">1 stars</label>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-lg-6 row">
+                            <input type="submit" name="submit-review" class="button add-review" value="SUBMIT REVIEW" />
+                        </div>
+                    }
+                </div>
+            }
+            
+        </div>
+    </div>
+</div>

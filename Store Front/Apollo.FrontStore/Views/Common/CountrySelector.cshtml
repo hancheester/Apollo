@@ -1,0 +1,50 @@
+﻿@using Apollo.Core;
+@using Apollo.Core.Infrastructure;
+@using Apollo.FrontStore.Models.Common;
+
+@model CountryPreferenceModel
+
+@{ 
+    var webHelper = EngineContext.Current.Resolve<IWebHelper>();
+}
+
+<a href="#country-selector" data-toggle="modal" data-target="#country-selector">
+    <span class="flag-icon flag-icon-@Model.SelectedCountryCode.ToLower()"></span> @Model.SelectedCountryName@Html.Raw(Model.FreeDeliveryNote)
+</a>
+<div class="modal fade" id="country-selector" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form action="@webHelper.ModifyQueryString(Url.RouteUrl("Change Country Preference"), "returnurl=" + HttpUtility.UrlEncode(HttpContext.Current.Request.RawUrl), null)" method="post">
+            <div class="modal-content content">
+                <div class="modal-header header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="text-center h4">
+                            <span class="flag-icon flag-icon-@Model.SelectedCountryCode.ToLower() flag"></span> @Model.SelectedCountryName
+                        </div>
+                    </div>
+                    <div class="description">
+                        @Html.Raw(Model.Note)
+                    </div>
+                    <div class="delivery-country text-center">
+                        Your <b>delivery country</b> is 
+                        <select class="country-list" name="CountryId">
+                            @if (Model.AvailableCountries.Count > 0)
+                            {
+                                for (int i = 0; i < Model.AvailableCountries.Count; i++)
+                                {
+                                    <option value="@Model.AvailableCountries[i].Value"@(Model.AvailableCountries[i].Selected ? " selected" : null)>@Model.AvailableCountries[i].Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer footer">
+                    <button type="submit" class="btn btn-default update">UPDATE</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

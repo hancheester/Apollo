@@ -1,0 +1,185 @@
+﻿@using Apollo.Core.Model;
+@using Apollo.FrontStore.Models.Product;
+@model ProductBoxModel
+
+@{
+    ProductMarkType type = (ProductMarkType)Model.ProductMarkType;
+    string border = string.Empty;
+
+    switch (type)
+    {
+        case ProductMarkType.Yellow:
+            border = "border-yellow";
+            break;
+        case ProductMarkType.Red:
+            border = "border-red";
+            break;
+        case ProductMarkType.Grey:
+            border = "border-grey";
+            break;
+        case ProductMarkType.Orange:
+            border = "border-orange";
+            break;
+        default:
+        case ProductMarkType.None:
+            border = string.Empty;
+            break;
+    }
+
+    if (!string.IsNullOrEmpty(Model.ProductMark)
+        && Model.ProductMarkExpiryDate.HasValue
+        && (Model.ProductMarkExpiryDate.Value.CompareTo(DateTime.Now) < 0))
+    {
+        border = string.Empty;     
+    }
+
+    //prepare "Add to cart" AJAX link
+    string addToCartLink = "";
+    var shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
+    var quantity = 1;
+
+    addToCartLink = Url.RouteUrl("Add Product To Cart - Catalog", new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity }, this.Request.Url.Scheme);
+    string quickStockNotification = "";
+    quickStockNotification = Url.RouteUrl("Quick Stock Notification", new { productid = Model.Id }, this.Request.Url.Scheme);
+
+}
+
+<div itemscope itemtype="https://schema.org/Product" class="product-box @Model.StyleClass">
+    <meta itemprop="sku" content="@Model.Id" />
+    <span itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+        <meta itemprop="priceCurrency" content="@Model.CurrencyCode" />
+        <meta itemprop="price" content="@Model.PriceValue" />
+        @if (Model.StockAvailability)
+        {
+            <link itemprop="availability" href="https://schema.org/InStock" />
+        }
+        else
+        {
+            <link itemprop="availability" href="https://schema.org/OutOfStock" />
+        }
+    </span>
+
+    <div class="image @border col-xs-4 col-sm-12">
+        @if (ViewData["remove-viewed-item"] != null && Convert.ToBoolean(ViewData["remove-viewed-item"]))
+        {
+            <span class="fa fa-times-circle remove-reviewed" onclick="removeVisitedItem(this.parentElement.parentElement, '/remove-reviewed-product', @Model.Id)"></span>
+        }
+        @if (string.IsNullOrEmpty(Model.Options) == false)
+        {
+            <div class="swatch"><span class="value">@Model.Options</span></div>
+        }
+
+        <a href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)" title="@Model.Name">
+            @if (Model.ImageLoadType == "owlCarousel")
+            {
+                <img itemprop="image"
+                     data-src="@Url.GenerateAbsoluteUrl("/media/product/" + Model.Picture.ImageUrl)"
+                     alt="@Html.Raw(Model.Picture.AlternateText)"
+                     title="@Html.Raw(Model.Picture.Title)"
+                     class="img-responsive owl-lazy">
+            }
+            else
+            {
+                <img itemprop="image"
+                     src="@Url.GenerateAbsoluteUrl("/content/img/loading-300x300.gif")"
+                     data-original="@Url.GenerateAbsoluteUrl("/media/product/" + Model.Picture.ImageUrl)"
+                     alt="@Html.Raw(Model.Picture.AlternateText)"
+                     title="@Html.Raw(Model.Picture.Title)"
+                     class="img-responsive lazy"
+                     width="300" height="300">
+            }
+        </a>
+
+        @if (!string.IsNullOrEmpty(Model.ProductMark))
+        {
+            if (Model.ProductMarkExpiryDate.HasValue)
+            {
+                if (Model.ProductMarkExpiryDate.Value.CompareTo(DateTime.Now) >= 0)
+                {
+                    <h6>@Model.ProductMark</h6>
+                }
+            }
+            else
+            {
+                <h6>@Model.ProductMark</h6>
+            }
+        }
+    </div>
+    <a class="magnifier" href="#"></a>
+    <div class="text col-xs-8 col-sm-12">
+        <div class="name col-sm-12">
+            <a itemprop="url" href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)"><h4 itemprop="name">@Html.Raw(Model.Name)</h4></a>
+        </div>
+
+        @if (Model.RelatedOffers.Count > 0)
+        {
+            <div class="offer col-xs-12">
+                @foreach (var offer in Model.RelatedOffers)
+                {
+                    if (offer.DisableOfferLabel == false)
+                    {
+                        if (offer.ShowInOfferPage == true)
+                        {
+                            <a href="@Url.RouteUrl("Individual Offer", new { urlkey = offer.UrlKey }, this.Request.Url.Scheme)" target="_blank" class="@offer.OfferRuleType.ToString().ToLower()-offer">@offer.OfferTag</a>
+                        }
+                        else
+                        {
+                            <a href="#" rel="nofollow" class="@offer.OfferRuleType.ToString().ToLower()-offer-only">@offer.OfferTag</a>
+                        }
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <a href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)">
+                <div class="option col-xs-12"><h5>@Model.DefaultOption</h5></div>
+            </a>
+        }
+
+        <a href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)">
+            <div class="prices col-xs-12"><h5>@Html.Raw(Model.PriceRange)</h5></div>
+        </a>
+
+        @if (Model.AverageReviewRating > 0)
+        {
+            <span itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+                <meta itemprop="ratingValue" content="@Model.AverageReviewRating" />
+                <meta itemprop="reviewCount" content="@Model.ReviewCount" />
+            </span>
+
+            <a href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)">
+                <div class="rates col-sm-12">
+                    <span class="a-icon a-icon-star a-star-@Model.AverageReviewRating">
+                        <span class="a-icon-alt">@Model.AverageReviewRating/5</span>
+                    </span>
+                    <span class="count">@Html.Raw("(" + Model.ReviewCount + ")")</span>
+                </div>
+            </a>
+        }
+        <div class="action space20 col-xs-12 visible-xs">
+            @if (Model.DisableBuyButton)
+            {
+                <input type="button" class="action-button pull-left" value="@Model.ButtonMessage" onclick="showQuickModal('@quickStockNotification');return false;" />
+            }
+            else
+            {
+                <input type="button" class="action-button pull-left" value="@Model.ButtonMessage" onclick="AjaxCart.addProductToCart_Catalog('@addToCartLink');return false;" />
+            }
+        </div>
+        <div class="action col-xs-12 hidden-xs">
+            <div class="add col-xs-12 text-center"><a>@Html.Raw(Model.Note)</a></div>
+            <div class="buy hidden-xs col-xs-12 text-center">
+                @if (Model.DisableBuyButton)
+                {
+                    @*<a href="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme)">@Model.ButtonMessage</a>*@
+                    <input type="button" value="@Model.ButtonMessage" onclick="showQuickModal('@quickStockNotification');return false;" />
+                }
+                else
+                {
+                    <input type="button" value="@Model.ButtonMessage" onclick="AjaxCart.addProductToCart_Catalog('@addToCartLink');return false;" />
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+﻿@using Apollo.FrontStore.Models.Product;
+@model SearchBoxModel
+
+@using (Html.BeginRouteForm("Search", FormMethod.Get))
+{
+<div id="searchbox" class="collapse">
+    <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="I'm looking for..." />
+        <span class="input-group-btn">
+            <button class="btn btn-default btn-md" type="submit">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </span>
+    </div>
+</div>
+
+<div class="col-lg-6 hidden-xs">
+    <div class="search-box">
+        <div class="col-lg-9 none">
+            <input name="q" type="text"/>
+        </div>
+        <div class="col-lg-3 none">
+            <input type="submit" value="search"/>
+        </div>
+    </div>
+</div>
+}
+
+@if (Model.AutoCompleteEnabled)
+{
+
+}

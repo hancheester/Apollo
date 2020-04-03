@@ -1,0 +1,13 @@
+﻿.traffic-danger, .traffic-danger a {
+    background-color: #ed5565 !important;
+    color: #FFFFFF !important;
+}
+
+.traffic-warning, .traffic-warning a {
+    background-color: #f8ac59 !important;
+    color: #FFFFFF !important;
+}
+
+.order-status-change-message {
+    margin-top: 25px;
+}

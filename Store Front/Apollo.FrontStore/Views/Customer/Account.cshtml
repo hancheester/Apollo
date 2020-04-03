@@ -1,0 +1,128 @@
+﻿@using Apollo.FrontStore.Models.Customer;
+@using Apollo.Web.Framework;
+@model AccountModel
+
+@{
+    Html.AddTitleParts("My Account");
+}
+
+<div id="account">
+    <div class="container">
+        <div class="row">
+            @Html.Partial("_AccountTopMenu")
+
+            <div class="col-xs-12">
+                <h4>My Account</h4>
+            </div>
+
+            @if (!string.IsNullOrEmpty(ViewBag.Message as string))
+            {
+                <div class="col-sm-12">
+                    <p class="text-danger warning">@Html.Raw(ViewBag.Message)</p>
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage as string))
+            {
+                <div class="col-sm-12">
+                    <p class="text-danger warning">@Html.Raw(ViewBag.ErrorMessage)</p>
+                </div>
+            }
+
+            <div class="col-xs-12 col-lg-6">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    var validationSummary = Html.ValidationSummary(true);
+                    if (!MvcHtmlString.IsNullOrEmpty(validationSummary))
+                    {
+                        <div class="message-error alert alert-danger">@validationSummary</div>
+                    }
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="myicon icon-user fa-fw" aria-hidden="true" title="Name"></i></div>
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Name" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="myicon icon-email fa-fw" aria-hidden="true" title="Email"></i></div>
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Email", @readonly = "true" })                            
+                        </div>
+                    </div>
+                    <div class="form-group">                        
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="myicon icon-phone fa-fw" aria-hidden="true" title="Contact number"></i></div>
+                            @Html.TextBoxFor(model => model.ContactNumber, new { @class = "form-control", @placeholder = "Contact number" })
+                        </div>
+                    </div>
+                    <div class="displayContactNumber">
+                        <p>If you wish to include your contact number on your address label for your delivery office to contact you when your parcel has reached the final destination, please select the option below and enter a valid contact number. Once selected your  contact number will appear on all future orders;  you can opt out at any time by unselecting the option below. Please be advised that your privacy and the security of your personal information is our highest priority and entering your contact number will be at your own risk.</p>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DisplayContactNumberInDespatch)
+                        @Html.EditorFor(model => model.DisplayContactNumberInDespatch, new { @class = "form-control", @type = "checkbox" })
+                    </div>
+
+                    <div class="form-group col-lg-6 row">
+                        <input type="submit" class="button" value="UPDATE" />
+                    </div>
+                }                
+            </div>
+
+            <div class="col-xs-12">
+                <h4>Password</h4>
+            </div>
+
+            <div class="col-xs-12 col-lg-6">
+                @if (Model.HasPassword)
+                {
+                    <div class="action">
+                        <div class="form-group col-xs-12 col-lg-6 space10 no-gutter">
+                            <a class="button password col-xs-12 text-center" href="@Url.RouteUrl("Account Change Password")">CHANGE PASSWORD</a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p>You haven't set a password yet. You can set a password so you can log onto Apollo with just your email address.</p>
+                    <div class="action">
+                        <div class="form-group col-xs-12 col-lg-6 space10 no-gutter">
+                            <a class="button password col-xs-12 text-center" href="@Url.RouteUrl("Account Set Password")">SET PASSWORD</a>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (Model.Credentials.Count > 0)
+            {
+                <div class="col-xs-12">
+                    <h4>Credentials</h4>
+                </div>
+
+                foreach (var login in Model.Credentials)
+                {
+                    <div class="col-xs-12 col-lg-3">
+                        <div class="well">
+                            <h4>@login.Key</h4>
+                            <form action="@Url.RouteUrl("Account Remove Login")" method="post">
+                                @Html.AntiForgeryToken()
+                                <div>
+                                    @Html.Hidden("loginProvider", login.Key)
+                                    @Html.Hidden("providerKey", login.Value)
+                                    <input type="submit" class="button" value="REMOVE" title="Remove this @login.Key login from your account" />
+                                </div>                            
+                            </form>
+                        </div>
+                    </div>
+                }
+            }
+            
+
+            @Html.Partial("_AccountBottomMenu")
+        </div>
+    </div>
+</div>

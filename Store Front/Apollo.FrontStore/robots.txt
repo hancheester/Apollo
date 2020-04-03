@@ -1,0 +1,47 @@
+User-Agent: *
+Host: www.Apollo.co.uk
+Disallow: /WebResource.axd
+Disallow: /bin/
+Disallow: /content/
+Disallow: /logs/
+Disallow: /media/
+Disallow: /plugins/
+Disallow: /scripts/
+Disallow: /account/
+Disallow: /changelocationpreference
+Disallow: /changecountrypreference
+Disallow: /changecurrency/
+Disallow: /*/changecurrency/
+Allow: /
+Sitemap: https://www.Apollo.co.uk/sitemap.xml
+
+User-Agent: googlebot
+Host: www.Apollo.co.uk
+Disallow: /WebResource.axd
+Disallow: /bin/
+Disallow: /logs/
+Disallow: /plugins/
+Disallow: /account/
+Disallow: /changelocationpreference
+Disallow: /changecountrypreference
+Disallow: /changecurrency/
+Disallow: /*/changecurrency/
+Allow: /
+Sitemap: https://www.Apollo.co.uk/sitemap.xml
+
+User-Agent: AhrefsBot
+Disallow: /
+
+User-Agent: SemrushBot
+Host: www.Apollo.co.uk
+Disallow: /WebResource.axd
+Disallow: /bin/
+Disallow: /logs/
+Disallow: /plugins/
+Disallow: /account/
+Disallow: /changelocationpreference
+Disallow: /changecountrypreference
+Disallow: /changecurrency/
+Disallow: /*/changecurrency/
+Allow: /
+Sitemap: https://www.Apollo.co.uk/sitemap.xml

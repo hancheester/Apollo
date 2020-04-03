@@ -1,0 +1,74 @@
+﻿@using Apollo.FrontStore.Models.Brand;
+@model BrandModel
+
+@{
+    string treeId = "brand-tree";
+
+    var forMobile = Html.ViewData["ForMobile"] as bool?;
+    if (forMobile.HasValue && forMobile.Value)
+    {
+        treeId = treeId + (forMobile.Value ? "-mobile" : null);
+    }
+}
+
+@if (Model.Categories.Count > 0)
+{
+    <div class="panel-group" id="@treeId">
+        @foreach (var category in Model.Categories)
+        {
+            <div class="panel panel-default">                
+                @if (category.Children.Count > 0)
+                {
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#@treeId" href="#@treeId-@category.Id">
+                                @Html.Raw(category.Name)
+                                <span class="glyphicon glyphicon-@(category.UrlKey == Model.TopUrlKey ? "minus" : "plus") pull-right"></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="@treeId-@category.Id" class="panel-collapse collapse @(category.UrlKey == Model.TopUrlKey ? "in" : null)">
+                        @foreach (var child in category.Children)
+                        {
+                            <div class="panel-body">
+                                <ul>
+                                    <li>
+                                    @if (child.Children.Count > 0)
+                                    {
+                                        <a data-toggle="collapse" href="#@treeId-@child.Id">@Html.Raw(child.Name)<span class="glyphicon glyphicon-chevron-right pull-right"></span></a>
+                                        <div id="@treeId-@child.Id" class="brand-child-category panel-collapse collapse @(child.UrlKey == Model.SecondUrlKey ? "in" : null)">
+                                            <div class="panel-body">
+                                                <ul>
+                                                @foreach (var item in child.Children)
+                                                {
+                                                    <li><a class="@(item.UrlKey == Model.ThirdUrlKey ? "selected" : null)" href="@Url.RouteUrl("Brand With Products", new { urlKey = Model.UrlKey, top = category.UrlKey, second = child.UrlKey, third = item.UrlKey }, this.Request.Url.Scheme)">@Html.Raw(item.Name)<span class="glyphicon glyphicon-menu-right pull-right"></span></a></li>
+                                                }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <a class="@(child.UrlKey == Model.SecondUrlKey ? "selected" : null)" href="@Url.RouteUrl("Brand With Products", new { urlKey = Model.UrlKey, top = category.UrlKey, second = child.UrlKey }, this.Request.Url.Scheme)">@Html.Raw(child.Name)<span class="glyphicon glyphicon-chevron-right pull-right"></span></a>
+                                    }
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="@Url.RouteUrl("Brand With Products", new { urlKey = Model.UrlKey, top = category.UrlKey, second = "" }, this.Request.Url.Scheme)">
+                                @Html.Raw(category.Name)
+                                <span class="glyphicon glyphicon-@(category.UrlKey == Model.TopUrlKey ? "minus" : "plus") pull-right"></span>
+                            </a>
+                        </h4>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,91 @@
+﻿@using Apollo.FrontStore.Models.Checkout;
+@model CheckoutAddressListModel
+
+@{
+    Html.AddTitleParts("Address");
+}
+<style type="text/css">
+
+</style>
+<div id="breadcrumb">
+    <div class="container list">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="@Url.RouteUrl("Shopping Cart")">Cart</a></li>
+            <li><a href="@Url.RouteUrl("Checkout Confirm Address")" class="active">Address</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="checkout">
+    <div class="container">
+        <div class="row address">
+            <div class="col-sm-12 hidden-xs checkout-progress">
+                <ul>
+                    <li><a href="@Url.RouteUrl("Shopping Cart")">1</a><span>My Cart</span></li>
+                    <li class="active"><a href="#">2</a><span>Address</span></li>
+                    <li><a href="#">3</a><span>Confirmation</span></li>
+                    <li><a href="#">4</a><span>Payment</span></li>
+                </ul>
+            </div>
+
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage as string))
+            {
+                <div class="col-sm-12">
+                    <p class="text-danger warning">@Html.Raw(ViewBag.ErrorMessage)</p>
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(ViewBag.Message as string))
+            {
+                <p class="message bg-success visible-xs">@Html.Raw(ViewBag.Message)</p>
+
+                <div class="col-sm-12 hidden-xs">
+                    <p class="message bg-success">@Html.Raw(ViewBag.Message)</p>
+                </div>
+            }
+
+            <div class="col-sm-6 col-lg-12">
+                <h4>Addresses</h4>
+                @if (Model.ExistingAddresses.Count > 0)
+                {
+                    foreach (var address in Model.ExistingAddresses)
+                    {
+                        <div class="col-lg-4 no-gutter item">                            
+                            <p>@address.Name,</p>
+                            <p>@address.AddressLine1,</p>
+
+                            @if (!string.IsNullOrEmpty(address.AddressLine2))
+                            {
+                                <p>@address.AddressLine2,</p>
+                            }                            
+                            <p>@address.City,</p>                            
+                            @if (!string.IsNullOrEmpty(address.PostCode))
+                            {
+                                <p>@address.PostCode,</p>                             
+                            }
+                            @if (!string.IsNullOrEmpty(address.USState))
+                            {
+                                <p>@address.USState,</p>
+                            }
+                            <p>@address.CountryName</p>
+
+                            <div class="form-group">
+                                <a class="btn btn-default select" href="@Url.RouteUrl("Checkout Select Address", new { type = Convert.ToInt32(Model.Type), addressid = address.Id })">SELECT</a>
+                                <a class="btn btn-default edit" href="@Url.RouteUrl("Checkout Edit Address", new { type = Convert.ToInt32(Model.Type), addressid = address.Id })">EDIT</a>
+                                <a class="btn btn-default remove" href="@Url.RouteUrl("Checkout Remove Address", new { type = Convert.ToInt32(Model.Type), addressid = address.Id })">REMOVE</a>
+                            </div>
+                        </div>
+                    }
+                }
+
+                <div class="col-xs-12 col-md-3 col-md-offset-9 no-gutter">
+                    <div class="form-group">
+                        <a class="btn btn-default add" href="@Url.RouteUrl("Checkout New Address", new { type = Convert.ToInt32(Model.Type) })">ADD ADDRESS</a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

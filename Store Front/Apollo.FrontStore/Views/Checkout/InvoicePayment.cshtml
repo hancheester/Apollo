@@ -1,0 +1,176 @@
+﻿@using Apollo.FrontStore.Models.Checkout;
+@using Apollo.Web.Framework;
+
+@model InvoicePaymentModel
+@{
+    Html.AddTitleParts("Invoice Payment");
+}
+
+<div id="breadcrumb">
+    <div class="container list">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#" class="active">Invoice Payment</a></li>           
+        </ul>
+    </div>
+</div>
+
+<div id="checkout">
+    <div class="container">
+        <div class="row">
+            @{
+                var validationSummary = Html.ValidationSummary(true);
+                if (!MvcHtmlString.IsNullOrEmpty(validationSummary))
+                {
+                    <div class="col-sm-12">
+                        <p class="text-danger warning">@validationSummary</p>
+                    </div>
+                }
+
+                if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="col-sm-12">
+                        <p class="text-danger warning">@Html.Raw(ViewBag.ErrorMessage)</p>
+                    </div>
+                }
+            }
+
+            <div class="col-xs-12">
+                <h4>Card Holder Statement Address</h4>
+            </div>
+
+                @using (Html.BeginForm("ConfirmInvoicePayment", "Checkout", FormMethod.Post))
+                {
+                    @Html.HiddenFor(Model => Model.EmailInvoiceId)
+
+                    <div class="address col-xs-12 col-lg-6">
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BillingAddress.Name)@Html.RequiredHint()
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.BillingAddress.Name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BillingAddress.Name)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BillingAddress.AddressLine1)@Html.RequiredHint()
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.BillingAddress.AddressLine1, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BillingAddress.AddressLine1)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BillingAddress.AddressLine2)
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.BillingAddress.AddressLine2, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BillingAddress.AddressLine2)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BillingAddress.City)@Html.RequiredHint()
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.BillingAddress.City, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BillingAddress.City)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BillingAddress.PostCode)
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => model.BillingAddress.PostCode, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BillingAddress.PostCode)
+                            </div>
+                        </div>
+
+                        <div class="states form-group" style="display: none;">
+                            @Html.LabelFor(model => model.BillingAddress.USState)
+                            <div class="input-group">
+                                @Html.DropDownListFor(model => model.BillingAddress.USStateId, Model.BillingAddress.AvailableStates)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BillingAddress.CountryName)
+                            <div class="input-group">
+                                @Html.DropDownListFor(model => model.BillingAddress.CountryId, Model.BillingAddress.AvailableCountries, new { @class = "country-list" })
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-xs-12">
+                        <h4>Payment</h4>
+                    </div>
+
+                    <div class="col-xs-12 col-lg-6">                        
+                        <h4 class="total-payment">Total payment is @Html.Raw(Model.Payment.OrderTotal)</h4>                        
+                        <div class="form-group">
+                            @Html.LabelFor(Model => Model.Payment.CardTypes)@Html.RequiredHint()
+                            <div class="input-group">
+                                @Html.DropDownListFor(Model => Model.Payment.CardType, Model.Payment.CardTypes, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(Model => Model.Payment.CardTypes)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(Model => Model.Payment.CardNumber)@Html.RequiredHint()
+                            <div class="input-group">
+                                @Html.TextBoxFor(Model => Model.Payment.CardNumber, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(Model => Model.Payment.CardNumber)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(Model => Model.Payment.CardHolderName)@Html.RequiredHint()
+                            <div class="input-group">
+                                @Html.TextBoxFor(Model => Model.Payment.CardHolderName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(Model => Model.Payment.CardHolderName)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(Model => Model.Payment.CardCode)@Html.RequiredHint()
+                            <div class="input-group">
+                                @Html.TextBoxFor(Model => Model.Payment.CardCode, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(Model => Model.Payment.CardCode)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(Model => Model.Payment.ExpireMonth)@Html.RequiredHint()
+                            <div class="input-group">
+                                @Html.DropDownListFor(Model => Model.Payment.ExpireMonth, Model.Payment.ExpireMonths, new { @class = "expiry-month" })
+                                /
+                                @Html.DropDownListFor(Model => Model.Payment.ExpireYear, Model.Payment.ExpireYears, new { @class = "expiry-year" })
+                            </div>
+                        </div>
+
+                        <div class="form-group col-lg-6 row">
+                            <button type="submit" class="button"><span class="glyphicon glyphicon-lock"></span>PAY SECURELY NOW</button>                            
+                        </div>
+                        
+                    </div>
+                }                    
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        (function () {
+            $('.country-list').change(function () {
+                var country = $(this).find('option:selected').text();
+                //console.log(country);
+                if (country === 'United States') {
+                    $('.states').show();
+                }
+                else {
+                    $('.states').hide();
+                }
+            });
+        })();
+    </script>
+}

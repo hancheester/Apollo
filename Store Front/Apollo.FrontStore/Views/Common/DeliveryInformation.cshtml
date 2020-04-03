@@ -1,0 +1,29 @@
+﻿@using Apollo.Core;
+@using Apollo.Core.Infrastructure;
+@using Apollo.Web.Framework.Services.Catalog;
+
+@{
+    Html.AddTitleParts("Delivery Information");
+    var priceFormatter = EngineContext.Current.Resolve<IPriceFormatter>();
+}
+
+@{ Html.RenderPartial("_OfferStrips"); }
+
+<div id="delivery">
+    <div class="row hidden-xs header">
+        <div class="col-sm-5">
+            <div class="col-sm-offset-6">
+                <h4><span>De</span>livery</h4>
+            </div>
+        </div>
+    </div>    
+    <div class="container">
+        <a href="/"><img src="/content/img/logo-medium.svg" alt="Apollo" class="hidden-xs" /></a>
+        <div class="visible-xs">
+            <h4>Delivery</h4>
+        </div>
+        <div class="content">
+            Put your "Delivery Information" information here. You can edit this in the admin site.
+        </div>
+    </div>    
+</div>

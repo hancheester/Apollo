@@ -1,0 +1,8 @@
+﻿Group: Widgets
+FriendlyName: Google Analytics or Universal Analytics
+SystemName: Widgets.GoogleAnalytics
+Version: 1.20
+SupportedVersions: 1.00
+Author: Apollo team, Han Chee
+DisplayOrder: 1
+FileName: Apollo.Plugin.Widgets.GoogleAnalytics.dll

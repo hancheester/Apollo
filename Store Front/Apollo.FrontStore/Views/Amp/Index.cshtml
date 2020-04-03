@@ -1,0 +1,70 @@
+﻿@using Apollo.Core.Model
+@using Apollo.Core.Domain.Seo;
+@using Apollo.Core.Infrastructure;
+
+@{
+    Html.AddTitleParts("Home");
+
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+
+    if (canonicalUrlsEnabled)
+    {
+        var url = Url.RouteUrl("Home", null, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(url);
+    }    
+}
+
+@section amp_script
+{
+    <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+}
+
+@section amp_custom 
+{
+    #banner .container {
+        margin-top: 50px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #box-menu .container {
+        padding: 0;
+        padding-right: 3%;
+        margin-bottom: 3%;
+    }
+
+    #box-menu .box {
+        margin-top: 3%;
+        padding-right: 0;
+        padding-left: 3%;
+    }
+
+    #box-menu .box .text {
+        text-align: center;
+        display: block;
+        background-color: #eee;
+        padding: 3%;
+        font-size: 12px;
+    }    
+}
+
+<div id="banner">
+    <div class="container">
+        @Html.Action("MainBanners", "Amp")
+    </div>
+</div>
+
+@Html.Action("BoxMenu", "Amp")
+
+<div id="tabs">
+    <div class="col-sm-12 col-lg-12">
+        <div class="feature-header">New arrivals</div>
+        <div class="feature-body">
+            @Html.Action("HomepageProducts", "Amp", new { groupId = ProductGroupType.NewArrivals })
+        </div>
+        <div class="feature-header">Trending now</div>
+        <div class="feature-body">
+            @Html.Action("HomepageProducts", "Amp", new { groupId = ProductGroupType.TrendingNow })
+        </div>
+    </div>
+</div>

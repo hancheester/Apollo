@@ -1,0 +1,63 @@
+﻿@using Apollo.Core.Model;
+@using Apollo.FrontStore.Models.Brand;
+
+@model BrandModel
+
+<div class="row">
+    @Html.Partial("~/Views/Amp/_Banners.cshtml", Model.Banners)
+    <div class="col-sm-12">        
+        <div class="side-nav col-sm-4">
+            <div class="default">
+                <h3 class="visible-xs">@Html.Raw(Model.Name)</h3>
+                @if (Model.Categories.Count > 0)
+                {
+                    @Html.Partial("_BrandCategoryTree", Model)
+                }
+                else
+                {
+                    //if there is no category for this brand, we load products instead                    
+                    <div class="products col-sm-12 visible-xs">
+                        @if (Model.Products.Count > 0)
+                        {
+                            foreach (var item in Model.Products)
+                            {
+                                @Html.Partial("_ProductBox", item);
+                            }
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+                
+        @if (Model.FeatureItemTypes.Count > 0)
+        {
+            foreach (var type in Model.FeatureItemTypes)
+            {
+                if (type != Convert.ToInt32(FeaturedItemType.Position) && type != 0)
+                {
+                    <div class="feature-header">
+                        @switch ((FeaturedItemType)type)
+                        {
+                            case FeaturedItemType.WhatsNew:
+                                @:What's new
+                                break;
+                            case FeaturedItemType.TopRated:
+                                @:We love
+                                break;
+                            case FeaturedItemType.BestSeller:
+                                @:Bestselling
+                                break;
+                            case FeaturedItemType.Position:
+                            default:
+                                break;
+                        }
+                    </div>
+                    <div class="feature-body">
+                        @Html.Action("BrandFeaturedProducts", "Amp", new { brandId = Model.Id, featuredItemTypeId = type })
+                    </div>
+                }
+            }
+        }
+        
+    </div>
+</div>

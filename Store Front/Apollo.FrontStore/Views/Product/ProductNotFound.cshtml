@@ -1,0 +1,51 @@
+﻿@{
+    Html.AddTitleParts("Product Not Found");
+}
+
+<div id="breadcrumb">
+    <div class="container list hidden-xs">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a class="active" href="#">Product Not Found</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="product">
+    <div class="container">        
+        <div class="content no-gutter col-sm-8 col-sm-offset-2">
+            <div class="not-found default-header">
+                <h4>Sorry, we do not currently carry the product you requested. Please try another search or find more ways to shop below.</h4>
+            </div>
+            <div class="col-xs-5 col-md-4 no-gutter">                
+                <img class="hidden-xs" src="/content/img/alt-brands-small.png" />
+                <img class="img-responsive visible-xs" src="/content/img/alt-brands.png" />
+            </div>
+            <div class="col-xs-7 col-md-8">
+                <h5>THE BRANDS</h5>
+                <p>Check out our complete lineup of health and beauty brands. Explore the largest and most diverse selection of products from Apollo.co.uk</p>
+                <div class="hidden-xs col-md-6 col-md-offset-6 no-gutter">
+                    <a class="btn btn-default btn-block" href="@Url.RouteUrl("Shop By Brand")">SHOP ALL BRANDS</a>
+                </div>
+            </div>
+            <div class="visible-xs col-xs-12 no-gutter">
+                <a class="btn btn-default btn-block" href="@Url.RouteUrl("Shop By Brand")">SHOP ALL BRANDS</a>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-xs-5 col-md-4 no-gutter">
+                <img class="hidden-xs" src="/content/img/alt-offers-small.png" />
+                <img class="img-responsive visible-xs" src="/content/img/alt-offers.png" />
+            </div>            
+            <div class="col-xs-7 col-md-8">
+                <h5>OFFERS</h5>
+                <p>Find our fantastic offers from your favourite brands. Browse our top makeup, skin care and healty living products.</p>
+                <div class="hidden-xs col-md-6 col-md-offset-6 no-gutter">
+                    <a class="btn btn-default btn-block" href="@Url.RouteUrl("Special Offers")">SHOP OFFERS</a>
+                </div>
+            </div>
+            <div class="visible-xs col-xs-12 no-gutter">
+                <a class="btn btn-default btn-block" href="@Url.RouteUrl("Special Offers")">SHOP OFFERS</a>
+            </div>            
+        </div>
+    </div>
+</div>

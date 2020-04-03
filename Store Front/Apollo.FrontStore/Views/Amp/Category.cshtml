@@ -1,0 +1,148 @@
+﻿@using Apollo.Core.Model;
+@using Apollo.Core.Domain.Seo;
+@using Apollo.Core.Infrastructure;
+@using Apollo.FrontStore.Models.Category;
+
+@model CategoryModel
+
+@{
+    Html.AddTitleParts(Model.Category.Name);
+    var metaTitle = string.IsNullOrEmpty(Model.Category.MetaTitle) ? Model.Category.Name : Model.Category.MetaTitle;
+    Html.AddTitleParts(metaTitle);
+    Html.AddMetaDescriptionParts(Model.Category.MetaDescription);
+    Html.AddMetaKeywordParts(Model.Category.MetaKeywords);
+
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+    if (canonicalUrlsEnabled)
+    {
+        var categoryUrl = Url.RouteUrl("Category", new { top = Model.Category.UrlKey }, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(categoryUrl);
+    }
+}
+
+@section amp_script
+{
+    <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+    <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+}
+
+@section amp_custom
+{
+    amp-accordion {
+        margin-bottom: 20px;
+    }
+
+    amp-accordion section {
+        border-bottom: 1px solid #eee;
+        background-color: #fff;
+    }
+
+    amp-accordion section+section {
+        margin-top: 5px;
+    }
+
+    amp-accordion section h4.title {
+        color: #333;
+        background: url(/content/img/dot.png) left center no-repeat;        
+        width: 100%;
+        padding: 0;
+        font-size: 14px;
+        text-decoration: none;
+        height: 35px;
+        display: block;
+        box-sizing: border-box;
+        padding: 0 5px 0 20px;
+        line-height: 35px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-transform: uppercase;
+        border: none;
+    }
+
+    amp-accordion section h4.title span.glyphicon {
+        line-height: 35px;
+        color: #fe5757;
+    }
+
+    amp-accordion section h4.title span.glyphicon:before {
+        content: "\002b";
+    }
+
+    amp-accordion section[expanded] h4.title span.glyphicon:before {
+        content: "\2212";
+    }
+
+    amp-accordion section .panel-body {
+        padding: 0 0 0 10px;
+    }
+
+    amp-accordion section .panel-body > ul > li {
+        padding: 10px;
+        padding-right: 5px;
+        border-bottom: 1px solid #eee;
+    }
+
+    amp-accordion section .panel-body > ul > li:last-child {
+        border-bottom: 0;
+    }
+
+    amp-accordion section .panel-body > ul > li > a {
+        font-size: 14px;
+        display: block;
+        text-decoration: none;
+    }
+
+    amp-accordion section .panel-body > ul > li > a span {
+        line-height: 18px;
+    }
+}
+
+<div id="category">
+    <div class="container">
+        <div class="row">
+            @Html.Partial("~/Views/Amp/_Banners.cshtml", Model.Banners)            
+            <div class="col-lg-12">
+                <div class="side-nav col-sm-3">
+                    <div class="default">
+                        <h3>@Html.Raw(Model.Category.Name)</h3>
+                        @Html.Partial("_CategoryTree", Model)                        
+                    </div>
+                </div>
+                <div class="content col-sm-12 col-lg-12 row">
+                    @if (Model.FeatureItemTypes.Count > 0)
+                    {
+                        foreach (var type in Model.FeatureItemTypes)
+                        {
+                            if (type != Convert.ToInt32(FeaturedItemType.Position) && type != 0)
+                            {
+                                <div class="visible-xs">
+                                    <div class="feature-header">
+                                        @switch ((FeaturedItemType)type)
+                                        {
+                                            case FeaturedItemType.WhatsNew:
+                                                @:What's new
+                                                break;
+                                            case FeaturedItemType.TopRated:
+                                                @:We love
+                                                break;
+                                            case FeaturedItemType.BestSeller:
+                                                @:Bestselling
+                                                break;
+                                            case FeaturedItemType.Position:
+                                            default:
+                                                break;
+                                        }
+                                    </div>
+                                    <div class="feature-body">
+                                        @Html.Action("CategoryFeaturedProducts", "Amp", new { categoryId = Model.Category.Id, featuredItemTypeId = type })
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,128 @@
+﻿@using Apollo.FrontStore.Models.Customer;
+@using Apollo.Web.Framework;
+@using System.Configuration;
+@model RegisterModel
+
+@{
+    Html.AddTitleParts("Register");
+}
+
+@{ Html.RenderPartial("_OfferStrips"); }
+
+@section head {
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script>
+        function onSubmit(token) {
+            document.getElementById('register-form').submit();
+        }
+    </script>
+}
+
+<div id="register">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Register</h4>
+            </div>
+            <div class="col-xs-12 col-lg-6">
+                @using (Html.BeginForm("Register", "Customer", FormMethod.Post, new { @id = "register-form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    var validationSummary = Html.ValidationSummary(false);
+                    if (!MvcHtmlString.IsNullOrEmpty(validationSummary))
+                    {
+                        if ("<div class=\"validation-summary-valid\" data-valmsg-summary=\"true\"><ul><li style=\"display:none\"></li>\r\n</ul></div>" != validationSummary.ToString())
+                        {
+                            <div class="message-error alert alert-danger">@validationSummary</div>
+                        }
+                    }
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="myicon icon-user fa-fw" aria-hidden="true" title="Name"></i></div>
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Name" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="myicon icon-email fa-fw" aria-hidden="true" title="Email"></i></div>
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Email" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="myicon icon-confirm-email fa-fw" aria-hidden="true" title="Confirm email"></i></div>
+                            @Html.TextBoxFor(model => model.ConfirmEmail, new { @class = "form-control", @placeholder = "Confirm email" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.ConfirmEmail)
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="myicon icon-dob fa-fw" aria-hidden="true" title="Date of birth"></i></div>
+                            @Html.DatePickerDropDowns(
+                                          Html.FieldNameFor(x => x.DateOfBirthDay),
+                                          Html.FieldNameFor(x => x.DateOfBirthMonth),
+                                          Html.FieldNameFor(x => x.DateOfBirthYear),
+                                          DateTime.Now.Year - 110,
+                                          DateTime.Now.Year,
+                                          Model.DateOfBirthDay,
+                                          Model.DateOfBirthMonth,
+                                          Model.DateOfBirthYear)
+                            @Html.ValidationMessageFor(model => model.DateOfBirthDay)
+                            @Html.ValidationMessageFor(model => model.DateOfBirthMonth)
+                            @Html.ValidationMessageFor(model => model.DateOfBirthYear)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="myicon icon-phone fa-fw" aria-hidden="true" title="Contact number"></i></div>
+                            @Html.TextBoxFor(model => model.ContactNumber, new { @class = "form-control", @placeholder = "Contact number" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="myicon icon-pwd fa-fw" aria-hidden="true" title="Password"></i></div>
+                            @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @type = "password", @placeholder = "Password" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="myicon icon-confirm-pwd fa-fw" aria-hidden="true" title="Confirm password"></i></div>
+                            @Html.TextBoxFor(model => model.ConfirmPassword, new { @class = "form-control", @type = "password", @placeholder = "Confirm password" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword)
+                    </div>
+
+                    <div class="displayContactNumber">
+                        <h4>Option</h4>
+                        <p>If you wish to include your contact number on your address label for your delivery office to contact you when your parcel has reached the final destination, please select the option below and enter a valid contact number. Once selected your  contact number will appear on all future orders;  you can opt out at any time by unselecting the option below. Please be advised that your privacy and the security of your personal information is our highest priority and entering your contact number will be at your own risk.</p>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DisplayContactNumberInDespatch)
+                        @Html.EditorFor(model => model.DisplayContactNumberInDespatch, new { @class = "form-control", @type = "checkbox" })
+                    </div>
+
+                    <div class="newsletter">
+                        <h4>Newsletter </h4>
+                        <p>If you opt to receive our newsletter you will get the latest special offers sent to you on a weekly basis (you may unsubscribe at any time). You would like to be reminded by Trusted Shops by e-mail of the possibility of submitting a customer review. You can revoke your consent at any time. Your personal data is protected in accordance with our privacy policy.</p>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Newsletter)
+                        @Html.EditorFor(model => model.Newsletter, new { @class = "form-control", @type = "checkbox" })
+                    </div>
+
+                    <div class="form-group col-lg-6 row">
+                        <button class="button g-recaptcha" data-sitekey="@ConfigurationManager.AppSettings["recaptcha:SiteKey"]" data-callback="onSubmit" data-badge="bottomleft" type="submit"><span class="glyphicon glyphicon-lock"></span>REGISTER NOW</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

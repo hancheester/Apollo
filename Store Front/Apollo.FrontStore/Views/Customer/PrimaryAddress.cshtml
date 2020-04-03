@@ -1,0 +1,98 @@
+﻿@using Apollo.FrontStore.Models.Customer;
+@model AccountPrimaryAddressModel
+
+@{
+    Html.AddTitleParts("My Address");    
+}
+
+<div id="account">
+    <div class="container">
+        <div class="row">
+            @Html.Partial("_AccountTopMenu")
+
+            <div class="col-xs-12">
+                <h4>My Address</h4>
+            </div>
+
+            @if (!string.IsNullOrEmpty(ViewBag.Message as string))
+            {
+                <div class="col-sm-12">
+                    <p class="text-danger warning">@Html.Raw(ViewBag.Message)</p>
+                </div>
+            }
+
+            <div class="col-xs-12 col-lg-6 addresses">
+                @if (Model.Billing != null)
+                {
+                    <div class="address col-xs-12 no-gutter">
+                        <h5>Billing Address</h5>
+                        <div class="body">
+                            @(Html.Raw(string.IsNullOrEmpty(Model.Billing.Name) ? null : Model.Billing.Name + "<br/>"))
+                            @(Html.Raw(string.IsNullOrEmpty(Model.Billing.AddressLine1) ? null : Model.Billing.AddressLine1 + "<br/>"))
+                            @(Html.Raw(string.IsNullOrEmpty(Model.Billing.AddressLine2) ? null : Model.Billing.AddressLine2 + "<br/>"))
+                            @(Html.Raw(string.IsNullOrEmpty(Model.Billing.City) ? null : Model.Billing.City + "<br/>"))
+                            @(Html.Raw(string.IsNullOrEmpty(Model.Billing.PostCode) ? null : Model.Billing.PostCode + "<br/>"))
+                            @Model.Billing.CountryName
+                        </div>
+                        <div class="action">
+                            <div class="form-group col-lg-6 row">
+                                <a href="@Url.RouteUrl("Account Addresses")" class="button col-xs-12 text-center">CHANGE</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="address col-xs-12 no-gutter">
+                        <h5>Billing Address</h5>
+                        <div class="body">
+                            <p class="text-warning warning">Please select your primary billing address.</p>
+                        </div>
+                        <div class="action">
+                            <div class="form-group col-lg-6 row">
+                                <a href="@Url.RouteUrl("Account Addresses")" class="button col-xs-12 text-center">CHOOSE</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.Shipping != null)
+                {
+                    <div class="address col-xs-12 no-gutter">
+                        <h5>Shipping Address</h5>
+                        <div class="body">
+                            @(Html.Raw(string.IsNullOrEmpty(Model.Shipping.Name) ? null : Model.Shipping.Name + "<br/>"))
+                            @(Html.Raw(string.IsNullOrEmpty(Model.Shipping.AddressLine1) ? null : Model.Shipping.AddressLine1 + "<br/>"))
+                            @(Html.Raw(string.IsNullOrEmpty(Model.Shipping.AddressLine2) ? null : Model.Shipping.AddressLine2 + "<br/>"))
+                            @(Html.Raw(string.IsNullOrEmpty(Model.Shipping.City) ? null : Model.Shipping.City + "<br/>"))
+                            @(Html.Raw(string.IsNullOrEmpty(Model.Shipping.PostCode) ? null : Model.Shipping.PostCode + "<br/>"))
+                            @Model.Shipping.CountryName
+                        </div>
+                        <div class="action">
+                            <div class="form-group col-lg-6 row">
+                                <a href="@Url.RouteUrl("Account Addresses")" class="button col-xs-12 text-center">CHANGE</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="address col-xs-12 no-gutter">
+                        <h5>Shipping Address</h5>
+                        <div class="body">
+                            <p class="text-warning warning">Please select your primary shipping address.</p>
+                        </div>
+                        <div class="action">
+                            <div class="form-group col-lg-6 row">
+                                <a href="@Url.RouteUrl("Account Addresses")" class="button col-xs-12 text-center">CHOOSE</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @Html.Partial("_AccountBottomMenu")
+
+        </div>
+    </div>
+</div>

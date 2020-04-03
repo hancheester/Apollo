@@ -1,0 +1,67 @@
+﻿@using Apollo.FrontStore.Models.Product;
+@model AlternativeProductModel
+
+@if (Model.Products.Count > 0)
+{
+    <div class="hidden-xs alternative">
+        <div class="title">ALTERNATIVE PRODUCTS YOU MAY LIKE</div>
+        <ul class="bxslider">
+            @if (Model.Products.Count > 0)
+            {
+                for (int i = 0; i < Model.Products.Count; i++)
+                {
+                    if (i % 4 == 0)
+                    {
+                        @:<li>
+                    }
+
+                    @Html.Partial("_ProductBox", Model.Products[i])
+
+                    if (i % 4 == 3)
+                    {
+                        @:</li>
+                    }
+                }
+            }
+        </ul>
+    </div>
+
+    <div class="col-sm-12 visible-xs">
+        @if (Model.Products.Count > 0)
+        {
+            foreach (var item in Model.Products)
+            {
+                @Html.Partial("_ProductBox", item)
+            }
+        }
+    </div>
+}
+else
+{
+    <div class="alternative col-md-6 no-gutter">
+        <p>Please kindly contact our Product Advisor for suggestions and personal shopping assistance.</p>
+        <input type="text" id="alternative-email" name="email" class="form-control" placeholder="Your email..." />
+        <input type="hidden" id="alternative-productid" name="productid" value="@Model.ProductId" />
+        <div class="form-group col-lg-6 row">
+            <button id="help-alternative" class="btn btn-default btn-md" type="submit">
+                SEND
+            </button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        (function defer() {
+            if (window.jQuery) {
+                $(function () {
+                    $('#help-alternative').on('click', function () {
+                        var e = $('#alternative-email').val();
+                        var i = $('#alternative-productid').val();
+                        submitForm('@Url.RouteUrl("Help Alternative Product")', { Email: e, ProductId: i });
+                    });
+                });
+            } else {
+                setTimeout(function () { defer() }, 50);
+            }
+        })();
+    </script>
+}

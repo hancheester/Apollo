@@ -1,0 +1,21 @@
+﻿<input type="text" id="subscribe-email" name="email" class="form-control" placeholder="Your email..." />
+<span class="input-group-btn">
+    <button id="subscribe" class="btn btn-default btn-md" type="submit">
+        SUBSCRIBE
+    </button>
+</span>
+
+<script type="text/javascript">
+    (function defer() {
+        if (window.jQuery) {
+            $(function () {
+                $('#subscribe').on('click', function () {
+                    var e = $('#subscribe-email').val();
+                    submitForm('@Url.RouteUrl("Subscription")', { Email: e });
+                });
+            });
+        } else {
+            setTimeout(function () { defer() }, 50);
+        }
+    })();
+</script>

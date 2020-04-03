@@ -1,0 +1,57 @@
+﻿@using Apollo.FrontStore.Models.ShoppingCart
+@model ShoppingCartModel.DiscountBoxModel
+@{ 
+    var displayApply = true;
+}
+<div class="discountcode">    
+    <div><h5>Gift voucher or discount code</h5></div>
+    <div>
+        @if (Model.IsApplied)
+        {
+            <p>@Html.Raw(Model.Message)</p>
+
+            if(!string.IsNullOrEmpty(Model.CurrentCode))
+            { 
+                <div class="input-group">
+                    <input id="discount-code" type="text" class="form-control"  value="@Model.CurrentCode.ToUpper()" disabled>
+                    <span class="input-group-btn">
+                        <a role="button" id="remove-code" href="@Url.RouteUrl("Remove Code")" class="btn btn-default">REMOVE</a>                        
+                    </span>
+                </div>
+                <p></p>
+
+                displayApply = false;
+            }
+        }
+       
+        @if (displayApply)
+        {
+            <div class="input-group">
+                <input id="discount-code" type="text" class="form-control" placeholder="Enter voucher or discount code">
+                <span class="input-group-btn">
+                    <button id="apply-code" class="btn btn-default" type="button">APPLY</button>
+                </span>
+            </div>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function defer() {
+        if (window.jQuery) {
+            
+            $(function () {
+                $('#apply-code').click(function () {
+                    var enteredCode = $('#discount-code').val();
+
+                    if (enteredCode != '') {
+                        submitForm('@Url.RouteUrl("Apply Code")', { code: enteredCode });
+                    }
+                });
+            });
+
+        } else {
+            setTimeout(function () { defer() }, 50);
+        }
+    })();
+</script>

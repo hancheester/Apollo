@@ -1,0 +1,546 @@
+﻿@using Apollo.Core;
+@using Apollo.Core.Domain;
+@using Apollo.FrontStore.Models.Product;
+@using Apollo.Core.Infrastructure;
+@model ProductDetailsModel
+
+@{ 
+    var metaTitle = string.IsNullOrEmpty(Model.MetaTitle) ? Model.Name : Model.MetaTitle;
+    Html.AddTitleParts(metaTitle);
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+    Html.AddHeadCustomParts(string.Format("<meta property=\"thumbnail\" content=\"{0}\"/>", Url.GenerateAbsoluteUrl(Model.DefaultPicture.ImageUrl)));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"rating\" content=\"{0}\"/>", Model.AverageReviewRating));
+
+    var productUrl = Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, this.Request.Url.Scheme);
+    Html.AddCanonicalUrlParts(productUrl);
+
+    var workContext = EngineContext.Current.Resolve<IWorkContext>();
+    var currencyHtmlEntity = workContext.WorkingCurrency.HtmlEntity;
+    var storeSettings = EngineContext.Current.Resolve<StoreInformationSettings>();
+    var imgUrl = Url.GenerateAbsoluteUrl(Model.DefaultPicture.FullSizeImageUrl);
+
+    // Open Graph tags
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:title\" content=\"{0}\"/>", metaTitle));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:description\" content=\"{0}\"/>", Model.MetaDescription));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:image\" content=\"{0}\"/>", imgUrl));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:url\" content=\"{0}\" />", productUrl));
+    Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"product\" />");
+    Html.AddHeadCustomParts(string.Format("<meta property=\"og:site_name\" content=\"{0}\" />", storeSettings.CompanyName));
+
+    // Twitter Card tags
+    // TODO: Move twitter:site, twitter:creator to settings
+    Html.AddHeadCustomParts("<meta property=\"twitter:card\" content=\"product\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:site\" content=\"@Apollo\" />");
+    Html.AddHeadCustomParts("<meta property=\"twitter:creator\" content=\"@Apollo\" />");
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:title\" content=\"{0}\"/>", metaTitle));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:description\" content=\"{0}\"/>", Model.MetaDescription));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:image:src\" content=\"{0}\"/>", imgUrl));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:image:alt\" content=\"{0}\"/>", Model.DefaultPicture.AlternateText));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:data1\" content=\"{0}\"/>", Model.DefaultProductPrice.OfferPrice));
+    Html.AddHeadCustomParts(string.Format("<meta property=\"twitter:label1\" content=\"Price\"/>"));
+
+    // Facebook tags
+    // TODO: Move fb:app_id to settings
+    Html.AddHeadCustomParts(string.Format("<meta property=\"fb:app_id\" content=\"231491834056841\"/>"));
+}
+
+@section amp_script
+{
+    <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+    <script async custom-element="amp-bind" src="https://cdn.ampproject.org/v0/amp-bind-0.1.js"></script>
+    <script async custom-element="amp-selector" src="https://cdn.ampproject.org/v0/amp-selector-0.1.js"></script>
+}
+
+@section amp_custom
+{
+    #product {
+        margin-top: 50px;
+    }
+
+    #product h1 {
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+    #product .rates {
+        margin-bottom: 10px;
+    }
+
+    #product .price-info, #product .price-info .price, #product .price-info .price span {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        color: #212121;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        line-height: 1.1;
+        clear: both;
+        -webkit-transition: all 2s;
+        transition: all 2s;
+    }
+
+    #product .price-info {
+        line-height: 20px;
+    }
+
+    #product .stock, #product .stock span {
+        float: right;
+        color: #7bd408;
+    }
+
+    #product .out-of-stock, #product .out-of-stock span {
+        float: right;
+        color: #d4087b;
+    }
+
+    #product .stock .fa::before, #product .out-of-stock .fa::before {
+        margin-right: 5px;
+    }
+
+    #product .rrp b, #product .rrp .old-price {
+        color: #888;
+    }
+
+    #product .rrp .old-price {
+        text-decoration: line-through;
+    }
+
+    #product .rrp .red {
+        color: #fd5555;
+    }
+
+    #product .image-container {
+        border: 1px solid #eee;
+        width: 302px;
+        height: 302px;
+        margin-bottom: 10px;
+    }
+
+    #product .image-container {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #product .image-container .image-holder {
+        width: 300px;
+        height: 300px;
+        border: 5px solid #fff;
+        overflow: hidden;
+        border-radius: 4px;
+    }
+
+    #product #image-slider img {
+        transform-origin: center;
+        /*cursor: zoom-in;*/
+    }
+
+    #product .image-pager a img {
+        width: 23%;
+        display: inline;
+    }
+
+    #product .image-pager a.active img, #product .image-pager a:hover img {
+        border: 1px solid #5280dd;
+    }
+
+    #product .product-image .bx-controls-direction {
+        display: none;
+        visibility: hidden;
+    }
+
+    #product .product-options {
+        min-height: 210px;
+    }
+
+    #product .product-options {
+        height: auto;
+    }
+
+    #product .add-to-cart-info {
+        min-height: 110px;
+        -webkit-transition: all 2s;
+        transition: all 2s;
+    }
+
+    #product .add-to-cart {
+        height: 110px;
+    }
+
+    #product select {
+        background: transparent;
+        color: #000;
+        cursor: pointer;
+        height: 30px;
+        line-height: 30px;
+        position: relative;
+        z-index: 1;
+    }
+
+    #product .add-quantity {
+        min-width: 40px;
+        padding-left: 5px;
+    }
+
+    #product .buy-now input[type=submit] {
+        background: #fe5656;
+        border-radius: 0;
+        border: 0;
+        color: #fff;
+        line-height: 30px;
+        margin-top: 10px;
+        border-bottom: 2px solid #cf3838;
+    }
+
+    #product .information.hidden-xs {
+        margin-bottom: 30px;
+    }
+
+    #product .information h3 {
+        font-size: 16px;
+        margin-top: 0;
+    }
+
+    #product .information .panel-group .panel-heading, #product .information .panel-group .panel-body {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #product .product-options amp-selector > amp-img {
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    #product .product-options amp-selector > amp-img.unavailable {
+        opacity: 0.1;
+    }
+
+    #product amp-selector[name^=product_price] > ul {
+        list-style: none;
+        display: flex;
+        align-items: flex-end;
+        justify-content: end;
+    }
+
+    #product amp-selector > ul li, #product amp-selector ul li.unavailable {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 8px;
+        background: white;
+        height: 40px;
+        min-width: 40px;
+        width: auto;
+        padding: 5px;
+    }
+
+    #product amp-selector ul li.unavailable {
+        text-decoration: line-through;
+        opacity: 0.5;
+    }
+
+    #product amp-selector [option] {
+      outline: none;
+    }
+
+    #product amp-selector amp-img[option][selected] {
+      outline-width: 1px;
+      outline-style: solid;
+      outline-color: #eb407a;
+      background: none;
+    }
+
+    #product amp-selector:not([disabled]) [option][selected]:not([disabled]), amp-img.selected {
+      will-change: box-shadow;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+      transition: box-shadow 0.3s cubic-bezier(.25,.8,.25,1);
+      color: #fff;
+    }
+
+    #product amp-selector:not([disabled]) [option][selected]:not([disabled]):not(.square) {
+      background-color: #eb407a;
+    }
+
+    #product amp-selector:not([disabled]) [option][selected]:not([disabled]).square {
+      outline: 1px solid #eb407a;
+    }
+
+    #product amp-selector:not([disabled]) [option]:not([selected]):not([disabled]), amp-img:not([.selected]) {
+      will-change: box-shadow;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+      transition: box-shadow 0.3s cubic-bezier(.25,.8,.25,1);
+    }
+
+    #product div[submit-error][role=alert], #product div[submit-success][role=alert] {        
+	    position: fixed;
+	    top: 0;
+	    left: 0;
+	    z-index: 2000;
+	    width: 100%;
+	    padding: 15px 25px 15px 10px;
+	    line-height: 20px;
+	    color: #fff;
+	    opacity: 0.95;
+    }
+
+    #product div[submit-error][role=alert] {
+        background-color: #e4444c;
+    }
+
+    #product div[submit-error][role=alert] div {
+        float: left;
+	    margin: 0 10px 0 0;
+        color: #fff;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+    }
+
+    #product div[submit-error][role=alert] .close, #product div[submit-success][role=alert] {
+        position: absolute;
+	    top: 0;
+	    right: 0;
+	    width: 32px;
+	    height: 32px;
+	    margin: 7px;
+	    background: #fff url('/content/img/close.png') center no-repeat;
+	    cursor: pointer;
+    }
+
+    #product amp-selector[role=listbox] div[role=option] h4 {
+        font-size: 12px;
+        margin-top: 22px;
+        margin-bottom: 11px;
+    }
+
+    #product amp-selector[role=listbox] div[role=tabpanel] {
+        display: none;
+        padding-top: 15px;
+        border-top: 1px solid #ddd;
+    }
+
+    #product amp-selector[role=listbox] div[role=option][selected]+div[role=tabpanel] {
+        display: block;
+    }
+
+    #product amp-selector[name=tabs][role=listbox]:not([disabled]) [option][selected]:not([disabled]):not(.unavailable):not(.square) {
+        background-color: #fff;
+    }
+
+    #product amp-selector[role=listbox]:not([disabled]) [option][selected]:not([disabled]), amp-img.selected {
+        box-shadow: none;
+    }
+
+    #product .product-image button {
+        border: 1px solid #fff;
+        padding: 0;
+    }
+}
+
+<div id="product" itemscope itemtype="https://schema.org/Product">
+    <div class="container">
+        
+        <h1 itemprop="name" class="visible-xs">@Html.Raw(Model.Name)</h1>
+        <meta itemprop="url" content="@Url.RouteUrl("Product", new { urlKey = Model.UrlKey }, Request.Url.Scheme)" />
+        @if (Model.Reviews.Count > 0)
+        {
+            <div class="rates no-gutter col-sm-12">
+                <span class="a-icon a-icon-star a-star-@Model.AverageReviewRating">
+                    <span class="a-icon-alt">@Model.AverageReviewRating/5</span>
+                </span>
+                
+                @Model.Reviews.Count <span>
+                    @if (Model.Reviews.Count == 1)
+                    {
+                        @:customer review
+                        }
+                    else
+                    {
+                        @:customer reviews
+                        }
+                </span>
+                
+            </div>
+        }
+        @{ Html.RenderPartial("ProductPriceInfo", Model.DefaultProductPrice, Html.ViewData); }
+
+        <div class="product-image left-side">
+            @if (Model.PictureModels.Count > 0)
+            {
+                <div>
+                    <amp-carousel id="product-image-carousel" width="300" height="300" layout="responsive" type="slides" controls autoplay>
+                        @for (int i = 0; i < Model.PictureModels.Count; i++)
+                        {
+                            <amp-img width="290" height="290" layout="responsive" itemprop="image" src="@Url.GenerateAbsoluteUrl("/media/product/" + Model.PictureModels[i].FullSizeImageUrl)" alt="@Model.PictureModels[i].AlternateText"></amp-img>
+                        }
+                    </amp-carousel>
+                </div>
+                <div>                        
+                    @if (Model.PictureModels.Count > 0)
+                    {
+                        for (int i = 0; i < Model.PictureModels.Count; i++)
+                        { 
+                            <button on="tap:product-image-carousel.goToSlide(index=@i)">
+                                <amp-img width="67" height="67" src="@Url.GenerateAbsoluteUrl("/media/product/" + Model.PictureModels[i].ImageUrl)" alt="@Model.PictureModels[i].AlternateText"></amp-img>
+                            </button>
+                        }                                
+                    }
+                </div>
+            }
+        </div>
+
+        <form id="product-details-form" action-xhr="@Url.RouteUrl("Add Product To Cart - Details AMP", new { productId = Model.Id }, this.Request.Url.Scheme)" method="post" target="_top">
+            <div class="right-side">
+                <h1>@Html.Raw(Model.Name)</h1>
+
+                @if (Model.Reviews.Count > 0)
+                {
+                    <div class="rates no-gutter col-sm-12">
+                        <span class="a-icon a-icon-star a-star-@Model.AverageReviewRating">
+                            <span class="a-icon-alt">@Model.AverageReviewRating/5</span>
+                        </span>
+
+                        @Model.Reviews.Count <span>
+                            @if (Model.Reviews.Count == 1)
+                            {
+                                @:customer review
+                        }
+                            else
+                            {
+                                @:customer reviews
+                        }
+                        </span>
+                        
+                    </div>
+                }
+                else
+                {
+                    <p>There are no reviews for this product. Be the first to <a class="underline" rel="nofollow" href="@Url.RouteUrl("Add Product Review", new { productId = Model.Id }, this.Request.Url.Scheme)">write a review</a>.</p>
+                }
+
+                @{Html.RenderPartial("ProductPriceInfo", Model.DefaultProductPrice);}
+
+                <p>Product code: <span itemprop="sku">@Model.Id</span></p>
+                <p>Despatched in @Model.DeliveryTimeLine</p>
+
+                @if (Model.ProductBrand.Visible)
+                {
+                    <div itemprop="brand" itemscope itemtype="https://schema.org/Brand">
+                        @if (Model.ProductBrand.Picture != null)
+                        {
+                        <a itemprop="url" href="@Model.ProductBrand.BrandUrl">
+                            <meta itemprop="name" content="@Html.Raw(Model.ProductBrand.Name)" />
+                            <amp-img width="140" height="50" itemprop="image" class="img-responsive" src="@Url.GenerateAbsoluteUrl(Model.ProductBrand.Picture.ImageUrl)" alt="@Model.ProductBrand.Picture.AlternateText" title="@Model.ProductBrand.Picture.Title" />
+                            <span class="underline">Shop @Html.Raw(Model.ProductBrand.Name)</span>
+                        </a>
+                        }
+                        else
+                        {
+                        <a itemprop="url" href="@Model.ProductBrand.BrandUrl">
+                            <span class="underline"><span itemprop="name">Shop @Html.Raw(Model.ProductBrand.Name)</span></span>
+                        </a>
+                        }
+                    </div>
+                }
+
+                <div class="product-options">
+
+                    @if (Model.IsPhoneOrder == false)
+                    {
+                        <!--options-->
+                        var attributes = new ViewDataDictionary();
+                        attributes.TemplateInfo.HtmlFieldPrefix = string.Format("attributes_{0}", Model.Id);
+                        attributes.Add("ProductId", Model.Id);
+                        attributes.Add("OptionType", Model.OptionType);
+                        @Html.Partial("_ProductPrices", Model.ProductPrices, attributes)
+
+                        <!--add to cart-->
+                    <div class="add-to-cart-info">
+                        @{
+                            var addToCart = new ViewDataDictionary();
+                            addToCart.TemplateInfo.HtmlFieldPrefix = string.Format("addtocart_{0}", Model.Id);
+                            @Html.Partial("_AddToCart", Model.AddToCart, addToCart)
+                        }
+                    </div>
+                    }
+                    else
+                    {
+                    <p class="phone-order">@Html.Raw(Model.PhoneOrderMessage)</p>
+                    }
+
+                    @if (Model.ProductOffer.Visible)
+                    {
+                        <!--offer countdown-->
+                    <div id="offer-countdown">
+                        <h5>Limited time only!</h5>
+                        <div class="clock"></div>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="information">
+                <h3>Product Information</h3>
+                <amp-selector name="tabs" role="tablist" layout="container" keyboard-select-mode="select">
+                    <div role="tab" option="a" selected>
+                        <h4>Description <span class="glyphicon glyphicon-triangle-right"></span></h4>
+                    </div>
+                    <div role="tabpanel">
+                        <p>@Html.Raw(Model.FullDescription)</p>
+                    </div>
+                    @if (Model.ProductTags.Count > 0)
+                    {
+                        for (int i = 0; i < Model.ProductTags.Count; i++)
+                        {
+                    <div role="tab" option="b_@i">
+                        <h4>@Model.ProductTags[i].Tag <span class="glyphicon glyphicon-triangle-right"></span></h4>
+                    </div>
+                    <div role="tabpanel">
+                        <p>@Html.Raw(Model.ProductTags[i].Description)</p>
+                    </div>
+                        }
+                    }
+
+                    @if (Model.Reviews.Count > 0)
+                    {
+                        <div role="tab" option="c">
+                            <h4>Review <span class="glyphicon glyphicon-triangle-right"></span></h4>
+                        </div>
+                        <div role="tabpanel">
+                            <h5>Average rating</h5>
+                            <ul>
+                                <li>
+                                    <span class="a-icon a-icon-star a-star-@Model.AverageReviewRating">
+                                        <span class="a-icon-alt">@Model.AverageReviewRating/5</span>
+                                    </span>
+                                </li>
+                            </ul>
+                            <span>@Model.Reviews.Count customer reviews</span>
+                            <a class="underline" rel="nofollow" href="@Url.RouteUrl("Add Product Review", new { productId = Model.Id }, Request.Url.Scheme)">Write a review</a>
+                            <dl class="review-list">
+                                @for (int i = 0; i < Model.Reviews.Count; i++)
+                                {
+                                    <dt>@Html.Raw(Model.Reviews[i].Title)</dt>
+                                        <dd>
+                                            <span class="a-icon a-icon-star a-star-@Model.Reviews[i].Score">
+                                                <span class="a-icon-alt">@Model.Reviews[i].Score/5</span>
+                                            </span>
+                                            <p>@Html.Raw(Model.Reviews[i].Comment)</p>
+                                            <span><i>@Model.Reviews[i].Alias</i> from @Html.GetTimeAgo(Model.Reviews[i].TimeStamp)</span>
+                                        </dd>
+                                }
+                            </dl>
+
+                        </div>
+                    }
+                </amp-selector>
+            </div>
+
+            <div submit-error>
+                <template type="amp-mustache">
+                    <a href="@productUrl"><span class="close" title="close">&nbsp;</span></a>
+                    {{message}}
+                </template>
+            </div>
+        </form>
+    </div>
+</div>

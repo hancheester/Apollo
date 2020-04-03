@@ -1,0 +1,115 @@
+﻿@using Apollo.FrontStore.Models.Product;
+@model ProductPriceModel
+@{
+    string displayFlag = null;
+
+    var showForMobile = Html.ViewData["ShowForMobile"] as bool?;
+    if (showForMobile.HasValue && showForMobile.Value)
+    {
+        displayFlag = showForMobile.Value ? "visible-xs" : null;
+    }
+}
+
+<div @((!showForMobile.HasValue || showForMobile.Value == false) ? Html.Raw("itemprop=\"offers\" itemscope itemtype=\"https://schema.org/Offer\"") : null) class="price-info @displayFlag">
+    @if (Model.Visible)
+    {
+        <span class="price">
+        @if (Model.OfferRuleId > 0)
+        {
+            if (!showForMobile.HasValue || showForMobile.Value == false)
+            {
+                <span itemprop="priceCurrency" content="@Model.CurrencyCode">@Model.CurrencySymbol</span><span itemprop="price" class="value" content="@Model.OfferPriceValue">@Model.OfferPriceValue</span>                
+            }
+            else
+            {
+                <span class="price-tag">@Html.Raw(Model.OfferPrice)</span>
+            }
+        }
+        else
+        {
+            if (!showForMobile.HasValue || showForMobile.Value == false)
+            {
+                <span itemprop="priceCurrency" content="@Model.CurrencyCode">@Model.CurrencySymbol</span><span itemprop="price" class="value" content="@Model.PriceValue">@Model.PriceValue</span>
+            }
+            else
+            {
+                <span class="price-tag">@Html.Raw(Model.Price)</span>
+            }
+        }
+        </span>
+    }
+    else
+    {
+        @Html.Raw(Model.MessageAfterHidden)
+    }
+
+    <span class="stock-status @(Model.StockAvailability ? "stock" : "out-of-stock")">
+        @if (!showForMobile.HasValue || showForMobile.Value == false)
+        {
+            @Html.Raw(Model.StockAvailability ? "<link itemprop=\"availability\" href=\"https://schema.org/InStock\" />" : "<link itemprop=\"availability\" href=\"https://schema.org/OutOfStock\" />")
+        }
+        <i class="fa fa-@(Model.StockAvailability ? "check-circle" : "times-circle")"></i><span>@(Model.StockAvailability ? "Available in stock" : "Out of stock")</span>
+    </span>
+
+    <div class="price-status @displayFlag">
+        @if (Model.Visible && Model.OfferRuleId > 0 && Model.DisplayRRP && string.IsNullOrEmpty(Model.SavePercentageNote) == false)
+        {
+            <span class="rrp">
+                <b>WAS </b><span class="old-price">@Html.Raw(Model.Price)</span>
+                <span class="red">@Html.Raw(@Model.SavePercentageNote)</span>
+            </span>
+        } 
+    </div>
+
+    @if (string.IsNullOrEmpty(displayFlag))
+    {
+        <span class="rrp price-status-clone hidden">
+            <b>WAS </b><span class="old-price"></span>
+            <span class="red"></span>
+        </span>
+    }    
+
+    <div class="stock-email @(Model.StockAvailability ? "hidden" : "show")"><a data-toggle="modal" data-target="#stock-notifier-modal"><i class="fa fa-envelope"></i> <i class="text">Email me when available</i></a></div>
+
+    <div class="clearfix"></div>
+</div>
+
+@if (Model.Visible && (!showForMobile.HasValue || showForMobile.Value == false))
+{
+    if (Model.OfferRuleId > 0)
+    {
+        foreach (var currency in Model.SchemaMetaOfferPrices)
+        {
+            <span itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                <meta itemprop="@currency.Key.ItemProp" content="@currency.Key.Content" />
+                <meta itemprop="@currency.Value.ItemProp" content="@currency.Value.Content" />
+                @if (Model.StockAvailability)
+                {
+                    <link itemprop="availability" href="https://schema.org/InStock" />
+                }
+                else
+                {
+                    <link itemprop="availability" href="https://schema.org/OutOfStock" />
+                }
+            </span>
+        }
+    }
+    else
+    {
+        foreach (var currency in Model.SchemaMetaPrices)
+        {
+            <span itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                <meta itemprop="@currency.Key.ItemProp" content="@currency.Key.Content" />
+                <meta itemprop="@currency.Value.ItemProp" content="@currency.Value.Content" />
+                @if (Model.StockAvailability)
+                {
+                    <link itemprop="availability" href="https://schema.org/InStock" />
+                }
+                else
+                {
+                    <link itemprop="availability" href="https://schema.org/OutOfStock" />
+                }
+            </span>
+        }
+    }    
+}

@@ -1,0 +1,448 @@
+﻿@using Apollo.Core;
+@using Apollo.FrontStore.Models.Category;
+@using Apollo.Core.Infrastructure;
+@using Apollo.Core.Domain.Seo;
+
+@model CategoryModel
+
+@{
+    if (string.IsNullOrEmpty(Model.SelectedThirdCategoryName) == false)
+    {
+        Html.AddTitleParts(string.Format("{0} | {1}", Model.Category.Name, Model.SelectedThirdCategoryName));
+    }
+    else if (string.IsNullOrEmpty(Model.SelectedSecondCategoryName) == false)
+    {
+        Html.AddTitleParts(string.Format("{0} | {1}", Model.Category.Name, Model.SelectedSecondCategoryName));
+    }
+    else
+    {
+        Html.AddTitleParts(Model.Category.Name);
+    }
+
+    var canonicalUrlsEnabled = EngineContext.Current.Resolve<SeoSettings>().CanonicalUrlsEnabled;
+
+    if (canonicalUrlsEnabled)
+    {
+        var categoryUrl = "";
+        if (string.IsNullOrEmpty(Model.SelectedSecondCategoryUrl) == false)
+        {
+            categoryUrl = Url.RouteUrl("Category With Products AMP", new { top = Model.Category.UrlKey, second = Model.SelectedSecondCategoryUrl, third = "" }, this.Request.Url.Scheme);
+        }
+
+        if (string.IsNullOrEmpty(Model.SelectedThirdCategoryUrl) == false)
+        {
+            categoryUrl = Url.RouteUrl("Category With Products AMP", new { top = Model.Category.UrlKey, second = Model.SelectedSecondCategoryUrl, third = Model.SelectedThirdCategoryUrl }, this.Request.Url.Scheme);
+        }
+
+        var currentPageNumber = Model.PagingFilteringContext.PageNumber;
+        var nextPageNumber = Model.PagingFilteringContext.TotalPages >= (currentPageNumber + 1) ? currentPageNumber + 1 : 0;
+        var prevPageNumber = currentPageNumber > 1 ? currentPageNumber - 1 : 0;
+
+        if (prevPageNumber > 0)
+        {
+            Html.AddPrevUrlParts(string.Format("{0}?pagenumber={1}", categoryUrl, prevPageNumber));
+        }
+
+        if (currentPageNumber > 0 && nextPageNumber != 0)
+        {
+            Html.AddNextUrlParts(string.Format("{0}?pagenumber={1}", categoryUrl, nextPageNumber));
+        }
+    }
+
+    var workContext = EngineContext.Current.Resolve<IWorkContext>();
+    var currencyHtmlEntity = workContext.WorkingCurrency.HtmlEntity;
+    var categoryTitle = string.IsNullOrEmpty(Model.SelectedThirdCategoryUrl) ? Model.SelectedSecondCategoryName : Model.SelectedThirdCategoryName;
+
+    int min;
+    int.TryParse(Model.PagingFilteringContext.PriceRangeFilter.Min, out min);
+
+    int from;
+    int.TryParse(Model.PagingFilteringContext.PriceRangeFilter.From, out from);
+
+    int max;
+    int.TryParse(Model.PagingFilteringContext.PriceRangeFilter.Max, out max);
+
+    int to;
+    int.TryParse(Model.PagingFilteringContext.PriceRangeFilter.To, out to);
+}
+
+<div id="breadcrumb">
+    <div class="container list hidden-xs">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="@Url.RouteUrl("Category", new { top = Model.Category.UrlKey })">@Html.Raw(Model.Category.Name)</a></li>
+            @if (string.IsNullOrEmpty(Model.SelectedSecondCategoryUrl) == false)
+            {
+                <li><a class="@(string.IsNullOrEmpty(Model.SelectedThirdCategoryUrl) ? "active" : null)" href="@Url.RouteUrl("Category With Products", new { top = Model.Category.UrlKey, second = Model.SelectedSecondCategoryUrl, third = "" })">@Html.Raw(Model.SelectedSecondCategoryName)</a></li>
+            }
+            @if (string.IsNullOrEmpty(Model.SelectedThirdCategoryUrl) == false)
+            {
+                <li><a class="active" href="@Url.RouteUrl("Category With Products", new { top = Model.Category.UrlKey, second = Model.SelectedSecondCategoryUrl, third = Model.SelectedThirdCategoryUrl })">@Html.Raw(Model.SelectedThirdCategoryName)</a></li>
+            }
+        </ul>
+    </div>    
+</div>
+
+<div id="category">
+    <div class="container">
+        <div class="side-nav visible-xs">
+            <h3>@Html.Raw(categoryTitle)</h3>
+            <a class="filter-refine pull-right" data-toggle="collapse" href="#refine-panel">refine</a>
+            <div id="refine-panel" class="collapse">
+                <h3>Refine Results</h3>
+                <div class="panel-group" id="mobile-filters" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#mobile-filters" href="#category-mobile-filter" aria-expanded="false">
+                                    @Html.Raw(Model.Category.Name)
+                                    <span class="glyphicon glyphicon-plus pull-right"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div class="selected">
+                            <span class="badge">@Html.Raw(categoryTitle)</span>
+                        </div>
+                        <div id="category-mobile-filter" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+                                @{
+                                    Html.ViewData.Add("ForMobile", true);
+                                }
+                                @Html.Partial("_CategoryTree", Model, Html.ViewData)
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.PagingFilteringContext.CategoryFilterRangeFilter.Filters.Count > 0)
+                    {
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingFilter">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#mobile-filters" href="#filters-mobile-filter" aria-expanded="true">
+                                    Type
+                                    <span class="glyphicon glyphicon-plus pull-right"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        @if (Model.PagingFilteringContext.CategoryFilterRangeFilter.SelectedFilters.Length > 0)
+                        {
+                            <div class="selected">
+                                @for (int i = 0; i < Model.PagingFilteringContext.CategoryFilterRangeFilter.SelectedFilters.Length; i++)
+                                {
+                                    var id = Model.PagingFilteringContext.CategoryFilterRangeFilter.SelectedFilters[i];
+                                    var filter = Model.PagingFilteringContext.CategoryFilterRangeFilter.Filters.Where(b => b.Item1 == id).FirstOrDefault();
+                                    <span class="badge">@Html.Raw(filter.Item2)</span>
+                                }
+                            </div>
+                        }
+                        <div id="filters-mobile-filter" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFilter">
+                            <div class="panel-body">                                
+                                    @{ var selected = Model.PagingFilteringContext.CategoryFilterRangeFilter.SelectedFilters; }
+                                    <ul>
+                                        @foreach (var item in Model.PagingFilteringContext.CategoryFilterRangeFilter.Filters)
+                                        {
+                                            <li><label>@Html.Raw(item.Item2) <span>(@item.Item3)</span><input data-filter="@item.Item1" class="categoryfilter-filters pull-right" @(selected.Contains(item.Item1) ? "checked" : "") type="checkbox"></label></li>
+                                        }
+                                    </ul>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingBrand">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#mobile-filters" href="#brands-mobile-filter" aria-expanded="true" aria-controls="collapseOne">
+                                    Brand
+                                    <span class="glyphicon glyphicon-plus pull-right"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        @if (Model.PagingFilteringContext.BrandRangeFilter.SelectedBrands.Length > 0)
+                        {
+                            <div class="selected">
+                                @for (int i = 0; i < Model.PagingFilteringContext.BrandRangeFilter.SelectedBrands.Length; i++)
+                                {
+                                    var id = Model.PagingFilteringContext.BrandRangeFilter.SelectedBrands[i];
+                                    var brand = Model.PagingFilteringContext.BrandRangeFilter.Brands.Where(b => b.Item1 == id).FirstOrDefault();
+                                    <span class="badge">@Html.Raw(brand.Item2)</span>
+                                }                                
+                            </div>
+                        }
+                        <div id="brands-mobile-filter" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingBrand">
+                            <div class="panel-body">
+                                @if (Model.PagingFilteringContext.BrandRangeFilter.Brands.Count > 0)
+                                {
+                                    var selected = Model.PagingFilteringContext.BrandRangeFilter.SelectedBrands;
+                                    <ul>
+                                        @foreach (var item in Model.PagingFilteringContext.BrandRangeFilter.Brands)
+                                        {                                            
+                                            <li><label>@Html.Raw(item.Item2) <span>(@item.Item3)</span><input data-brand="@item.Item1" class="brand-filters pull-right" @(selected.Contains(item.Item1) ? "checked" : "") type="checkbox"></label></li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingThree">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#mobile-filters" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Price
+                                    <span class="glyphicon glyphicon-plus pull-right"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div class="selected">
+                            <span class="badge">@Html.Raw(currencyHtmlEntity)@(min < from ? from : min) - @Html.Raw(currencyHtmlEntity)@(max > to ? to : max)</span>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="panel-body">
+                                <div class="price-slider col-xs-12">
+                                    <b>Range: @Html.Raw(currencyHtmlEntity)<span id="mobile-min-price">@(min < from ? from : min)</span> - @Html.Raw(currencyHtmlEntity)<span id="mobile-max-price">@(max > to ? to : max)</span></b>
+                                    <input id="mobile-priceSlider" type="text" value=""
+                                           data-slider-min="@Model.PagingFilteringContext.PriceRangeFilter.Min"
+                                           data-slider-max="@Model.PagingFilteringContext.PriceRangeFilter.Max"
+                                           data-slider-step="5"
+                                           data-slider-value="[@(min < from ? from : min),@(max > to ? to : max)]" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="side-nav hidden-xs col-sm-3 col-lg-4">
+            <div class="default">
+                <h3>@Html.Raw(Model.Category.Name)</h3>
+                @Html.Partial("_CategoryTree", Model)
+                <div class="filter">
+                    <h3>Filter Selection</h3>
+                    <div class="price-filter col-sm-12">
+                        <h5>Price</h5>
+                        <input id="priceSlider" type="text" value=""
+                                data-slider-min="@Model.PagingFilteringContext.PriceRangeFilter.Min"
+                                data-slider-max="@Model.PagingFilteringContext.PriceRangeFilter.Max"
+                                data-slider-step="5"
+                                data-slider-value="[@(min < from ? from : min),@(max > to ? to : max)]" />                       
+                        <div class="range col-sm-12"><b>Range: @Html.Raw(currencyHtmlEntity)<span id="min-price">@(min < from ? from : min)</span> - @Html.Raw(currencyHtmlEntity)<span id="max-price">@(max > to ? to : max)</span></b></div>
+                    </div>
+                    @if (Model.PagingFilteringContext.CategoryFilterRangeFilter.Filters.Count > 0)
+                    {
+                    <div class="col-sm-12">
+                        <h5>Types</h5>
+                        <div class="categoryfilter-filter row">                            
+                            @{ 
+                                var selected = Model.PagingFilteringContext.CategoryFilterRangeFilter.SelectedFilters;
+                            }
+                            @foreach (var item in Model.PagingFilteringContext.CategoryFilterRangeFilter.Filters)
+                            {
+                                <span class="row"><label>@Html.Raw(item.Item2) <span>(@item.Item3)</span><input data-filter="@item.Item1" class="categoryfilter-filters pull-right" @(selected.Contains(item.Item1) ? "checked" : "") type="checkbox"></label></span>
+                            }
+                        </div>
+                    </div>
+                    }
+                    <div class="col-sm-12 no-gutter-right">
+                        <h5>Brands</h5>
+                        <div class="brand-filter row">
+                            @if (Model.PagingFilteringContext.BrandRangeFilter.Brands.Count > 0)
+                            {
+                                var selected = Model.PagingFilteringContext.BrandRangeFilter.SelectedBrands;
+                                foreach (var item in Model.PagingFilteringContext.BrandRangeFilter.Brands)
+                                {
+                                    <span class="row"><label>@Html.Raw(item.Item2) <span>(@item.Item3)</span><input data-brand="@item.Item1" class="brand-filters pull-right" @(selected.Contains(item.Item1) ? "checked" : "") type="checkbox"></label></span>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <a class="btn btn-default text-center" href="javascript:reset();"><p><i class="fa fa-times-circle clear-filter"></i> Clear All Filters</p></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content col-sm-9 col-lg-8">
+            <div class="hidden-xs default-header">
+                <div class="category-desc">
+                    <h2>@Html.Raw(categoryTitle)</h2>
+                    @if (!string.IsNullOrEmpty(Model.SelectedCategoryDescription))
+                    {
+                        <p>@Html.Raw(Model.SelectedCategoryDescription)</p>
+                    }
+                </div>
+            </div>
+            <div class="pagination-header hidden-xs">
+                <span class="showing pull-left">
+                    Showing @Model.PagingFilteringContext.FirstItem – @Model.PagingFilteringContext.LastItem of @Model.PagingFilteringContext.TotalItems results
+                </span>
+                <div class="sort-by pull-right">
+                    <ul class="text-right">
+                        <li class="dropdown">
+                            Show
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                @Model.PagingFilteringContext.SelectedPageSize items<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">                                
+                                <li><a class="show-items" href="#">36 items</a></li>
+                                <li><a class="show-items" href="#">72 items</a></li>
+                                <li><a class="show-items" href="#">108 items</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            Sort By
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                @Model.PagingFilteringContext.ConvertEnum(Model.PagingFilteringContext.OrderBy)<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @foreach (var item in Model.PagingFilteringContext.AvailableSortOptions)
+                                {
+                                    <li><a class="sort-items" data-sortby="@item.Value" href="#">@item.Text</a></li>
+                                }                                        
+                            </ul>
+                        </li>
+                        @foreach (var item in Model.PagingFilteringContext.AvailableViewModes)
+                        {
+                            <li><a class="view-modes" data-view="@item.Value" href="#"><span class="glyphicon @item.Text @(item.Selected ? "selected" : null)"></span></a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="products col-sm-12">
+                @if (Model.Products.Count > 0)
+                {
+                    foreach (var item in Model.Products)
+                    {
+                        if (Model.PagingFilteringContext.ViewMode == "grid")
+                        {
+                            @Html.Partial("_ProductBox", item)
+                        }
+                        else
+                        {
+                            @Html.Partial("_ProductRow", item)
+                        }
+                    }
+                }
+            </div>
+
+            @{
+                var pager = Html.Pager(Model.PagingFilteringContext)
+                    .QueryParam("pagenumber")
+                    .BooleanParameterName("adv")
+                    .BooleanParameterName("isc")
+                    .BooleanParameterName("sid")
+                    .RenderEmptyParameters(true);
+            }
+            @if (!pager.IsEmpty())
+            {
+                <div class="pagination-footer sm-col-12 text-center">
+                    @Html.Raw(pager)
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        (function defer() {
+            if (window.jQuery) {
+                // [INSERT CODE HERE
+                $(document).ready(function () {
+                    $('.view-modes').on('click', function () {
+                        var value = $(this).data('view');
+                        window.location = updateQueryString('viewmode', value, null);
+                    });
+
+                    $('.sort-items').on('click', function () {
+                        var value = $(this).data('sortby');
+                        window.location = updateQueryString('orderby', value, null);
+                    });
+
+                    $('.show-items').on('click', function () {
+                        var value = $(this).text().replace(' items', '');
+                        window.location = updateQueryString('pagesize', value, null);
+                    });
+
+                    var currentMinValue;
+                    var currentMaxValue;
+
+                    var $priceSlider = $('#priceSlider').slider({ tooltip: 'hide' });
+                    $priceSlider.on('slideStart', onSlideStart);
+                    $priceSlider.on('slide', onSlide);
+                    $priceSlider.on('slideStop', onSlideStop);
+
+                    var $mobilePriceSlider = $('#mobile-priceSlider').slider();
+                    $mobilePriceSlider.on('slideStart', onSlideStart);
+                    $mobilePriceSlider.on('slide', onSlide);
+                    $mobilePriceSlider.on('slideStop', onSlideStop);
+
+                    function onSlideStart(e) {
+                        currentMinValue = e.value[0];
+                        currentMaxValue = e.value[1];
+                    }
+
+                    function onSlide(e) {
+                        $('#mobile-min-price').text(e.value[0]);
+                        $('#mobile-max-price').text(e.value[1]);
+                        $('#min-price').text(e.value[0]);
+                        $('#max-price').text(e.value[1]);
+                    }
+
+                    function onSlideStop(e) {
+                        var newMinValue = e.value[0];
+                        var newMaxValue = e.value[1];
+
+                        if (currentMinValue != newMinValue) {
+                            var url = updateQueryString('from', newMinValue, null);
+                            url = updateQueryString('pagenumber', 1, url);
+                            window.location = url;
+                        }
+
+                        if (currentMaxValue != newMaxValue) {
+                            var url = updateQueryString('to', newMaxValue, null);
+                            url = updateQueryString('pagenumber', 1, url);
+                            window.location = url;
+                        }
+
+                        $priceSlider.slider('setValue', [newMinValue, newMaxValue]);
+                        $mobilePriceSlider.slider('setValue', [newMinValue, newMaxValue]);
+                    }
+
+                    $('#brands-mobile-filter .brand-filters').change(function () {
+                        var brands = $('.brands-mobile-filter input:checkbox:checked.brand-filters').map(function () {
+                            return $(this).data('brand');
+                        }).get();
+                        var value = $.unique(brands).sort().join();
+                        var url = updateQueryString('brands', value, null);
+                        url = updateQueryString('pagenumber', 1, url);
+                        window.location = url;
+                    });
+
+                    $('.brand-filter .brand-filters').change(function () {
+                        var brands = $('.brand-filter input:checkbox:checked.brand-filters').map(function () {
+                            return $(this).data('brand');
+                        }).get();
+                        var value = $.unique(brands).sort().join();
+                        var url = updateQueryString('brands', value, null);
+                        url = updateQueryString('pagenumber', 1, url);
+                        window.location = url;
+                    });
+
+                    $('.categoryfilter-filters').change(function () {
+                        var filters = $('input:checkbox:checked.categoryfilter-filters').map(function () {
+                            return $(this).data('filter');
+                        }).get();
+                        var value = $.unique(filters).sort().join();
+                        var url = updateQueryString('filters', value, null);
+                        url = updateQueryString('pagenumber', 1, url);
+                        window.location = url;
+                    });
+                });
+            } else {
+                setTimeout(function () { defer() }, 50);
+            }
+        })();        
+    </script>
+}

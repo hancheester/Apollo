@@ -1,0 +1,104 @@
+﻿@using Apollo.FrontStore.Models.Common;
+
+@model ContactUsModel
+
+@{
+    Html.AddTitleParts("Contact Us");
+}
+
+@{ Html.RenderPartial("_OfferStrips"); }
+
+<div id="contact">
+    <div class="row hidden-xs header">
+        <div class="col-sm-5">
+            <div class="col-sm-offset-6">
+                <h4><span>Co</span>ntact Us</h4>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="visible-xs">
+            <h4>Contact Us</h4>
+        </div>
+        <div class="content">
+            <div class="col-lg-6 no-gutter">
+                <h5>Form</h5>
+                <img src="/content/img/title-underline.png" alt="" class="img-responsive">
+
+                @using (Html.BeginForm())
+                {
+                    <p>Put your "Contact Us" form description here. You can edit this in the admin site.</p>
+                    var validationSummary = Html.ValidationSummary(true);
+                
+                    if (!MvcHtmlString.IsNullOrEmpty(validationSummary))
+                    {
+                        <div class="message-error alert alert-danger">@validationSummary</div>
+                    }
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Name (required)" })
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Email (required)" })
+                            @Html.ValidationMessageFor(model => model.Email)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            @Html.TextAreaFor(model => model.Message, new { @class = "form-control message" })
+                            @Html.ValidationMessageFor(model => model.Message)
+                        </div>
+                    </div>
+
+                    <div class="form-group col-lg-6 row">
+                        <input type="submit" class="button" value="SUBMIT" />
+                    </div>
+                }
+            </div>
+            <div class="col-lg-6 no-gutter">
+                <h5>Title</h5>
+                <img src="/Content/img/title-underline.png" alt="" class="img-responsive">
+                <div class="col-sm-12 row">
+                    <div class="col-sm-2 no-gutter">
+                        Address
+                    </div>
+                    <div class="col-sm-offset-1 col-sm-9 no-gutter">
+                        <p>Your address here</p>
+                    </div>
+                </div>
+                <div class="col-sm-12 row">
+                    <div class="col-sm-2 no-gutter">
+                        Phone
+                    </div>
+                    <div class="col-sm-offset-1 col-sm-9 no-gutter">
+                        <p><a href="tel:+44123456789">+44 (0)1234 567 890</a></p>
+                    </div>
+                </div>
+                <div class="col-sm-12 row">
+                    <div class="col-sm-2 no-gutter">
+                        Email
+                    </div>
+                    <div class="col-sm-offset-1 col-sm-9 no-gutter">
+                        <p><a href="mailto:customerservices@apollo.co">customerservices@apollo.co</a></p>
+                    </div>
+                </div>
+                <div class="col-sm-12 row">
+                    <div class="col-sm-2 no-gutter">
+                        Opening Times
+                    </div>
+                    <div class="col-sm-offset-1 col-sm-9 no-gutter">
+                        <p>Mon to Fri - 9:00am to 5:00pm<br />
+                           Bank Holidays are excluded</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

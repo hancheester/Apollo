@@ -1,0 +1,24 @@
+﻿@using Apollo.FrontStore.Models.Common;
+@model HeaderStripOfferModel
+
+<div class="header-strip @(Model.IsMobile ? null : "hidden-xs")">
+    <div class="promo-bar">
+        <a role="button" data-toggle="collapse" href="#@Model.ElementId" aria-expanded="false" aria-controls="@Model.ElementId">
+            @Model.Alias
+        </a>
+    </div>
+    <div id="@Model.ElementId" class="collapse">
+        <div class="terms-and-conditions">
+            <p>@Html.Raw(Model.Description)</p>
+            <p>Offers are subject to Apollo's discretion and may be withdrawn at any time and without notice.</p>
+            <p></p>
+            <p>For full Apollo terms &amp; conditions <a href="@Url.RouteUrl("Individual Offer", new { urlkey = Model.UrlKey }, this.Request.Url.Scheme)">click here</a>.</p>
+        </div>
+        <div class="action">
+            <a href="@Url.RouteUrl("Individual Offer", new { urlkey = Model.UrlKey }, this.Request.Url.Scheme)" class="button">Take Me To This Offer</a>
+        </div>
+        <div class="action">
+            <a href="#" class="button hide-offer-strip">No Thanks</a>
+        </div>
+    </div>
+</div>

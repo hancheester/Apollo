@@ -1,0 +1,29 @@
+﻿@{
+    Html.AddTitleParts("About Us");
+}
+
+@{ Html.RenderPartial("_OfferStrips"); }
+
+<div id="about">
+    <div class="row hidden-xs header">
+        <div class="col-sm-5">
+            <div class="col-sm-offset-6">
+                <h4><span>Ab</span>out Us</h4>
+            </div>            
+        </div>        
+    </div>
+    <div class="important">
+        <div class="container">
+            <a href="@Url.GenerateAbsoluteUrl("/")"><img src="@Url.GenerateAbsoluteUrl("/content/img/logo-medium.svg")" alt="Apollo logo" class="hidden-xs" /></a>
+            <p>Put your "About Us" short description here. You can edit this in the admin site.</p>
+        </div>            
+    </div>
+    <div class="container">
+        <div class="visible-xs">
+            <h4>About Us</h4>
+        </div>
+        <div class="content">
+            Put your "About Us" information here. You can edit this in the admin site.
+        </div>
+    </div>
+</div>

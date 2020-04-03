@@ -1,0 +1,165 @@
+﻿using Apollo.Core.Model.Entity;
+using System.Collections.Generic;
+using System.Data;
+
+namespace Apollo.Core.Services.Interfaces
+{
+    public interface IReportService
+    {
+        decimal GetOrderLoyaltyDiscountSumByDate(
+            string inOrderStatusXml,
+            bool? nonEuOnly,
+            int hourFlag,
+            int dayFlag,
+            int weekFlag,
+            int monthFlag,
+            int quarterFlag,
+            int yearFlag,
+            int hour,
+            int day,
+            int week,
+            int month,
+            int quarter,
+            int year);
+        decimal GetLineCostSumByDate(
+            string inOrderStatusXml,
+            string inLineStatusXml,
+            bool? nonEuOnly,
+            int hourFlag,
+            int dayFlag,
+            int weekFlag,
+            int monthFlag,
+            int quarterFlag,
+            int yearFlag,
+            int hour,
+            int day,
+            int week,
+            int month,
+            int quarter,
+            int year);
+        decimal GetMarginValueSumByDate(
+            string inOrderStatusXml,
+            string inLineStatusXml,
+            bool? nonEuOnly,
+            int? vat,
+            int hourFlag,
+            int dayFlag,
+            int weekFlag,
+            int monthFlag,
+            int quarterFlag,
+            int yearFlag,
+            int hour,
+            int day,
+            int week,
+            int month,
+            int quarter,
+            int year);
+        decimal GetNonTaxableOrderValueSumByDate(
+            string inOrderStatusXml,
+            string inLineStatusXml,
+            bool? nonEuOnly,
+            int? vat,
+            int hourFlag,
+            int dayFlag,
+            int weekFlag,
+            int monthFlag,
+            int quarterFlag,
+            int yearFlag,
+            int hour,
+            int day,
+            int week,
+            int month,
+            int quarter,
+            int year);
+        decimal GetOrderValueSumByDate(
+            string inOrderStatusXml,
+            string inLineStatusXml,
+            bool? nonEuOnly,
+            int? vat,
+            int hourFlag,
+            int dayFlag,
+            int weekFlag,
+            int monthFlag,
+            int quarterFlag,
+            int yearFlag,
+            int hour,
+            int day,
+            int week,
+            int month,
+            int quarter,
+            int year);        
+        decimal GetProductDiscountSumByDate(
+            string inOrderStatusXml,
+            string inLineStatusXml,
+            bool? nonEuOnly,
+            int hourFlag,
+            int dayFlag,
+            int weekFlag,
+            int monthFlag,
+            int quarterFlag,
+            int yearFlag,
+            int hour,
+            int day,
+            int week,
+            int month,
+            int quarter,
+            int year);
+        decimal GetOrderDiscountSumByDate(
+            string inOrderStatusXml,
+            bool? nonEuOnly,
+            int hourFlag,
+            int dayFlag,
+            int weekFlag,
+            int monthFlag,
+            int quarterFlag,
+            int yearFlag,
+            int hour,
+            int day,
+            int week,
+            int month,
+            int quarter,
+            int year);
+        decimal GetShippingValueSumByDate(
+            string inOrderStatusXml,
+            string inLineStatusXml,
+            bool? nonEuOnly,
+            int? vat,
+            int hourFlag,
+            int dayFlag,
+            int weekFlag,
+            int monthFlag,
+            int quarterFlag,
+            int yearFlag,
+            int hour,
+            int day,
+            int week,
+            int month,
+            int quarter,
+            int year);
+        IList<spReport_GetRegistrations_Result> GetTotalRegisteredGroupByDay(string fromDate, string toDate);
+        int GetOrderCountSumByDate(
+            string inOrderStatusXml,
+            bool? nonEuOnly,
+            int hourFlag,
+            int dayFlag,
+            int weekFlag,
+            int monthFlag,
+            int quarterFlag,
+            int yearFlag,
+            int hour,
+            int day,
+            int week,
+            int month,
+            int quarter,
+            int year);
+        IList<spRegistered_Customers_Result> GetRegisteredCustomersReport();
+        DataTable GetIncompleteOrders();
+        PagedList<ProductAnalysis> GetProductAnalysis(
+            int pageIndex = 0,
+            int pageSize = 2147483647,
+            IList<int> productIds = null,
+            string name = null,
+            string fromDateStamp = null,
+            string toDateStamp = null);
+    }
+}

@@ -1,0 +1,107 @@
+﻿@using Apollo.Core.Model;
+@using Apollo.FrontStore.Models.ShoppingCart;
+@model QuickAddToCartModel
+@{ 
+    int rowHeight = 45;
+    string addToCartLink = "";
+    var shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
+    var quantity = 1;
+    addToCartLink = Url.RouteUrl("Add Product To Cart - Catalog", new { productid = Model.Product.Id, shoppingcarttypeid = shoppingCartTypeId, quantity = quantity }, this.Request.Url.Scheme);
+    var optionType = "";
+    switch (Model.Product.OptionType)
+    {
+        case OptionType.None:
+            break;
+        case OptionType.Size:
+            optionType = "size";
+            break;
+        case OptionType.Colour:
+            optionType = "colour";
+            break;
+        case OptionType.GiftCard:
+            break;
+        default:
+            break;
+    }
+}
+<div class="modal-content content">
+    <div class="modal-header header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body @optionType">
+        <div class="row">
+            <div class="col-md-3">
+                <img class="img-responsive" src="/media/product/@Model.Product.ThumbMediaFilename" />
+            </div>            
+            <div class="col-md-9">
+                <h2>@Html.Raw(Model.Product.Name)</h2>
+
+                @switch (Model.Product.OptionType)
+                {
+                    case OptionType.None:
+                        break;
+                    case OptionType.Size:
+                        <select id="options" name="options" class="size" style="width:200px;">
+                            <option value="0" data-description="Please select your size"></option>
+                            @foreach (var size in Model.Options)
+                            {
+                                if (size.StockAvailability)
+                                {
+                                    <option value="@size.Id" data-description="@size.Option - @size.OfferPrice"></option>
+                                }
+                            }
+                        </select>
+                        <div class="clearfix"></div>
+                        <span id="option-validation" class="field-validation-error"> Please select a size from above.</span>
+
+                        rowHeight = 20;
+                        break;
+                    case OptionType.Colour:
+                        <select id="options" name="options" class="colour" style="width:210px;">
+                            <option value="0" data-description="Please select your colour"></option>
+                            @foreach (var colour in Model.Options)
+                            {
+                                if (colour.StockAvailability)
+                                {
+                                    <option value="@colour.Id" data-image="@colour.PictureModel.ImageUrl" data-description="@colour.Option - @colour.OfferPrice"></option>
+                                }
+                            }
+                        </select>
+                        <div class="clearfix"></div>
+                        <span id="option-validation" class="field-validation-error"> Please select a colour from above.</span>
+
+                        rowHeight = 55;
+
+                        break;
+                    case OptionType.GiftCard:
+                        break;
+                    default:
+                        break;
+                }
+                <div class="row col-md-12">
+                    <input type="button" id="button-quick-add" value="Add To Cart" />
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function (arg) {
+        $('#options').msDropDown({ visibleRows: 4, rowHeight: @rowHeight, roundedCorner: false, on: { change: resetError } });
+        $('#button-quick-add').on('click', function () {
+            if ($('#options').val() > 0) {
+                AjaxCart.addProductToCart_Catalog('@addToCartLink/' + $('#options').val());
+                return false;
+            }
+            else {
+                $('#option-validation').show();
+                return false;
+            }
+        });
+
+        function resetError() {
+            $('#option-validation').hide();
+        }
+    })
+</script>

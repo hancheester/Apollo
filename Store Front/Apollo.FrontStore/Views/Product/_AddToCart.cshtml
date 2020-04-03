@@ -1,0 +1,25 @@
+﻿@using Apollo.FrontStore.Models.Product;
+@model AddToCartModel
+
+@if (Model.Visible)
+{
+    <div class="add-to-cart">
+        <span class="add-to-cart-anchor"></span>        
+        @if (Model.AllowedQuantities.Count > 0)
+        {
+            <h5>Quantity:</h5>
+            @Html.DropDownListFor(model => Model.EnteredQuantity, Model.AllowedQuantities, new { @class = "add-quantity" })
+
+            <div class="buy-now">
+                @{ 
+                    var buttonMessage = "ADD TO CART";
+                    if (Model.AvailableForPreOrder)
+                    {
+                        buttonMessage = "PRE-ORDER NOW";
+                    }
+                }
+                <input type="button" class="btn btn-default btn-block" value="@buttonMessage" data-productid="@Model.ProductId" onclick="AjaxCart.addProductToCart_Details('@Url.RouteUrl("Add Product To Cart - Details", new { productId = Model.ProductId })', '#product-details-form');return false;" />
+            </div>
+        }
+    </div>
+}

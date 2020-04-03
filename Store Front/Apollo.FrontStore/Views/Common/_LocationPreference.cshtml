@@ -1,0 +1,52 @@
+﻿@using Apollo.Core;
+@using Apollo.Core.Infrastructure;
+@using Apollo.FrontStore.Models.Common;
+
+@model LocationPreferenceModel
+
+@{
+    var webHelper = EngineContext.Current.Resolve<IWebHelper>();
+}
+
+<div id="location">
+    <div class="container">
+        <div class="visible-xs">
+            <nav class="navbar navbar-default">
+                <div class="navbar-header">
+                    <a class="btn btn-default" data-toggle="collapse" data-target="#location-preference">
+                        <span class="flag-icon flag-icon-@Model.SelectedCountryCode.ToLower()"></span> @Model.SelectedCountryName@Html.Raw(Model.FreeDeliveryNote)
+                        <span class="glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                </div>
+                 <div id="location-preference" class="collapse" aria-expanded="true" role="directory">
+                    <form action="@webHelper.ModifyQueryString(Url.RouteUrl("Change Location Preference", null, this.Request.Url.Scheme), "returnurl=" + HttpUtility.UrlEncode(HttpContext.Current.Request.RawUrl), null)" method="post">
+                        @Html.Raw(Model.Note)
+                        <br />
+                        <a href="@Url.RouteUrl("Delivery Information", null, this.Request.Url.Scheme)">*weight restrictions apply</a>
+                        <div class="options col-xs-12 no-gutter">
+                            <select class="col-xs-12" name="CountryId">
+                                @if (Model.AvailableCountries.Count > 0)
+                                {
+                                    for (int i = 0; i < Model.AvailableCountries.Count; i++)
+                                    {
+                                        <option value="@Model.AvailableCountries[i].Value"@(Model.AvailableCountries[i].Selected ? " selected" : null)>@Model.AvailableCountries[i].Text</option>
+                                    }
+                                }
+                            </select>
+                            <select class="col-xs-12" name="CurrencyCode">
+                                @if (Model.AvailableLocaleCurrencies.Count > 0)
+                                {
+                                    for (int i = 0; i < Model.AvailableLocaleCurrencies.Count; i++)
+                                    {
+                                        <option value="@Model.AvailableLocaleCurrencies[i].Value"@(Model.AvailableLocaleCurrencies[i].Selected ? " selected" : null)>@Model.AvailableLocaleCurrencies[i].Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <input type="submit" formmethod="post" formaction="@webHelper.ModifyQueryString(Url.RouteUrl("Change Location Preference", null, this.Request.Url.Scheme), "returnurl=" + HttpUtility.UrlEncode(HttpContext.Current.Request.RawUrl), null)" class="btn btn-default btn-block" value="UPDATE" />
+                    </form>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>

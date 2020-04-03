@@ -1,0 +1,41 @@
+﻿#offer #conditions i.more, #offer #conditions i.table, #offer #conditions i.confirm, #offer #conditions i.remove, #offer #conditions i.save,
+#offer #action i.more, #offer #action i.table, #offer #action i.confirm, #offer #action i.remove, #offer #action i.save {
+    padding-right: 5px;
+}
+#offer #action .action-conditions {
+    min-height: 200px;
+}
+
+.rule-tree { 
+    margin: 0; 
+    padding-left: 2px; 
+}
+.rule-tree ul { 
+    margin: 0; 
+    padding-left: 20px !important; 
+    border-left: dotted 1px #888; 
+}
+.rule-tree img { 
+    border: 0 none; 
+    vertical-align: middle; 
+}
+.rule-root { 
+    padding-left: 2px; 
+}
+.rule-root ul li { 
+    list-style: none;     
+    padding-top: 5px;
+    font-size: 14px;
+}
+
+.rule-root input[type=text], .rule-tree input[type=text],
+.rule-root select, .rule-tree select {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #e5e6e7;
+    border-radius: 1px;
+    color: inherit;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;    
+    font-size: 14px;
+}

@@ -1,0 +1,12 @@
+﻿@using Apollo.FrontStore.Models.Brand;
+@model IList<BrandModel>
+
+<ul>
+    @if (Model.Count > 0)
+    {
+        foreach (var brand in Model)
+        {
+            <li><a href="@Url.RouteUrl("Brand", new { urlKey = brand.UrlKey }, this.Request.Url.Scheme)">@Html.Raw(brand.Name)<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+        }
+    }    
+</ul>

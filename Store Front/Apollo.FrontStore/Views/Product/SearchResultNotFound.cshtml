@@ -1,0 +1,42 @@
+﻿@using Apollo.FrontStore.Models.Product;
+@model SearchModel
+
+@{
+    Html.AddTitleParts("Search Results");
+}
+
+<div id="breadcrumb">
+    <div class="container list hidden-xs">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a class="active" href="#">Search results for "@Model.q"</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="search">
+    <div class="container">
+        <div class="side-nav visible-xs">
+            <h3>Search Results</h3>            
+        </div>
+        <div class="content no-gutter col-sm-8 col-sm-offset-2">
+            <div class="not-found default-header text-center">
+                <h4><span class="info hidden-xs glyphicon glyphicon-info-sign"></span>Sorry, we couldn't find any results matching &quot;@Html.Raw(Model.OriginalKeywords)&quot;</h4>
+            </div>            
+            <div>                
+                @if (!string.IsNullOrEmpty(Model.SuggestedKeywords))
+                {
+                    <h4 class="keyword-suggest">Did you mean: <u><a class="h4" href="@Url.RouteUrl("Search")?q=@Html.Raw(Model.SuggestedKeywords)">@Html.Raw(Model.SuggestedKeywords)</a></u></h4>
+                }
+                <h4>Search tips</h4>
+                <ul>                   
+                    <li>Check your spelling and try again.</li>
+                    <li>Try a similar but different search term, like cream instead of unguent.</li>
+                    <li>Keep your search term simple as our search facility works best with shorter descriptions.</li>
+                    <li>Try looking within the departments shown below.</li>
+                </ul>
+                @Html.Action("BoxMenu", "Category", new { isForSearchResult = true })
+            </div>
+        </div>
+    </div>
+</div>

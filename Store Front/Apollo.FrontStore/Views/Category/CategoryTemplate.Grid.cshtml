@@ -1,0 +1,40 @@
+﻿@using Apollo.FrontStore.Models.Category;
+@model CategoryModel
+
+<div class="default-header hidden-xs">
+    <div class="category-desc">
+        @Html.Raw(Model.Category.Description)
+    </div>
+</div>
+<div class="default-body hidden-xs">
+    <div class="category-body">
+        <div class="col-sm-12">
+            @if (Model.Category.Children.Count > 0)
+            {
+                foreach (var child in Model.Category.Children)
+                {
+                    <div class="col-sm-6 category-box">
+                        <div class="col-sm-12">
+                            <div class="col-sm-12">
+                                <h4>@Html.Raw(child.Name)</h4>
+                            </div>
+                            <div class="col-sm-12">
+                                <img src="@Url.GenerateAbsoluteUrl("/content/img/category-box-border.png")" alt="">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 image">
+                            <a href="@Url.RouteUrl("Category With Products", new { top = Model.Category.UrlKey, second = child.UrlKey, third = "" }, this.Request.Url.Scheme)">
+                                <img src="@Url.GenerateAbsoluteUrl(string.Format("/media/category/{0}", child.ThumbnailFilename))" class="img-responsive" alt="@child.Name">
+                            </a>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="hidden-sm">@Html.Raw(child.ShortDescription)</p>
+                        </div>
+                        <a href="@Url.RouteUrl("Category With Products", new { top = Model.Category.UrlKey, second = child.UrlKey, third = "" }, this.Request.Url.Scheme)" class="button">View Details</a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+

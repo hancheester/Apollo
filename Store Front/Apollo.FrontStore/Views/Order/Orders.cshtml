@@ -1,0 +1,110 @@
+﻿@using Apollo.FrontStore.Models.Order;
+
+@model CustomerOrderListModel
+
+@{
+    Html.AddTitleParts("My Orders");
+}
+
+<div id="account">
+    <div class="container">
+        <div class="row">
+            @Html.Partial("_AccountTopMenu")
+
+            @if (!string.IsNullOrEmpty(ViewBag.Message as string))
+            {
+                <div class="col-sm-12">
+                    <p class="text-danger warning">@Html.Raw(ViewBag.Message)</p>
+                </div>
+            }
+
+            <div class="col-xs-12">
+                <h4>My Orders</h4>
+            </div>
+
+            <div class="col-xs-12">
+
+                <form class="search" action="@Url.RouteUrl("Customer Orders")" method="get">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search by order number..." value="@Model.PagingFilteringContext.q">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-md" type="submit">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-xs-12">
+
+            @if (Model.Orders.Count > 0)
+            {
+                <div class="panel-group orders" id="accordion" role="tablist" aria-multiselectable="true">
+                @foreach (var order in Model.Orders)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">                            
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#o_@order.Id" aria-expanded="true" aria-controls="o_@order.Id">
+                                <h4 class="panel-title title">
+                                    Order #@order.Id
+                                </h4>
+                            </a>                            
+                        </div>
+                        <div id="o_@order.Id" class="panel-collapse collapse @(order.Chosen ? "in" : null)" role="tabpanel">
+                            <div class="panel-body">
+                                <div class="header">
+                                    <table>
+                                        <tr>
+                                            <td>Order Status</td>
+                                            <td>:</td>
+                                            <td class="text-primary">@order.OrderStatus</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Order Date</td>
+                                            <td>:</td>
+                                            <td class="text-info">@order.CreatedOn.ToLongDateString()</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Order Total</td>
+                                            <td>:</td>
+                                            <td class="text-muted">@order.OrderTotal</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="details">
+                                    <a href="@Url.RouteUrl("Customer Order Details", new { id = order.Id })">
+                                        <i class="fa fa-bars" aria-hidden="true"></i>
+                                        Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                </div>
+                
+                var pager = Html.Pager(Model.PagingFilteringContext)
+                    .QueryParam("pagenumber")
+                    .BooleanParameterName("adv")
+                    .BooleanParameterName("isc")
+                    .BooleanParameterName("sid")
+                    .RenderEmptyParameters(true);
+
+                if (!pager.IsEmpty())
+                {
+                    <div class="pagination-footer sm-col-12 text-center">
+                        @Html.Raw(pager)
+                    </div>
+                }
+            }
+            
+            </div>
+
+            @Html.Partial("_AccountBottomMenu")
+        </div>
+    </div>
+</div>

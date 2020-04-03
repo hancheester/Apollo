@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{69067CE3-5F66-4C27-8AE9-7309B2A6D105}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Apollo.Core.Model</RootNamespace>
+    <AssemblyName>Apollo.Core.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountSortingType.cs" />
+    <Compile Include="AccountUpdateResults.cs" />
+    <Compile Include="AddressType.cs" />
+    <Compile Include="AdmissionLineSortingType.cs" />
+    <Compile Include="AttributeControlType.cs" />
+    <Compile Include="BannerDisplayType.cs" />
+    <Compile Include="BannerSortingType.cs" />
+    <Compile Include="BranchOrderProcessResults.cs" />
+    <Compile Include="BranchPendingLineSortingType.cs" />
+    <Compile Include="BrandSortingType.cs" />
+    <Compile Include="CacheEntityKey.cs" />
+    <Compile Include="CartItemMode.cs" />
+    <Compile Include="CartItemSortingType.cs" />
+    <Compile Include="ColourSortingType.cs" />
+    <Compile Include="ContactUsResults.cs" />
+    <Compile Include="CountrySortingType.cs" />
+    <Compile Include="CurrencyType.cs" />
+    <Compile Include="CustomerLoginResults.cs" />
+    <Compile Include="Entity\Account.cs" />
+    <Compile Include="Entity\ActivityLog.cs" />
+    <Compile Include="Entity\Address.cs" />
+    <Compile Include="Entity\AdmissionLineItem.cs" />
+    <Compile Include="Entity\AllocatedItem.cs" />
+    <Compile Include="Entity\AllocatedPointResult.cs" />
+    <Compile Include="Entity\BaseEntity.cs" />
+    <Compile Include="Entity\BlogComment.cs" />
+    <Compile Include="Entity\BlogPost.cs" />
+    <Compile Include="Entity\BlogPostTag.cs" />
+    <Compile Include="Entity\Branch.cs" />
+    <Compile Include="Entity\BranchAllocation.cs" />
+    <Compile Include="Entity\BranchItemStatus.cs" />
+    <Compile Include="Entity\BranchOrder.cs" />
+    <Compile Include="Entity\BranchOrderItem.cs" />
+    <Compile Include="Entity\BranchPendingAllocation.cs" />
+    <Compile Include="Entity\BranchPendingLine.cs" />
+    <Compile Include="Entity\BranchPendingLineDownload.cs" />
+    <Compile Include="Entity\BranchProductStock.cs" />
+    <Compile Include="Entity\BranchStockStatus.cs" />
+    <Compile Include="Entity\Brand.cs" />
+    <Compile Include="Entity\BrandCategory.cs" />
+    <Compile Include="Entity\BrandFeaturedItem.cs" />
+    <Compile Include="Entity\BrandMedia.cs" />
+    <Compile Include="Entity\BulkProductsInfo.cs" />
+    <Compile Include="Entity\Card.cs" />
+    <Compile Include="Entity\CartItem.cs" />
+    <Compile Include="Entity\CartOffer.cs" />
+    <Compile Include="Entity\CartPharmItem.cs" />
+    <Compile Include="Entity\CartPharmOrder.cs" />
+    <Compile Include="Entity\Category.cs" />
+    <Compile Include="Entity\CategoryFeaturedBrand.cs" />
+    <Compile Include="Entity\CategoryFeaturedItem.cs" />
+    <Compile Include="Entity\CategoryFilter.cs" />
+    <Compile Include="Entity\CategoryLargeBannerMapping.cs" />
+    <Compile Include="Entity\CategoryMedia.cs" />
+    <Compile Include="Entity\CategoryTemplate.cs" />
+    <Compile Include="Entity\CategoryWhatsNew.cs" />
+    <Compile Include="Entity\Colour.cs" />
+    <Compile Include="Entity\Country.cs" />
+    <Compile Include="Entity\Currency.cs" />
+    <Compile Include="Entity\CurrencyCountry.cs" />
+    <Compile Include="Entity\CustomDictionary.cs" />
+    <Compile Include="Entity\DefaultBranch.cs" />
+    <Compile Include="Entity\Delivery.cs" />
+    <Compile Include="Entity\EmailInvoice.cs" />
+    <Compile Include="Entity\EmailMessage.cs" />
+    <Compile Include="Entity\EventLog.cs" />
+    <Compile Include="Entity\GCSupportedCountry.cs" />
+    <Compile Include="Entity\GenericAttribute.cs" />
+    <Compile Include="Entity\GoogleTaxonomy.cs" />
+    <Compile Include="Entity\IdentityLoginResult.cs" />
+    <Compile Include="Entity\InventoryPendingLine.cs" />
+    <Compile Include="Entity\ItemShipment.cs" />
+    <Compile Include="Entity\LargeBanner.cs" />
+    <Compile Include="Entity\LineItem.cs" />
+    <Compile Include="Entity\LinePickingStatus.cs" />
+    <Compile Include="Entity\LineStatus.cs" />
+    <Compile Include="Entity\OfferAction.cs" />
+    <Compile Include="Entity\OfferActionAttribute.cs" />
+    <Compile Include="Entity\OfferAttribute.cs" />
+    <Compile Include="Entity\OfferAttributeWithOperator.cs" />
+    <Compile Include="Entity\OfferBanner.cs" />
+    <Compile Include="Entity\OfferCondition.cs" />
+    <Compile Include="Entity\OfferOperator.cs" />
+    <Compile Include="Entity\OfferRelatedItem.cs" />
+    <Compile Include="Entity\OfferRule.cs" />
+    <Compile Include="Entity\OfferType.cs" />
+    <Compile Include="Entity\Order.cs" />
+    <Compile Include="Entity\OrderComment.cs" />
+    <Compile Include="Entity\OrderIssue.cs" />
+    <Compile Include="Entity\OrderNote.cs" />
+    <Compile Include="Entity\OrderPayment.cs" />
+    <Compile Include="Entity\OrderShipment.cs" />
+    <Compile Include="Entity\OrderStatus.cs" />
+    <Compile Include="Entity\OrderTotals.cs" />
+    <Compile Include="Entity\PaymentEntity.cs" />
+    <Compile Include="Entity\PaymentStatus.cs" />
+    <Compile Include="Entity\PharmItem.cs" />
+    <Compile Include="Entity\PharmOrder.cs" />
+    <Compile Include="Entity\PickingLineItem.cs" />
+    <Compile Include="Entity\Product.cs" />
+    <Compile Include="Entity\ProductAnalysis.cs" />
+    <Compile Include="Entity\ProductAttribute.cs" />
+    <Compile Include="Entity\ProductAttributeMapping.cs" />
+    <Compile Include="Entity\ProductCategory.cs" />
+    <Compile Include="Entity\ProductCategoryFilter.cs" />
+    <Compile Include="Entity\ProductGoogleCustomLabelGroupMapping.cs" />
+    <Compile Include="Entity\ProductGroup.cs" />
+    <Compile Include="Entity\ProductGroupMapping.cs" />
+    <Compile Include="Entity\ProductMedia.cs" />
+    <Compile Include="Entity\ProductPrice.cs" />
+    <Compile Include="Entity\ProductReview.cs" />
+    <Compile Include="Entity\ProductTag.cs" />
+    <Compile Include="Entity\Profile.cs" />
+    <Compile Include="Entity\Refund.cs" />
+    <Compile Include="Entity\RestrictedGroup.cs" />
+    <Compile Include="Entity\RestrictedGroupMapping.cs" />
+    <Compile Include="Entity\RewardPointHistory.cs" />
+    <Compile Include="Entity\SagePayDirect.cs" />
+    <Compile Include="Entity\SagePayLog.cs" />
+    <Compile Include="Entity\ScheduleTask.cs" />
+    <Compile Include="Entity\SearchTerm.cs" />
+    <Compile Include="Entity\Setting.cs" />
+    <Compile Include="Entity\ShippingOption.cs" />
+    <Compile Include="Entity\spBestsellers_Dashboard_Result.cs" />
+    <Compile Include="Entity\spGetBestSellers_Result.cs" />
+    <Compile Include="Entity\spLastfive_Result.cs" />
+    <Compile Include="Entity\spOrderCount_GroupByDate_Result.cs" />
+    <Compile Include="Entity\spOrderslastday_graph_Result.cs" />
+    <Compile Include="Entity\spOrderslastmonth_graph_Result.cs" />
+    <Compile Include="Entity\spOrderslastweek_graph_Result.cs" />
+    <Compile Include="Entity\spRegistered_Customers_Result.cs" />
+    <Compile Include="Entity\spReport_GetBrandsSale_Result.cs" />
+    <Compile Include="Entity\spReport_GetProductsSale_Result.cs" />
+    <Compile Include="Entity\spReport_GetRegistrations_Result.cs" />
+    <Compile Include="Entity\spReport_NewVsReturnOrders_Result.cs" />
+    <Compile Include="Entity\spRevenue_currentmonth_Result.cs" />
+    <Compile Include="Entity\spRevenue_lastday_Result.cs" />
+    <Compile Include="Entity\spRevenue_lastweek_Result.cs" />
+    <Compile Include="Entity\StockNotification.cs" />
+    <Compile Include="Entity\StockStatus.cs" />
+    <Compile Include="Entity\Subscriber.cs" />
+    <Compile Include="Entity\SysCheckAddress.cs" />
+    <Compile Include="Entity\SysCheckEmail.cs" />
+    <Compile Include="Entity\SysCheckName.cs" />
+    <Compile Include="Entity\SysCheckPostCode.cs" />
+    <Compile Include="Entity\SystemCheck.cs" />
+    <Compile Include="Entity\Tag.cs" />
+    <Compile Include="Entity\TaxCategory.cs" />
+    <Compile Include="Entity\TaxCategoryMapping.cs" />
+    <Compile Include="Entity\Testimonial.cs" />
+    <Compile Include="Entity\TransactionOutput.cs" />
+    <Compile Include="Entity\UserBehaviour.cs" />
+    <Compile Include="Entity\USState.cs" />
+    <Compile Include="Entity\WarehouseAllocation.cs" />
+    <Compile Include="Entity\WebMembershipUser.cs" />
+    <Compile Include="FeaturedItemSortingType.cs" />
+    <Compile Include="FeaturedItemType.cs" />
+    <Compile Include="FulltextSearchMode.cs" />
+    <Compile Include="GiftCardType.cs" />
+    <Compile Include="GlobalConstant.cs" />
+    <Compile Include="HelpAlternativeResults.cs" />
+    <Compile Include="HelpStockNoficationResults.cs" />
+    <Compile Include="ICacheExpirySupported.cs" />
+    <Compile Include="LineDistributionOutput.cs" />
+    <Compile Include="LineDistributionResults.cs" />
+    <Compile Include="LineItemSortingType.cs" />
+    <Compile Include="MyCookie.cs" />
+    <Compile Include="NewSubscriptionResults.cs" />
+    <Compile Include="OfferAttributeType.cs" />
+    <Compile Include="OfferConditionType.cs" />
+    <Compile Include="OfferRuleSortingType.cs" />
+    <Compile Include="OfferRuleType.cs" />
+    <Compile Include="OptionType.cs" />
+    <Compile Include="OrderCancellationResults.cs" />
+    <Compile Include="OrderCommentSortingType.cs" />
+    <Compile Include="OrderRefundResults.cs" />
+    <Compile Include="OrderShipmentSortingType.cs" />
+    <Compile Include="OrderSortingType.cs" />
+    <Compile Include="OverviewModel\AccountOverviewModel.cs" />
+    <Compile Include="OverviewModel\AddressOverviewModel.cs" />
+    <Compile Include="OverviewModel\BaseOverviewModel.cs" />
+    <Compile Include="OverviewModel\BranchPendingLineOverviewModel.cs" />
+    <Compile Include="OverviewModel\BrandCategoryOverviewModel.cs" />
+    <Compile Include="OverviewModel\BrandOverviewModel.cs" />
+    <Compile Include="OverviewModel\CartItemOverviewModel.cs" />
+    <Compile Include="OverviewModel\CategoryFeaturedItemOverviewModel.cs" />
+    <Compile Include="OverviewModel\CategoryOverviewModel.cs" />
+    <Compile Include="OverviewModel\LineItemOverviewModel.cs" />
+    <Compile Include="OverviewModel\OfferRuleOverviewModel.cs" />
+    <Compile Include="OverviewModel\OfferTypeOverviewModel.cs" />
+    <Compile Include="OverviewModel\OrderCommentOverviewModel.cs" />
+    <Compile Include="OverviewModel\OrderHeaderOverviewModel.cs" />
+    <Compile Include="OverviewModel\OrderOverviewModel.cs" />
+    <Compile Include="OverviewModel\OrderShipmentOverviewModel.cs" />
+    <Compile Include="OverviewModel\PaymentHeaderOverviewModel.cs" />
+    <Compile Include="OverviewModel\ProductGoogleCustomLabelGroupMappingOverviewModel.cs" />
+    <Compile Include="OverviewModel\ProductOverviewModel.cs" />
+    <Compile Include="OverviewModel\ProductPriceOverviewModel.cs" />
+    <Compile Include="OverviewModel\SagePayDirectOverviewModel.cs" />
+    <Compile Include="OverviewModel\ShippingOptionOverviewModel.cs" />
+    <Compile Include="OverviewModel\ShippingOverviewModel.cs" />
+    <Compile Include="PasswordResetResults.cs" />
+    <Compile Include="ProductGroupType.cs" />
+    <Compile Include="ProductMarkType.cs" />
+    <Compile Include="ProductPriceSortingType.cs" />
+    <Compile Include="ProductReviewSortingType.cs" />
+    <Compile Include="ProductSortingType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RefundSortingType.cs" />
+    <Compile Include="RegistrationResult.cs" />
+    <Compile Include="SagePayConstant.cs" />
+    <Compile Include="SearchTermSortingBy.cs" />
+    <Compile Include="SettingKey.cs" />
+    <Compile Include="ShippingOptionSortingType.cs" />
+    <Compile Include="ShoppingCartType.cs" />
+    <Compile Include="SubscriberSortingType.cs" />
+    <Compile Include="SystemCustomerAttributeNames.cs" />
+    <Compile Include="TaxDisplayType.cs" />
+    <Compile Include="TestimonialSortingType.cs" />
+    <Compile Include="TransactionResults.cs" />
+    <Compile Include="UrlKeyPage.cs" />
+    <Compile Include="UserRegistrationType.cs" />
+    <Compile Include="ValidLineStatus.cs" />
+    <Compile Include="ValidOrderStatus.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

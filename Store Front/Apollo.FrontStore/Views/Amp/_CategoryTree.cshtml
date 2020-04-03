@@ -1,0 +1,30 @@
+﻿@using Apollo.FrontStore.Models.Category;
+@model CategoryModel
+
+@if (Model.Category.Children.Count > 0)
+{
+    <amp-accordion>
+        @foreach (var child in Model.Category.Children)
+        {
+            <section>
+                @if (child.Children.Count > 0)
+                {
+                    <h4 class="title">
+                        @Html.Raw(child.Name)<span class="glyphicon pull-right"></span>
+                    </h4>
+                    <div class="panel-body">
+                    @if (child.Children.Count > 0)
+                    {
+                        <ul>
+                            @foreach (var item in child.Children)
+                            {
+                                <li><a class="@(item.UrlKey == Model.SelectedThirdCategoryUrl ? "selected" : null)" href="@Url.RouteUrl("Category With Products", new { top = Model.Category.UrlKey, second = child.UrlKey, third = item.UrlKey }, this.Request.Url.Scheme)">@Html.Raw(item.Name)<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                            }
+                        </ul>
+                    }
+                    </div>
+                }
+            </section>
+        }        
+    </amp-accordion>
+}

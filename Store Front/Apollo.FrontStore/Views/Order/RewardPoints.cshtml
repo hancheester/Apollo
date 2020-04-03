@@ -1,0 +1,79 @@
+﻿@using Apollo.FrontStore.Models.Order;
+
+@model CustomerRewardPointsModel
+
+@{
+    Html.AddTitleParts("My Reward Points");
+}
+
+<div id="account">
+    <div class="container">
+        <div class="row">
+            @Html.Partial("_AccountTopMenu")
+
+            @if (!string.IsNullOrEmpty(ViewBag.Message as string))
+            {
+                <div class="col-sm-12">
+                    <p class="text-danger warning">@Html.Raw(ViewBag.Message)</p>
+                </div>
+            }
+
+            <div class="col-xs-12">
+                <h4>My Reward Points</h4>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-xs-12">
+                @if (Model.RewardPoints.Count > 0)
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Message</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model.RewardPoints)
+                        {
+                            <tr>
+                                <td>@item.CreatedOn.ToShortDateString()</td>
+                                <td>
+                                    @item.Message
+                                    @if (item.Points.HasValue)
+                                    {
+                                        <div class="text-primary">Rewarded points: @item.Points.Value</div>
+                                    }
+                                    @if (item.UsedPoints.HasValue)
+                                    {
+                                        <div class="text-danger">Used points: @item.UsedPoints.Value</div>
+                                    }
+                                </td>
+                                <td>@item.PointsBalance</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+
+                    var pager = Html.Pager(Model.PagingFilteringContext)
+                    .QueryParam("pagenumber")
+                    .BooleanParameterName("adv")
+                    .BooleanParameterName("isc")
+                    .BooleanParameterName("sid")
+                    .RenderEmptyParameters(true);
+
+                    if (!pager.IsEmpty())
+                    {
+                        <div class="pagination-footer sm-col-12 text-center">
+                            @Html.Raw(pager)
+                        </div>
+                    }
+                }
+            </div>
+
+            @Html.Partial("_AccountBottomMenu")
+        </div>
+    </div>
+</div>

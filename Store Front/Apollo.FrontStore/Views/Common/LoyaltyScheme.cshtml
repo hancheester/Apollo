@@ -1,0 +1,67 @@
+﻿@{
+    Html.AddTitleParts("Loyalty Scheme");
+}
+
+@{ Html.RenderPartial("_OfferStrips"); }
+
+<div id="terms">
+    <div class="row hidden-xs header">
+        <div class="col-sm-5">
+            <div class="col-sm-offset-6">
+                <h4><span>Lo</span>yalty Scheme</h4>
+            </div>
+        </div>
+    </div>
+    <div class="important">
+        <div class="container">
+            <a href="/"><img src="/content/img/logo-medium.svg" alt="Apollo" class="hidden-xs" /></a>
+            <p>Every time you shop, we give you 5% of the total order value back in points.</p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="visible-xs">
+            <h4>Loyalty Scheme</h4>
+        </div>
+        <div class="content">
+            <h5>Your reward</h5>
+            <img src="/Content/img/title-underline.png" alt="" class="img-responsive">
+            <p>All purchases you make at our online shop collect points, which are worth 5% of the total value of your purchases excluding deliveries and any other special offers.</p>
+            <p>Please note that any products on special offer are not eligible to receive loyalty points on purchase.</p>
+            <p>Also, no minimum purchase is required. These points are available to use against future online orders with us and what's more they do not expire.</p>
+            <p>Each point is equal to &pound;0.01 (100 points = &pound;1.00)</p>
+            <p>The number of points earned will be stated on the basket page.</p>
+            <p>Points are only issued on new sales and will not be applied to past purchases.</p>
+            <p>Points will show as pending when your order is confirmed. Once the corresponding order has been dispatched they will be confirmed and available to use, they cannot be used until the corresponding order has been dispatched.</p>
+
+            <h5>How do I use my points?</h5>
+            <img src="/Content/img/title-underline.png" alt="" class="img-responsive">
+            <p>To use your points, begin your online purchase as normal. Once you have selected all of your items, go to the basket page and look for the loyalty points section.</p>
+            <p>Simply type in the number of points you would like to use, and click the update button to apply the discount.</p>
+            <p>Points are not automatically discounted from the basket. The customer can choose how many points you wish to redeem against the value of an order, once the order has been placed this cannot be amended.</p>
+
+            <h5>Policy</h5>
+            <img src="/Content/img/title-underline.png" alt="" class="img-responsive">
+            <p>Modification or withdrawal of the reward points scheme:</p>
+            <p>
+                <ul>
+                    <li>- By redeeming any points you agree to and are bound by these <a href="@Url.RouteUrl("Terms And Conditions")">Terms and Conditions</a>.</li>
+                    <li>- We may cancel, withdraw or amend the reward point's scheme or any individual points total at any time including the Terms and Conditions, or any Customer account, at any time.</li>
+                    <li>- We will notify you of any material changes we make to the reward points scheme by email or on the Website.</li>
+                    <li>- Points are only valid for Apollo.co.uk and can only be spent on Apollo.co.uk</li>
+                    <li>- If we identify that you have more than one registered account with multiple email address, we may merge them in to one account or cancel all accounts and any earned points at our discretion.</li>
+                    <li>- The Points Scheme is for personal use only, business use of the scheme is strictly forbidden. We reserve the right to suspend or cancel any points or accounts considered to be for business use at our discretion.</li>
+                    <li>- Apollo.co.uk can take any action it considers to be appropriate if they have reason to believe that the point scheme is being abused in any form or fashion.</li>
+                    <li>- The point scheme does not have an actual cash value and can never be exchanged for cash and are non-transferable, points cannot be transferred to any other account.</li>
+                    <li>- Points redeemed do not count towards free delivery, this only applies to cash purchases.</li>
+                    <li>- Apollo.co.uk reserve the right to substitute or remove products that are available for point's collection and redemption without notice.</li>
+                    <li>- If you return a product for a refund, the number of points collected during the transaction will be deducted from your Apollo account.</li>
+                    <li>- If you return a product for a refund and have spent the points earned while purchasing the product and have no remaining points in your account, you will be refunded for the value of the product minus the value of the points earned on that product.</li>
+                    <li>- If you return a product that has been purchased completely using points, your account will be credited with the value of the points used for the purchase. No cash refund will be given in these circumstances.</li>
+                    <li>- If you return a product that has been purchased partially using Points, you will be refunded for the amount paid for using cash and your account will be credited with the value of the points used for the purchase. No cash refund will be given where points have been used to purchase a product.</li>
+                    <li>- Our loyalty scheme is designed to benefit you, and we hope you will choose Apollo.co.uk as your first choice for all your Health and Beauty needs on the Internet.</li>
+                </ul>
+            </p>
+            <p>For more details please see our <a href="@Url.RouteUrl("Terms And Conditions")">terms and conditions</a>.</p>
+        </div>
+    </div>
+</div>
