@@ -3,11 +3,7 @@ using Apollo.Core.Infrastructure;
 using Apollo.Core.Infrastructure.DependencyManagement;
 using Apollo.Core.Logging;
 using Apollo.Core.Performance;
-using Apollo.Core.Services.Interfaces;
 using Autofac;
-using Autofac.Integration.Web;
-using System.Web.Profile;
-using System.Web.Security;
 
 namespace Apollo.AdminStore.WebForm.Infrastructure
 {
