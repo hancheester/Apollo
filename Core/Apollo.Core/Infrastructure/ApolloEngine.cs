@@ -11,17 +11,11 @@ namespace Apollo.Core.Infrastructure
 {
     public class ApolloEngine : IEngine
     {
-        #region Fields
-
-        private ContainerManager _containerManager;
-
-        #endregion
-
         #region Utilities
 
         protected virtual void RunStartupTasks()
         {
-            var typeFinder = _containerManager.Resolve<ITypeFinder>();
+            var typeFinder = ContainerManager.Resolve<ITypeFinder>();
             var startUpTaskTypes = typeFinder.FindClassesOfType<IStartupTask>();
             var startUpTasks = new List<IStartupTask>();
             foreach (var startUpTaskType in startUpTaskTypes)
@@ -36,10 +30,6 @@ namespace Apollo.Core.Infrastructure
         {
             var builder = new ContainerBuilder();
             var container = builder.Build();
-
-            //we create new instance of ContainerBuilder
-            //because Build() or Update() method can only be called once on a ContainerBuilder.
-
 
             //dependencies
             var typeFinder = new WebAppTypeFinder(config);
@@ -61,7 +51,7 @@ namespace Apollo.Core.Infrastructure
                 dependencyRegistrar.Register(builder, typeFinder);
             builder.Update(container);
             
-            this._containerManager = new ContainerManager(container);
+            this.ContainerManager = new ContainerManager(container);
 
             //set dependency resolver
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
@@ -125,10 +115,7 @@ namespace Apollo.Core.Infrastructure
         /// <summary>
         /// Container manager
         /// </summary>
-        public ContainerManager ContainerManager
-        {
-            get { return _containerManager; }
-        }
+        public ContainerManager ContainerManager { get; private set; }
 
         #endregion
     }
