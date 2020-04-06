@@ -18,13 +18,6 @@ namespace Apollo.AdminStore.WebForm.Infrastructure
             get { return 3; }
         }
         
-        static IContainerProvider _containerProvider;
-
-        public IContainerProvider ContainerProvider
-        {
-            get { return _containerProvider; }
-        }
-
         public void Register(ContainerBuilder builder, ITypeFinder typeFinder)
         {
             builder.RegisterType<LogBuilder>().As<ILogBuilder>();
@@ -33,18 +26,6 @@ namespace Apollo.AdminStore.WebForm.Infrastructure
             builder.RegisterType<OfferUtility>().SingleInstance();
             builder.RegisterType<ImageUtility>().SingleInstance();
             builder.RegisterType<ExcelUtility>().SingleInstance();
-
-            // Once you're done registering things, set the container
-            // provider up with your registrations.
-            _containerProvider = new ContainerProvider(builder.Build());
-
-            var accountService = _containerProvider.ApplicationContainer.Resolve<IAccountService>();
-
-            var roleProvider = Roles.Provider as CustomRoleProvider;
-            if (roleProvider != null) roleProvider.AccountService = accountService;
-
-            var profileProvider = ProfileManager.Provider as CustomProfileProvider;
-            if (profileProvider != null) profileProvider.AccountService = accountService;
         }
     }
 }

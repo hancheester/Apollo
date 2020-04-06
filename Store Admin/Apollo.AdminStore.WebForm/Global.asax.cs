@@ -1,9 +1,13 @@
-﻿using Apollo.Core.Infrastructure;
+﻿using Apollo.AdminStore.WebForm.Classes;
+using Apollo.Core.Infrastructure;
+using Apollo.Core.Services.Interfaces;
 using Autofac.Integration.Web;
 using log4net;
 using System;
 using System.Threading;
 using System.Web;
+using System.Web.Profile;
+using System.Web.Security;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
@@ -24,6 +28,18 @@ namespace Apollo.AdminStore.WebForm
         {
             //initialize engine context
             EngineContext.Initialize(false);
+
+            var accountService = EngineContext.Current.Resolve<IAccountService>();
+
+            var roleProvider = Roles.Provider as CustomRoleProvider;
+            if (roleProvider != null) roleProvider.AccountService = accountService;
+
+            var profileProvider = ProfileManager.Provider as CustomProfileProvider;
+            if (profileProvider != null) profileProvider.AccountService = accountService;
+
+            // Once you're done registering things, set the container
+            // provider up with your registrations.
+            _containerProvider = new ContainerProvider(EngineContext.Current.ContainerManager.Container);
         }
         
         protected void Session_Start(object sender, EventArgs e)
